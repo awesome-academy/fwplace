@@ -64,6 +64,9 @@ class Kernel extends HttpKernel
         'checkUser' => \App\Http\Middleware\CheckUser::class,
         'CheckAdmin' => \App\Http\Middleware\CheckAdmin::class,
         'checkTrainer' => \App\Http\Middleware\CheckTrainer::class,
+        'role' => \Zizaco\Entrust\Middleware\EntrustRole::class,
+        'permission' => \Zizaco\Entrust\Middleware\EntrustPermission::class,
+        'ability' => \Zizaco\Entrust\Middleware\EntrustAbility::class,
 
     ];
 }
