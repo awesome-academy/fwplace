@@ -22,6 +22,7 @@
                                         <i class="flaticon-add"></i>
                                     </a>
                                 </th>
+                                <th>@lang('Add Location')</th>
                             @endif
                         </tr>
                         </thead>
@@ -56,6 +57,11 @@
                                             'message' => __('Delete this item?')
                                         ]) !!}
                                         {!! Form::close() !!}
+                                    </td>
+                                    <td>
+                                        <a href="{{ route('generate', ['id' => $item->id]) }}">
+                                            <i class="flaticon-add"></i>
+                                        </a>
                                     </td>
                                 @endif
                             </tr>

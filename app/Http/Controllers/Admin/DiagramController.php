@@ -38,9 +38,9 @@ class DiagramController extends Controller
         return redirect()->route('generate', ['id' => $workspace->id]);
     }
 
-    public function generateDiagram(Request $request, $id)
+    public function generateDiagram(Request $request, $idWorkspace)
     {
-        $workspace = $this->workspace->findOrFail($id);
+        $workspace = $this->workspace->findOrFail($idWorkspace);
         $totalSeat = $workspace->total_seat;
         $seatPerRow = $workspace->seat_per_row;
         $remainderSeat = $totalSeat % $seatPerRow; // Lấy số ghế dư ra
@@ -78,11 +78,27 @@ class DiagramController extends Controller
             }
         }
 
-        return view('test.workspace.generate', compact('renderSeat', 'id'));
+        $locations = $workspace->locations;
+        $colorLocation = [];
+        foreach ($locations as $key => $location) {
+            foreach ($location->seats as $id => $seat) {
+                $colorLocation[$key][$id]['location'] = $location->name;
+                $colorLocation[$key][$id]['name'] = $seat->name;
+                $colorLocation[$key][$id]['color'] = $location->color;
+            }
+        }
+        $colorLocation = json_encode($colorLocation);
+
+        return view('test.workspace.generate', compact('renderSeat', 'idWorkspace', 'colorLocation'));
     }
 
     public function saveLocation(Request $request, $id)
     {
+        $this->validate($request, [
+            'seats' => 'required',
+            'name' => 'required',
+        ]);
+
         $this->workspace->findOrFail($id);
         $seats = explode(',', $request->seats);
         $location = $this->location->create([
@@ -149,6 +165,7 @@ class DiagramController extends Controller
         }
 
         $locations = $workspace->locations;
+        $colorLocation = [];
         foreach ($locations as $key => $location) {
             foreach ($location->seats as $id => $seat) {
                 $colorLocation[$key][$id]['location'] = $location->name;
