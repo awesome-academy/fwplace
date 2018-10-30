@@ -14,15 +14,21 @@ class WorkspaceTableSeeder extends Seeder
         $workspaces = [
             [
                 'name' => 'Handico',
-                'image' => '1.jpg'
+                'image' => '1.jpg',
+                'total_seat' => 150,
+                'seat_per_row' => 10,
             ],
             [
                 'name' => 'KeangNam',
-                'image' => '2.jpg'
+                'image' => '2.jpg',
+                'total_seat' => 150,
+                'seat_per_row' => 9,
             ],
             [
                 'name' => 'Lab',
-                'image' => '3.jpg'
+                'image' => '3.jpg',
+                'total_seat' => 150,
+                'seat_per_row' => 8,
             ],
         ];
 
