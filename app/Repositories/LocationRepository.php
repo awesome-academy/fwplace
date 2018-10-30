@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use DB;
 use Carbon\CarbonPeriod;
-use App\User;
+use App\Models\User;
 
 class LocationRepository extends EloquentRepository
 {
