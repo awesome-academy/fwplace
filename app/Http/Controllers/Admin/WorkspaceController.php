@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Workspace;
 use App\Repositories\WorkspaceRepository;
+use Illuminate\Http\Request;
 use Storage;
 
 class WorkspaceController extends Controller
@@ -123,6 +123,6 @@ class WorkspaceController extends Controller
             alert()->error(__('Delete Workspace'), __('This workspace having employees.'));
         }
 
-        return redirect()->route('workspaces.index');
+        return redirect()->route('list_workspace');
     }
 }

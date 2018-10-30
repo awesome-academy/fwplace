@@ -10,12 +10,6 @@ class Role extends EntrustRole
     use SoftDeletes;
 
     /**
-     * [$table description]
-     * @var string
-     */
-    protected $table= 'roles';
-
-    /**
      * [$dates description]
      * @var array
      */

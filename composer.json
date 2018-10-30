@@ -15,7 +15,8 @@
         "realrashid/sweet-alert": "^1.1",
         "tightenco/ziggy": "^0.6.9",
         "yajra/laravel-datatables-oracle": "^8.9",
-        "zizaco/entrust": "5.2.x-dev"
+        "zizaco/entrust": "5.2.x-dev",
+        "pusher/pusher-php-server": "^3.2"
     },
     "require-dev": {
         "beyondcode/laravel-dump-server": "^1.0",

@@ -10,7 +10,7 @@ use App\Repositories\PositionRepository;
 use App\Repositories\ProgramRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\WorkspaceRepository;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use RealRashid\SweetAlert\Facades\Alert;

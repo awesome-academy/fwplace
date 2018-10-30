@@ -17,8 +17,8 @@ class LocationTableSeeder extends Seeder
             foreach (range(1, 10) as $value) {
                 DB::table('locations')->insert([
                     'name' => $faker->state,
-                    'total_seat' => rand(5, 20),
-                    'workspace_id' => $workspaces->random()->id
+                    'workspace_id' => $workspaces->random()->id,
+                    'color' => substr(md5(rand()), 0, 6),
                 ]);
             }
         }
