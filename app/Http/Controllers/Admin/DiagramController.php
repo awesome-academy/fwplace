@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use DB;
 use App\Repositories\LocationRepository;
 use App\Repositories\SeatRepository;
 use App\Repositories\WorkspaceRepository;
+use Illuminate\Http\Request;
 
 class DiagramController extends Controller
 {
@@ -69,7 +68,8 @@ class DiagramController extends Controller
         foreach ($rowList as $key => $row) {
             foreach ($columnList as $column) {
                 $counting++;
-                if ($counting <= $totalSeat) { // Chưa max thì sẽ thêm
+                if ($counting <= $totalSeat) {
+                    // Chưa max thì sẽ thêm
                     $renderSeat[$row][] = $column . $row;
                 } else {
                     // Nếu max thì thêm để tạo đủ ghế
@@ -106,7 +106,7 @@ class DiagramController extends Controller
             'workspace_id' => $id,
             'color' => $request->color,
         ]);
-        
+
         foreach ($seats as $value) {
             $this->seat->create([
                 'name' => $value,
@@ -155,7 +155,8 @@ class DiagramController extends Controller
         foreach ($rowList as $key => $row) {
             foreach ($columnList as $column) {
                 $counting++;
-                if ($counting <= $totalSeat) { // Chưa max thì sẽ thêm
+                if ($counting <= $totalSeat) {
+                    // Chưa max thì sẽ thêm
                     $renderSeat[$row][] = $column . $row;
                 } else {
                     // Nếu max thì thêm để tạo đủ ghế
