@@ -8,10 +8,16 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Notifications\Notifiable as NotifiableNotification;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Zizaco\Entrust\Traits\EntrustUserTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, SoftDeletes, EntrustUserTrait {
+        SoftDeletes::restore insteadof EntrustUserTrait;
+
+        EntrustUserTrait::restore insteadof SoftDeletes;
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -71,6 +77,15 @@ class User extends Authenticatable
     public function workSchedules()
     {
         return $this->hasMany('App\Models\WorkSchedule', 'user_id');
+    }
+
+    /**
+     * Get roles many to many
+     * @return [type] [description]
+     */
+    public function roles()
+    {
+        return $this->belongsToMany('App\Models\Role', 'role_user', 'user_id', 'role_id');
     }
 
     public function getAvatarUserAttribute()

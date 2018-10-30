@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use DB;
-use App\User;
+use App\Models\User;
 
 class WorkspaceRepository extends EloquentRepository
 {
