@@ -1,10 +1,12 @@
 {
-    "/js/app.js": "/js/app.js",
-    "/css/app.css": "/css/app.css",
-    "/js/all.js": "/js/all.js",
-    "/js/calendar.js": "/js/calendar.js",
-    "/js/detailworkspace.js": "/js/detailworkspace.js",
-    "/js/generate.js": "/js/generate.js",
-    "/js/location.js": "/js/location.js",
-    "/css/custom.css": "/css/custom.css"
+    "/js/app.js": "/js/app.js?id=9c2a7c1af40522f40967",
+    "/css/app.css": "/css/app.css?id=ae91bda39c903b9c6c5b",
+    "/js/role.js": "/js/role.js?id=6da803671960d7dd8cb6",
+    "/js/all.js": "/js/all.js?id=75915943bbbcaca88dea",
+    "/js/calendar.js": "/js/calendar.js?id=19e5091f4737c3ce155b",
+    "/js/detailworkspace.js": "/js/detailworkspace.js?id=22ee99ff8aef25379a1d",
+    "/js/generate.js": "/js/generate.js?id=26a0611e3ac1b65300d8",
+    "/js/location.js": "/js/location.js?id=19eab30f0358732accd6",
+    "/css/custom.css": "/css/custom.css?id=461e81482ad1bab75e9a",
+    "/css/datatable.css": "/css/datatable.css?id=08598daec38cd70c4e04"
 }

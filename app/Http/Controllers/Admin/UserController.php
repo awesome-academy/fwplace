@@ -7,10 +7,12 @@ use App\Http\Requests\UserFormRequest;
 use App\Repositories\PositionRepository;
 use App\Repositories\ProgramRepository;
 use App\Repositories\UserRepository;
+use App\Repositories\RoleRepository;
 use App\Repositories\WorkspaceRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
+use DB;
 
 class UserController extends Controller
 {
@@ -18,17 +20,20 @@ class UserController extends Controller
     protected $programRepository;
     protected $positionRepository;
     protected $workspaceRepository;
+    protected $roleRepository;
 
     public function __construct(
         UserRepository $userRepository,
         ProgramRepository $programRepository,
         PositionRepository $positionRepository,
-        WorkspaceRepository $workspaceRepository
+        WorkspaceRepository $workspaceRepository,
+        RoleRepository $roleRepository
     ) {
         $this->userRepository = $userRepository;
         $this->programRepository = $programRepository;
         $this->positionRepository = $positionRepository;
         $this->workspaceRepository = $workspaceRepository;
+        $this->roleRepository = $roleRepository;
         $this->middleware('checkTrainer')->except('index', 'create', 'store', 'edit', 'update', 'getListTrainee');
     }
 
@@ -59,7 +64,9 @@ class UserController extends Controller
             $users->getList('position_id', $request->position_id);
         }
 
-        $users = $users->orderBy('created_at', 'DESC')->paginate(config('site.paginate_user'));
+        $users = $users->where('status', config('site.active'))
+                        ->orderBy('created_at', 'DESC')
+                        ->paginate(config('site.paginate_user'));
 
         return view('admin.user.index', compact('users', 'programs', 'positions', 'workspaces'));
     }
@@ -106,7 +113,30 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = $this->userRepository->findOrFail($id);
+
+        $roles = $this->roleRepository->orderBy('id', 'desc')->get();
+
+        if (!empty($roles)) {
+            foreach ($roles as $role) {
+                $flag = DB::table('role_user')
+                        ->where('user_id', $id)
+                        ->where('role_id', $role->id)
+                        ->where('deleted_at', null)
+                        ->first();
+
+                if ($flag != null) {
+                    $role->checked = 1;
+                } else {
+                    $role->checked = 0;
+                }
+            }
+        }
+
+        return view('admin.user.show', [
+            'user' => $user,
+            'roles' => $roles,
+        ]);
     }
 
     /**
@@ -185,5 +215,37 @@ class UserController extends Controller
         $trainees = $trainees->getListTrainee($id);
 
         return view('admin.user.traineelist', compact('trainees', 'positions', 'programs', 'workspaces'));
+    }
+
+    /**
+     * [updateRoleUser description]
+     * @param  Request $request [description]
+     * @return [type]           [description]
+     */
+    public function updateRoleUser(Request $request)
+    {
+        if ($request->checked == 1) {
+            DB::table('role_user')
+                ->where('user_id', $request->user_id)
+                ->where('role_id', $request->role_id)
+                ->delete();
+
+            return response()->json([
+                'error' => false,
+                'message' => 'deleted',
+            ], 200);
+        } else {
+            DB::table('role_user')->insert([
+                'user_id' => $request->user_id,
+                'role_id' => $request->role_id,
+                'created_at' => date('Y-m-d H:m:s', time()),
+                'updated_at' => date('Y-m-d H:m:s', time()),
+            ]);
+
+            return response()->json([
+                'error' => false,
+                'message' => 'added',
+            ], 200);
+        }
     }
 }
