@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\UserFormRequest;
-use App\Models\Position;
-use App\Models\Program;
-use App\Models\Workspace;
 use App\Repositories\PositionRepository;
 use App\Repositories\ProgramRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\WorkspaceRepository;
-use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {
@@ -122,7 +118,7 @@ class UserController extends Controller
         }
         $this->userRepository->update($data, $id);
         alert()->success(__('Edit User'), __('Successfully!!!'));
-        
+
         return redirect('/');
     }
 

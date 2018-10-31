@@ -1,5 +1,10 @@
 {
     "/js/app.js": "/js/app.js",
     "/css/app.css": "/css/app.css",
-    "/js/all.js": "/js/all.js"
+    "/js/all.js": "/js/all.js",
+    "/js/calendar.js": "/js/calendar.js",
+    "/js/detailworkspace.js": "/js/detailworkspace.js",
+    "/js/generate.js": "/js/generate.js",
+    "/js/location.js": "/js/location.js",
+    "/css/custom.css": "/css/custom.css"
 }
