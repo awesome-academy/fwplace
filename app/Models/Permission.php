@@ -10,12 +10,6 @@ class Permission extends EntrustPermission
     use SoftDeletes;
 
     /**
-     * [$table description]
-     * @var string
-     */
-    protected $table= 'permissions';
-
-    /**
      * [$dates description]
      * @var array
      */

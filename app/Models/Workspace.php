@@ -18,7 +18,7 @@ class Workspace extends Model
 
     public function users()
     {
-        return $this->hasMany('App\User', 'workspace_id');
+        return $this->hasMany('App\Models\User', 'workspace_id');
     }
     
     public function locations()
@@ -33,7 +33,7 @@ class Workspace extends Model
 
     public function workSchedules()
     {
-        return $this->hasManyThrough('App\Models\WorkSchedule', 'App\User');
+        return $this->hasManyThrough('App\Models\WorkSchedule', 'App\Models\User');
     }
 
     public function delete()
