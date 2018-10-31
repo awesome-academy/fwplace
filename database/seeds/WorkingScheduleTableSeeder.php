@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use App\Models\Location;
 
@@ -20,7 +20,7 @@ class WorkingScheduleTableSeeder extends Seeder
                 for ($i = 0 ; $i < 31; $i++) { 
                     $day = Carbon::now()->startOfMonth()->addDay($i);
                     if (!$day->isWeekend()) {
-                        $user->work_schedules()->create([
+                        $user->workSchedules()->create([
                             'date' => $day->format('Y-m-d'),
                             'shift' => collect([1, 2, 3])->random(),
                             'location_id' => $user->workspace->locations->random()->id
