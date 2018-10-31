@@ -20,7 +20,7 @@ class Workspace extends Model
     {
         return $this->hasMany('App\Models\User', 'workspace_id');
     }
-    
+
     public function locations()
     {
         return $this->hasMany('App\Models\Location', 'workspace_id');
@@ -49,7 +49,7 @@ class Workspace extends Model
     public function getTotalUserAttribute()
     {
         $total = $this->users()->count();
-        
+
         return $total;
     }
 }

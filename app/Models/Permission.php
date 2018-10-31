@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use Zizaco\Entrust\EntrustPermission;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Zizaco\Entrust\EntrustPermission;
 
 class Permission extends EntrustPermission
 {
     use SoftDeletes;
-
     /**
      * [$dates description]
      * @var array

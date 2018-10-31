@@ -2,19 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\UserFormRequest;
-use App\Models\Position;
-use App\Models\Program;
-use App\Models\Workspace;
 use App\Repositories\PositionRepository;
 use App\Repositories\ProgramRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\WorkspaceRepository;
-use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class UserController extends Controller
 {
@@ -62,7 +58,7 @@ class UserController extends Controller
         if ($request->has('position_id') && $request->position_id != config('site.prepend')) {
             $users->getList('position_id', $request->position_id);
         }
-        
+
         $users = $users->orderBy('created_at', 'DESC')->paginate(config('site.paginate_user'));
 
         return view('admin.user.index', compact('users', 'programs', 'positions', 'workspaces'));

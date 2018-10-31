@@ -16,3 +16,5 @@ yarn-error.log
 /public/css
 /public/js
 /public/images
+node_modules
+npm-debug.log
