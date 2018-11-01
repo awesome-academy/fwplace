@@ -10,6 +10,8 @@ use Illuminate\Validation\Rule;
 use Storage;
 use App\Http\Requests\LocationAddRequest;
 use App\Http\Requests\LocationUpdateRequest;
+use DB;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class LocationController extends Controller
 {
@@ -122,9 +124,18 @@ class LocationController extends Controller
      */
     public function destroy($id)
     {
-        $location = $this->location->delete($id);
-        alert()->success(__('Delete Location'), __('Successfully!!!'));
+        try {
+            $location = $this->location->findOrFail($id);
 
-        return redirect()->back();
+            DB::transaction(function () use ($id, $location) {
+                $location->seats()->delete();
+                $location->delete();
+            });
+            alert()->success(__('Delete Location'), __('Successfully!!!'));
+
+            return redirect()->back();
+        } catch (ModelNotFoundException $exception) {
+            return back()->with('error', __('Not found error'));
+        }
     }
 }
