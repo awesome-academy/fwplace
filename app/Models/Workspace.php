@@ -18,12 +18,12 @@ class Workspace extends Model
 
     public function users()
     {
-        return $this->hasMany('App\Models\User', 'workspace_id');
+        return $this->hasMany(User::class);
     }
 
     public function locations()
     {
-        return $this->hasMany('App\Models\Location', 'workspace_id');
+        return $this->hasMany(Location::class);
     }
 
     public function getPhotoAttribute()
@@ -33,7 +33,12 @@ class Workspace extends Model
 
     public function workSchedules()
     {
-        return $this->hasManyThrough('App\Models\WorkSchedule', 'App\Models\User');
+        return $this->hasManyThrough(WorkSchedule::class, User::class);
+    }
+
+    public function seats()
+    {
+        return $this->hasManyThrough(Seat::class, Location::class);
     }
 
     public function delete()

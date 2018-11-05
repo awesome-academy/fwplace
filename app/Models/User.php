@@ -60,22 +60,28 @@ class User extends Authenticatable
 
     public function program()
     {
-        return $this->belongsTo('App\Models\Program');
+        return $this->belongsTo(Program::class);
     }
 
     public function workspace()
     {
-        return $this->belongsTo('App\Models\Workspace');
+        return $this->belongsTo(Workspace::class);
     }
 
     public function position()
     {
-        return $this->belongsTo('App\Models\Position');
+        return $this->belongsTo(Position::class);
     }
 
     public function workSchedules()
     {
-        return $this->hasMany('App\Models\WorkSchedule', 'user_id');
+        return $this->hasMany(WorkSchedule::class);
+    }
+
+    public function seats()
+    {
+        return $this->belongsToMany(Seat::class)
+            ->withPivot('id', 'registration_date', 'shift');
     }
 
     public function seat()
@@ -88,7 +94,7 @@ class User extends Authenticatable
      */
     public function roles()
     {
-        return $this->belongsToMany('App\Models\Role', 'role_user', 'user_id', 'role_id');
+        return $this->belongsToMany(Role::class);
     }
 
     public function getAvatarUserAttribute()

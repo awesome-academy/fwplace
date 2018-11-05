@@ -30,3 +30,4 @@ mix.styles('resources/css/datatable.css', 'public/css/datatable.css');
 mix.js('resources/js/role.js', 'public/js/role.js');
 
 mix.version();
+mix.copyDirectory('resources/js/view-seat.js', 'public/js');

@@ -60,6 +60,8 @@ Route::group(['middleware' => 'checkLogin'], function () {
     Route::get('schedule/users/{id}', 'Admin\WorkingScheduleController@viewByUser')->name('user.schedule');
     Route::get('schedule/users/{id}/get', 'Admin\WorkingScheduleController@getDataUser');
     Route::get('/register/trainer/{programId}', 'UserController@selectTrainer');
+    Route::post('/get-seat', 'WorkScheduleController@getSeat');
+    Route::post('/get-seat-by-day', 'WorkScheduleController@getSeatByDay');
 });
 Route::get('/register', 'UserController@index');
 Route::post('/register', 'UserController@store');
