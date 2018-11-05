@@ -6,18 +6,32 @@ use App\Http\Controllers\Controller;
 use App\Repositories\LocationRepository;
 use App\Repositories\SeatRepository;
 use App\Repositories\WorkspaceRepository;
+use App\Repositories\ProgramInterface;
+use App\Repositories\UserRepository;
+use App\Repositories\PositionRepository;
 use Illuminate\Http\Request;
 
 class DiagramController extends Controller
 {
+    protected $userRepository;
+    protected $programRepository;
+    protected $positionRepository;
+    protected $locationRepository;
+
     public function __construct(
         LocationRepository $locationRepository,
         WorkspaceRepository $workspaceRepository,
-        SeatRepository $seatRepository
+        SeatRepository $seatRepository,
+        UserRepository $userRepository,
+        ProgramInterface $programRepository,
+        PositionRepository $positionRepository
     ) {
-        $this->location = $locationRepository;
+        $this->locationRepository = $locationRepository;
         $this->workspace = $workspaceRepository;
         $this->seat = $seatRepository;
+        $this->userRepository = $userRepository;
+        $this->programRepository = $programRepository;
+        $this->positionRepository = $positionRepository;
     }
 
     public function typeWorkspaceInformation()
@@ -49,7 +63,6 @@ class DiagramController extends Controller
         } else {
             $totalRow = floor($totalSeat / $seatPerRow);
         }
-
         $alphabet = range('A', 'Z'); // Tạo ra bảng chữ cái để đặt tên cho cột
         $columnName = $alphabet;
         if ($seatPerRow > count($alphabet)) {
@@ -77,44 +90,79 @@ class DiagramController extends Controller
                 }
             }
         }
-
         $locations = $workspace->locations;
         $colorLocation = [];
         foreach ($locations as $key => $location) {
             foreach ($location->seats as $id => $seat) {
                 $colorLocation[$key][$id]['location'] = $location->name;
+                $colorLocation[$key][$id]['seat_id'] = $seat->id;
+                if ($seat->user != null) {
+                    $colorLocation[$key][$id]['user_name'] = $seat->user->name;
+                } else {
+                    $colorLocation[$key][$id]['user_name'] = $seat->name;
+                }
                 $colorLocation[$key][$id]['name'] = $seat->name;
                 $colorLocation[$key][$id]['color'] = $location->color;
+                $colorLocation[$key][$id]['workspace_id'] = $location->workspace_id;
             }
         }
         $colorLocation = json_encode($colorLocation);
+        $listProgram = $this->programRepository->listProgramArray();
+        $listPosition = $this->positionRepository->listpositionArray();
+        $listUser = $this->userRepository->getList('program_id', 1)->pluck('name', 'id');
 
-        return view('test.workspace.generate', compact('renderSeat', 'idWorkspace', 'colorLocation'));
+        return view('test.workspace.generate', compact(
+            'renderSeat',
+            'idWorkspace',
+            'colorLocation',
+            'listProgram',
+            'listPosition',
+            'listUser'
+        ));
     }
 
     public function saveLocation(Request $request, $id)
     {
         $this->validate($request, [
-            'seats' => 'required',
-            'name' => 'required',
+        'seats' => 'required',
+        'name' => 'required',
         ]);
 
         $this->workspace->findOrFail($id);
         $seats = explode(',', $request->seats);
-        $location = $this->location->create([
-            'name' => $request->name,
-            'workspace_id' => $id,
-            'color' => $request->color,
+        $location = $this->locationRepository->create([
+        'name' => $request->name,
+        'workspace_id' => $id,
+        'color' => $request->color,
         ]);
 
         foreach ($seats as $value) {
             $this->seat->create([
-                'name' => $value,
-                'location_id' => $location->id,
+            'name' => $value,
+            'location_id' => $location->id,
             ]);
         }
 
         return redirect()->back();
+    }
+
+    public function saveAjaxLocation(Request $request)
+    {
+        $data = $this->locationRepository->create([
+        'name' => $request->name,
+        'workspace_id' => $request->id,
+        'color' => $request->color,
+        ]);
+
+        $seats = $request->seat;
+        foreach ($seats as $value) {
+            $this->seat->create([
+            'name' => $value,
+            'location_id' => $data->id,
+            ]);
+        }
+
+        return response()->json($data);
     }
 
     public function list()

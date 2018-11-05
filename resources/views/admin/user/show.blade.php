@@ -55,10 +55,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    
+
                     @if (!empty($roles))
                         @foreach ($roles as $key => $role)
-                            
+
                             <tr>
                                 <td>{{ $key + 1 }}</td>
                                 <td>{{ $role->display_name }}</td>
@@ -77,7 +77,7 @@
 
                                     @if ($role->checked == 1)
                                         <i id="action-{{ $role->id }}" class="fa fa-check-circle" onclick="updateRole({{ $user->id }}, {{ $role->id }})" aria-hidden="true" style="cursor: pointer; color: #3598dc; font-size: 20px;"></i>
-                                    @else 
+                                    @else
                                         <i id="action-{{ $role->id }}" class="fa fa-circle-notch" onclick="updateRole({{ $user->id }}, {{ $role->id }})" aria-hidden="true" style="cursor: pointer; color: #3598dc; font-size: 20px;"></i>
                                     @endif
                                 </td>
@@ -93,7 +93,7 @@
 
     {!! Form::hidden('add_success_lang', __('Add success'), ['id' => 'add_success_lang']) !!}
     {!! Form::hidden('delete_success_lang', __('Delete success'), ['id' => 'delete_success_lang']) !!}
-    
+
 @endsection
 
 @section('js')
@@ -131,7 +131,7 @@
                         $('#action-' + role_id).removeClass('fa-check-circle').addClass('fa-circle-notch');
                         $('#checked-' + role_id).val(0);
                         toastr.success(delete_success_lang);
-                    } 
+                    }
 
                     if (res.message == 'added') {
                         $('#action-' + role_id).removeClass('fa-circle-notch').addClass('fa-check-circle');
@@ -140,7 +140,7 @@
                     }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    // 
+                    //
                 }
             });
         }

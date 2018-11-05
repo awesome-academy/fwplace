@@ -14,12 +14,12 @@
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['checkLogin', 'CheckAdmin']], function () {
     Route::get('/', 'DashboardController@index')->name('admin.index');
 
-    Route::get('/roles/get-roles','RoleController@getRoles')->name('roles.get_roles');
-    Route::post('/roles/update-permission-role','RoleController@updatePermissionRole')->name('roles.update_permission_role');
-    Route::get('/roles/get-permission-role/{role_id}','RoleController@getPermissionRole')->name('roles.get_permission_role');
+    Route::get('/roles/get-roles', 'RoleController@getRoles')->name('roles.get_roles');
+    Route::post('/roles/update-permission-role', 'RoleController@updatePermissionRole')->name('roles.update_permission_role');
+    Route::get('/roles/get-permission-role/{role_id}', 'RoleController@getPermissionRole')->name('roles.get_permission_role');
     Route::resource('roles', 'RoleController');
 
-    Route::post('/users/update-role-user','UserController@updateRoleUser')->name('users.update_role_user');
+    Route::post('/users/update-role-user', 'UserController@updateRoleUser')->name('users.update_role_user');
     Route::resource('users', 'UserController');
 
     Route::resource('positions', 'PositionController');
@@ -65,13 +65,13 @@ Route::get('/register', 'UserController@index');
 Route::post('/register', 'UserController@store');
 Route::get('/register/trainer', 'UserController@selectTrainer')->name('get_trainer_by_program');
 
-// Testing
-
-Route::get('/workspace/create/', 'Admin\DiagramController@typeWorkspaceInformation')->name('create_workspace');
-Route::post('/workspace/save/', 'Admin\DiagramController@saveWorkspace')->name('test.save');
-Route::get('/workspace/{id}/add-locations/', 'Admin\DiagramController@generateDiagram')->name('generate');
-Route::post('/workspace/{id}/add-locations/', 'Admin\DiagramController@saveLocation')->name('save_location');
-Route::get('/workspace/list', 'Admin\DiagramController@list')->name('list_workspace');
-Route::get('/workspace/{id}/detail', 'Admin\DiagramController@detail')->name('detail_workspace');
-
-// End testing
+Route::group(['prefix' => 'workspace'], function () {
+    Route::get('create', 'Admin\DiagramController@typeWorkspaceInformation')->name('create_workspace');
+    Route::post('save', 'Admin\DiagramController@saveWorkspace')->name('test.save');
+    Route::get('edit-locations/{id}', 'Admin\DiagramController@generateDiagram')->name('generate');
+    Route::post('add-locations/{id}', 'Admin\DiagramController@saveLocation')->name('save_location');
+    Route::get('list', 'Admin\DiagramController@list')->name('list_workspace');
+    Route::get('detail/{id}', 'Admin\DiagramController@detail')->name('detail_workspace');
+    Route::post('save-ajax', 'Admin\DiagramController@saveAjaxLocation')->name('save_location_color');
+    Route::post('save-info-location', 'Admin\DiagramController@saveInfoLocation')->name('save_info_location');
+});

@@ -16,7 +16,7 @@ abstract class EloquentRepository implements RepositoryInterface
         $this->app = new App();
         $this->makeModel();
     }
-    
+
     abstract public function model();
 
     public function makeModel()
@@ -32,7 +32,7 @@ abstract class EloquentRepository implements RepositoryInterface
     public function newQuery()
     {
         $this->model = $this->model->newQuery();
-        
+
         return $this;
     }
 
@@ -94,7 +94,7 @@ abstract class EloquentRepository implements RepositoryInterface
 
         return $this->model->find($id, $columns);
     }
-    
+
     public function findOrFail($id, $columns = ['*'])
     {
         $this->makeModel();
@@ -108,7 +108,7 @@ abstract class EloquentRepository implements RepositoryInterface
 
         return $this->model->create($data);
     }
-    
+
     public function update(array $data, $id = null)
     {
         $this->newQuery()
@@ -164,7 +164,7 @@ abstract class EloquentRepository implements RepositoryInterface
     {
         $this->newQuery()
             ->loadWhere();
-        
+
         return $this->model->orderBy($key, $value);
     }
 
@@ -186,7 +186,7 @@ abstract class EloquentRepository implements RepositoryInterface
         if (is_array($lists)) {
             return $lists;
         }
-        
+
         return $lists->all();
     }
 
@@ -194,15 +194,14 @@ abstract class EloquentRepository implements RepositoryInterface
     {
         $this->newQuery()
             ->loadWhere();
-        
+
         return $this->model->toArray();
     }
 
     public function all()
     {
-        $this->newQuery()
-            ->loadWhere();
-        
+        $this->newQuery()->loadWhere();
+
         return $this->model->all();
     }
 
@@ -210,7 +209,7 @@ abstract class EloquentRepository implements RepositoryInterface
     {
         $this->newQuery()
             ->loadWhere();
-        
+
         return $this->model->with($relationships);
     }
 }

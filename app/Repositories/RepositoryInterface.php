@@ -9,7 +9,7 @@ interface RepositoryInterface
     public function orWhere($conditions, $operator = null, $value = null);
 
     public function count();
-    
+
     public function get($columns = ['*']);
 
     public function lists($column, $key = null);
@@ -33,6 +33,8 @@ interface RepositoryInterface
     public function pluck($value, $key = null);
 
     public function toArray();
+
+    public function all();
 
     public function with($relationships = ['']);
 }

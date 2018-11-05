@@ -16,4 +16,9 @@ class Seat extends Model
     {
         return $this->belongsTo('App\Models\Location', 'location_id');
     }
+
+    public function user()
+    {
+        return $this->hasOne('App\Models\User', 'seat_id', 'id');
+    }
 }
