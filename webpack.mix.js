@@ -24,3 +24,9 @@ mix.copyDirectory('resources/js/detailworkspace.js', 'public/js');
 mix.copyDirectory('resources/js/generate.js', 'public/js');
 mix.copyDirectory('resources/js/location.js', 'public/js');
 mix.copyDirectory('resources/css/custom.css', 'public/css');
+
+mix.styles('resources/css/datatable.css', 'public/css/datatable.css');
+
+mix.js('resources/js/role.js', 'public/js/role.js');
+
+mix.version();

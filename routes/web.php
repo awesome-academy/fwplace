@@ -13,13 +13,22 @@
 
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['checkLogin', 'CheckAdmin']], function () {
     Route::get('/', 'DashboardController@index')->name('admin.index');
+
+    Route::get('/roles/get-roles','RoleController@getRoles')->name('roles.get_roles');
+    Route::post('/roles/update-permission-role','RoleController@updatePermissionRole')->name('roles.update_permission_role');
+    Route::get('/roles/get-permission-role/{role_id}','RoleController@getPermissionRole')->name('roles.get_permission_role');
+    Route::resource('roles', 'RoleController');
+
+    Route::post('/users/update-role-user','UserController@updateRoleUser')->name('users.update_role_user');
+    Route::resource('users', 'UserController');
+
     Route::resource('positions', 'PositionController');
     Route::resource('workspaces', 'WorkspaceController');
     Route::resource('programs', 'ProgramController');
     Route::resource('locations', 'LocationController');
-    Route::resource('users', 'UserController');
     Route::resource('userdisables', 'UserDisableController');
     Route::get('/traineelists/{id}', 'UserController@getListTrainee');
+
     Route::group(['prefix' => 'schedule', 'as' => 'schedule.'], function () {
         Route::get('/', 'WorkingScheduleController@chooseWorkplace')->name('workplace.list');
         Route::get('/{id}', 'WorkingScheduleController@viewByWorkplace')->name('workplace.view');
@@ -29,6 +38,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['che
         Route::get('users/{id}', 'WorkingScheduleController@viewByUser');
         Route::get('users/{id}/get', 'WorkingScheduleController@getDataUser');
     });
+
     Route::group(['prefix' => 'calendar', 'as' => 'calendar.'], function () {
         Route::get('/', 'SittingCalendarController@chooseWorkplace')->name('workplace.list');
         Route::get('/workplace/{id}', 'SittingCalendarController@locationList')->name('location.list');
