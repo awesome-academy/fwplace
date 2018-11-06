@@ -34,26 +34,32 @@ $(function() {
             {
                 data: 'action',
                 name: 'action',
-                render: function (roleId) {
+                render: function (data) {
                     $string = '';
 
-                    $string = $string + '<a href="' + route('roles.show', roleId) + '"\
+                    if (data.permissionRoles == 1) {
+                        $string = $string + '<a href="' + route('roles.show', data.roleId) + '"\
+                                                class="m-portlet__nav-link btn m-btn m-btn--hover-brand\
+                                                        m-btn--icon m-btn--icon-only m-btn--pill"\
+                                                data-tooltip="tooltip" title="' + permission_lang + '">\
+                                                <i class="la la-shield" aria-hidden="true"></i></a>' + '&nbsp;&nbsp;';
+                    }
+
+                    if (data.editRoles == 1) {
+                        $string = $string + '&nbsp;&nbsp;' + '<a href="javascript:;" data-id="' + data.roleId + '"\
                                             class="m-portlet__nav-link btn m-btn m-btn--hover-brand\
-                                                    m-btn--icon m-btn--icon-only m-btn--pill"\
-                                            data-tooltip="tooltip" title="' + permission_lang + '">\
-                                            <i class="la la-shield" aria-hidden="true"></i></a>' + '&nbsp;&nbsp;';
+                                                    m-btn--icon m-btn--icon-only m-btn--pill edit_role"\
+                                            data-tooltip="tooltip" title="' + edit_lang + '">\
+                                            <i class="la la-edit" aria-hidden="true"></i></a>' + '&nbsp;&nbsp;';
+                    }
 
-                    $string = $string + '&nbsp;&nbsp;' + '<a href="javascript:;" data-id="' + roleId + '"\
-                                        class="m-portlet__nav-link btn m-btn m-btn--hover-brand\
-                                                m-btn--icon m-btn--icon-only m-btn--pill edit_role"\
-                                        data-tooltip="tooltip" title="' + edit_lang + '">\
-                                        <i class="la la-edit" aria-hidden="true"></i></a>' + '&nbsp;&nbsp;';
-
-                    $string = $string + '&nbsp;&nbsp;' + '<a href="javascript:;" data-id="' + roleId + '"\
-                                        class="m-portlet__nav-link btn m-btn m-btn--hover-brand\
-                                                m-btn--icon m-btn--icon-only m-btn--pill delete_role"\
-                                        data-tooltip="tooltip" title="' + delete_lang + '">\
-                                        <i class="la la-trash"></i></a>';
+                    if (data.deleteRoles == 1) {
+                        $string = $string + '&nbsp;&nbsp;' + '<a href="javascript:;" data-id="' + data.roleId + '"\
+                                            class="m-portlet__nav-link btn m-btn m-btn--hover-brand\
+                                                    m-btn--icon m-btn--icon-only m-btn--pill delete_role"\
+                                            data-tooltip="tooltip" title="' + delete_lang + '">\
+                                            <i class="la la-trash"></i></a>';
+                    }
 
                     return $string;
                 }
@@ -72,7 +78,7 @@ $(function() {
     /*--------------------------*/
 
     /*Ấn nút Tạo vai trò mới*/
-    $('#add_role_btn').on('click', function(event) {
+    $('#add_role_btn').on('click', function (event) {
         event.preventDefault();
 
         var name = $('#name').val();
@@ -96,7 +102,7 @@ $(function() {
                 type: 'POST',
                 url: route('roles.store'),
                 data: formData,
-                success: function(res) {
+                success: function (res) {
                     if (res.error == 'valid') {
                         var arr = res.message;
                         var key = Object.keys(arr);
@@ -114,7 +120,7 @@ $(function() {
                         //
                     }
                 },
-                error: function(xhr, ajaxOptions, thrownError) {
+                error: function (xhr, ajaxOptions, thrownError) {
                     // 
                 }
             });
@@ -137,7 +143,7 @@ $(function() {
         $.ajax({
             type: 'GET',
             url: route('roles.edit', [role_id]),
-            success: function(res)
+            success: function (res)
             {
                 $('#edit_display_name').val(res.role.display_name);
                 $('#edit_name').val(res.role.name);
@@ -152,7 +158,7 @@ $(function() {
     /*--------------------------*/
 
     /*Ấn nút Cập nhật vai trò*/
-    $('#edit_role_btn').on('click', function(event) {
+    $('#edit_role_btn').on('click', function (event) {
         event.preventDefault();
 
         var name = $('#edit_name').val();
@@ -177,7 +183,7 @@ $(function() {
                 type: 'PUT',
                 url: route('roles.update', [role_id]),
                 data: formData,
-                success: function(res) {
+                success: function (res) {
                     if (res.error == 'valid') {
                         var arr = res.message;
                         var key = Object.keys(arr);
@@ -195,7 +201,7 @@ $(function() {
                         //
                     }
                 },
-                error: function(xhr, ajaxOptions, thrownError) {
+                error: function (xhr, ajaxOptions, thrownError) {
                     // 
                 }
             });
@@ -205,13 +211,13 @@ $(function() {
 
     /*Xóa vai trò*/
     $(document).on('click', '.delete_role', function() {
-        var role_id =  $(this).data('id');
+        var role_id = $(this).data('id');
 
         swal({
             title: question_delete_lang,
-            type: "warning",
+            type: 'warning',
             showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
+            confirmButtonColor: '#DD6B55',
             cancelButtonText: no_lang,
             confirmButtonText: yes_lang,
         },

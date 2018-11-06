@@ -151,11 +151,14 @@
                                                     </td>
 
                                                     <td>
-                                                        <a href="{{ url('admin/users/' . $user->id . '/edit') }}" class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" data-toggle="m-tooltip" data-placement="top" data-original-title="{{ __('Edit') }}">
-                                                            <i class="flaticon-edit-1"></i>
-                                                        </a>
-                                                        @if (Auth::user()->role == config('site.permission.admin'))
-                                                            {!! Form::open(['url' => 'admin/users/' . $user->id, 'method' => 'DELETE', 'class' => 'd-inline']) !!}
+                                                        @if (Entrust::can(['edit-users']))
+                                                            <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" data-toggle="m-tooltip" data-placement="top" data-original-title="{{ __('Edit') }}">
+                                                                <i class="flaticon-edit-1"></i>
+                                                            </a>
+                                                        @endif
+
+                                                        @if (Entrust::can(['delete-users']))
+                                                            {!! Form::open(['route' => ['users.destroy', $user->id], 'method' => 'DELETE', 'class' => 'd-inline']) !!}
                                                             {!! Form::button('<i class="flaticon-cancel"></i>', ['type' => 'submit', 'class' => 'btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill delete', 'data-toggle' => 'm-tooltip', 'data-placement' => 'top', 'data-original-title' => __('Delete')]) !!}
                                                             {!! Form::close() !!}
                                                         @endif

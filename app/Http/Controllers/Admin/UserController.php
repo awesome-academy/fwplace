@@ -34,7 +34,13 @@ class UserController extends Controller
         $this->positionRepository = $positionRepository;
         $this->workspaceRepository = $workspaceRepository;
         $this->roleRepository = $roleRepository;
-        $this->middleware('checkTrainer')->except('index', 'create', 'store', 'edit', 'update', 'getListTrainee');
+
+        $this->middleware('checkLogin');
+        $this->middleware('permission:view-users')->only(['index']);
+        $this->middleware('permission:add-users')->only(['create', 'store']);
+        $this->middleware('permission:role-users')->only(['show', 'updateRoleUser']);
+        $this->middleware('permission:edit-users')->only(['edit', 'update']);
+        $this->middleware('permission:delete-users')->only('destroy');
     }
 
     /**

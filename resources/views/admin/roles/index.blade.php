@@ -41,14 +41,18 @@
         <div class="m-portlet__head">
             <div class="m-portlet__head-tools">
                 <ul class="m-portlet__nav">
-                    <li class="m-portlet__nav-item">
-                        <a class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air" id="add_role_a">
-                            <span>
-                                <i class="la la-plus"></i>
-                                <span>{{ __('New Role') }}</span>
-                            </span>
-                        </a>
-                    </li>
+
+                    @if (Entrust::can(['add-roles']))
+                        <li class="m-portlet__nav-item">
+                            <a class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air" id="add_role_a">
+                                <span>
+                                    <i class="la la-plus"></i>
+                                    <span>{{ __('New Role') }}</span>
+                                </span>
+                            </a>
+                        </li>
+                    @endif
+                    
                 </ul>
             </div>
         </div>

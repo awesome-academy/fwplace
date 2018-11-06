@@ -25,6 +25,13 @@ class RoleController extends Controller
     {
         $this->roleRepository = $roleRepository;
         $this->permissionRepository = $permissionRepository;
+
+        $this->middleware('checkLogin');
+        $this->middleware('permission:view-roles')->only(['index', 'getRoles']);
+        $this->middleware('permission:add-roles')->only(['create', 'store']);
+        $this->middleware('permission:permission-roles')->only(['show', 'getPermissionRole', 'updatePermissionRole']);
+        $this->middleware('permission:edit-roles')->only(['edit', 'update']);
+        $this->middleware('permission:delete-roles')->only('destroy');
     }
 
     /**
@@ -242,7 +249,30 @@ class RoleController extends Controller
             })
 
             ->addColumn('action', function ($role) {
-                return $role->id;
+                if (Entrust::can(['permission-roles'])) {
+                    $permissionRoles = 1;
+                } else {
+                    $permissionRoles = 0;
+                }
+
+                if (Entrust::can(['edit-roles'])) {
+                    $editRoles = 1;
+                } else {
+                    $editRoles = 0;
+                }
+
+                if (Entrust::can(['delete-roles'])) {
+                    $deleteRoles = 1;
+                } else {
+                    $deleteRoles = 0;
+                }
+
+                return [
+                    'permissionRoles' => $permissionRoles,
+                    'editRoles' => $editRoles,
+                    'deleteRoles' => $deleteRoles,
+                    'roleId' => $role->id,
+                ];
             })
 
         ->make(true);

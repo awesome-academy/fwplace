@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use App\Models\User;
 
 class UserTableSeeder extends Seeder
 {
@@ -11,7 +12,11 @@ class UserTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::table('users')->truncate();
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+        User::create([
             'name' => 'Admin',
             'email' => 'admin@framgia.com',
             'password' => bcrypt('framgia'),
@@ -20,9 +25,10 @@ class UserTableSeeder extends Seeder
             'workspace_id' => 1,
             'role' => 2,
             'lang' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
-        DB::table('users')->insert([
+
+        User::create([
             'name' => 'Trainer',
             'email' => 'trainer@framgia.com',
             'password' => bcrypt('framgia'),
@@ -31,9 +37,10 @@ class UserTableSeeder extends Seeder
             'workspace_id' => 1,
             'role' => 1,
             'lang' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
-        DB::table('users')->insert([
+
+        User::create([
             'name' => 'Trainee',
             'email' => 'trainee@framgia.com',
             'password' => bcrypt('framgia'),
@@ -42,22 +49,7 @@ class UserTableSeeder extends Seeder
             'workspace_id' => 1,
             'role' => 0,
             'lang' => 1,
-            'status' => 1
+            'status' => 1,
         ]);
-
-        $faker = \Faker\Factory::create();
-        foreach (range(1, 20) as $value) {
-            $positions = collect(['Open', 'Intern']);
-            DB::table('users')->insert([
-                'name' => $faker->name,
-                'email' => $faker->email,
-                'password' => bcrypt('framgia'),
-                'program_id' => DB::table('programs')->get()->random()->id,
-                'position_id' => DB::table('positions')->where('name', $positions->random())->first()->id,
-                'workspace_id' => DB::table('workspaces')->get()->random()->id,
-                'lang' => 1,
-                'status' => 1
-            ]);
-        }
     }
 }
