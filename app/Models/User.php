@@ -21,7 +21,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
+        'seat_id',
         'name',
+        'images',
         'email',
         'password',
         'status',
@@ -32,6 +34,7 @@ class User extends Authenticatable
         'status',
         'lang',
         'role',
+        'seat_id',
         'trainer_id',
     ];
 
@@ -75,6 +78,10 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\WorkSchedule', 'user_id');
     }
 
+    public function seat()
+    {
+        return $this->belongsTo('App\Models\Seat', 'seat_id', 'id');
+    }
     /**
      * Get roles many to many
      * @return [type] [description]

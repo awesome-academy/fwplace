@@ -4,7 +4,7 @@ namespace App\Repositories;
 
 use App\Models\Program;
 
-class ProgramRepository extends EloquentRepository
+class ProgramRepository extends EloquentRepository implements ProgramInterface
 {
     public function model()
     {

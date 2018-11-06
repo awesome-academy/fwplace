@@ -24,7 +24,7 @@ test:
   #   ignore: false
   #   command: eslint --format=checkstyle
   #     --output-file=.framgia-ci-reports/eslint.xml
-  #     resources/assets/js/ --ext .js
+  #     resources/js/ --ext .js
   phpcs:
     ignore: false
     command: echo '' | phpcs --standard=Framgia --report-checkstyle=.framgia-ci-reports/phpcs.xml app
