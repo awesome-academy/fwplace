@@ -12,22 +12,18 @@ $(document).ready(function () {
         for (var j = 0; j < paintLocation[i].length; j++)
         {
             var id = paintLocation[i][j]['name'];
-            var str = String(id);
-            var s = String();
-            for ( var k = 0; k < str.length; k++ ) {
-                if( str[k] != '-' ) {
-                    s +=str[k];
-                } else {
-                    break;
-                }
-            }
-            $('#' + s + '').val(paintLocation[i][j]['seat_id']);
+            var name_user = paintLocation[i][j]['user_name'].split(' ');
+            var avatar = paintLocation[i][j]['avatar'];
             var color = paintLocation[i][j]['color'];
+            var user_id = paintLocation[i][j]['user_id'];
+            $('#' + id + '').attr('seat_id', paintLocation[i][j]['seat_id']);
             $('#' + id + '').css('background-color', color);
             $('#' + id + '').removeClass('ui-selectee');
             $('#' + id + '').addClass('disabled');
-            var name_user = paintLocation[i][j]['user_name'].split(" ");
-            $('#' + id + '').html(name_user[name_user.length-1]);
+            $('#' + id + '').attr('full_name', paintLocation[i][j]['user_name']);
+            $('#' + id + '').html(name_user[name_user.length -1]);
+            $('#' + id + '').attr('avatar', avatar);
+            $('#' + id + '').attr('user_id', user_id);
         }
     }
 
@@ -86,12 +82,18 @@ $(document).ready(function () {
 
     // Alert ID-User
     $('.all_seat .seat').hover(function () {
-        var checkID = $(this).attr('id');
-        $(this).append('<div id="hello"><span>"' + checkID + '"</span></div>');
+        var checkID = $(this).attr('full_name');
+        var avatar = $(this).attr('avatar');
+        if (avatar) {
+            $(this).append('<div id="hello"><span><small><i class="fa fa-circle" style="color: green"></i></small> ' + checkID + ' <br> <img src="storage/user/'+avatar+'" alt="" style = "width: 40px; "></span></div>');
+        } else {
+            $(this).append('<div id="hello"><span><small><i class="fa fa-circle" style="color: green"></i></small> ' + checkID + ' <br> </span></div>');
+        }
+
     },
-        function() {
+    function() {
         $( this ).find('#hello').remove();
-  })
+    })
 
     //img-info-location
     function readURL(input) {
@@ -109,9 +111,35 @@ $(document).ready(function () {
         readURL(this);
     });
 
+
     $(document).on('click',  '.seat', function() {
-        var id = $(this).find('input[name="seat"]').val();
-        $('#locations').val(id);
+        var user_id = $(this).attr('user_id');
+        $('#locations').val(user_id);
+        var avatar = $(this).attr('avatar');
+        if (avatar != '') {
+            var id = $(this).attr('id');
+            var $this = $(this);
+            var url = route('edit_info_location');
+            $.ajaxSetup({
+                headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+            });
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {'user_id' : user_id},
+                success: function (data) {
+                    var url ='../storage/user/'+ data.avatar;
+                        if (url) {
+                            $('#modal-info-user').find('#imagePreview').css('background-image', 'url(' + url + ')');
+                        }
+                        $('#modal-info-user').find('#list-name option[value = '+data.id+']').attr('selected','selected');
+                        $('#modal-info-user').find('#list-language option[value = '+data.program_id+']').attr('selected','selected');
+                        $('#modal-info-user').find('#list-position option[value = '+data.position_id+']').attr('selected','selected');
+                }
+            });
+        };
     });
 
 })
