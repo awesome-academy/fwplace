@@ -283,6 +283,17 @@
                             </li>
 
                             <li class="m-menu__item" aria-haspopup="true">
+                                <a href="{{ route('image_map') }}" class="m-menu__link ">
+                                    <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                        <span></span>
+                                    </i>
+                                    <span class="m-menu__link-text color-manager">
+                                        @lang('Design Diagram')
+                                    </span>
+                                </a>
+                            </li>
+
+                            <li class="m-menu__item" aria-haspopup="true">
                                 <a href="{{ route('list_workspace') }}" class="m-menu__link ">
                                     <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                         <span></span>

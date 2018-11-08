@@ -31,20 +31,18 @@
             {!! Form::hidden('',$colorLocation, ['id' => 'colorLocation']) !!}
             @foreach($renderSeat as $row)
                 <div class="row">
-                        @foreach($row as $seat)
-                            <a data-toggle="modal" href='#modal-info-user' data-toggle="modal">
-                                <div class="seat @if ($seat === null) disabled @endif" id="{{ $seat }}-{{ $idWorkspace }}">
-                                    {{ $seat ?? 'X' }}
-                                    {!! Form::hidden('seat', $seat, ['id' => $seat]) !!}
-                                </div>
-                            </a>
-                        @endforeach
+                    @foreach($row as $seat)
+                        <a data-toggle="modal" href='#modal-info-user' data-toggle="modal">
+                            <span seat_id="" full_name="" avatar="" user_id="" class="seat @if ($seat === null) disabled @endif" id="{{ $seat }}">
+                                {{ $seat ?? 'X' }}
+                            </span>
+                        </a>
+                    @endforeach
                 </div>
             @endforeach
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="modal-info-user">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -59,7 +57,7 @@
                                 {!! Html::image( asset(config('site.static') . 'favicon.png'), 'alt' ) !!}
                                 <p></p>
                             </div>
-                            {!! Form::open([ 'method' => 'POST', 'route' => 'save_info_location','file' => true, 'class'=>'m-form m-form--fit', 'id' => 'myForm'] ) !!}
+                            {!! Form::open([ 'method' => 'POST', 'route' => 'save_info_location','files' => true, 'class'=>'m-form m-form--fit', 'id' => 'myForm'] ) !!}
                                 <div class="m-portlet__body">
                                     <div class="form-group m-form__group row">
                                         <div class="col-12">
@@ -67,7 +65,7 @@
                                                 <h1 class="title-img">{{ __('My PhoTo') }}</h1>
                                                 <div class="avatar-upload">
                                                     <div class="avatar-edit">
-                                                        {!! Form::file('image', ['accept' => '.png, .jpg, .jpeg', 'id' => 'imageUpload']) !!}
+                                                        {!! Form::file('avatar', ['accept' => '.png, .jpg, .jpeg', 'id' => 'imageUpload']) !!}
                                                         <label for="imageUpload"></label>
                                                     </div>
                                                     <div class="avatar-preview">
@@ -81,22 +79,22 @@
                                     <div class="form-group m-form__group row">
                                         {!! htmlspecialchars_decode( Form::label( 'name', __('User Name').'<span class="required">*</span>', [ 'class' => 'control-label col-md-4 col-sm-4 col-xs-12']  ) )  !!}
                                         <div class="col-8">
-                                            {!! Form::select('name',$listUser, null, ['class' => 'form-control m-input', 'required'=>'', 'id' => 'list-name' ])  !!}
+                                            {!! Form::select('user_id',$listUser, null, ['class' => 'form-control m-input', 'required'=>'', 'id' => 'list-name' ])  !!}
                                         </div>
                                     </div>
                                     <div class="form-group m-form__group row">
                                         {!! htmlspecialchars_decode( Form::label( 'language', __('Language').'<span class="required">*</span>', [ 'class' => 'control-label col-md-4 col-sm-4 col-xs-12']  ) )  !!}
                                         <div class="col-8">
-                                            {!! Form::select('language',$listProgram, null, ['class' => 'form-control m-input'])  !!}
+                                            {!! Form::select('language',$listProgram, null, ['class' => 'form-control m-input', 'id' => 'list-language'])  !!}
                                         </div>
                                     </div>
                                     <div class="form-group m-form__group row">
                                         {!! htmlspecialchars_decode( Form::label( 'position', __('Position').'<span class="required">*</span>', [ 'class' => 'control-label col-md-4 col-sm-4 col-xs-12']  ) )  !!}
                                         <div class="col-8">
-                                            {!! Form::select('position',$listPosition, null, ['class' => 'form-control m-input'])  !!}
+                                            {!! Form::select('position',$listPosition, null, ['class' => 'form-control m-input', 'id' => 'list-position'])  !!}
                                         </div>
                                     </div>
-                                    {!! Form::hidden('seat_id','', ['id' => 'locations']) !!}
+                                    {!! Form::hidden('user_id','', ['id' => 'locations']) !!}
                                 </div>
                                 <div class="boder"></div>
                                 {!! Form::submit(__('Save'), ['class' => 'col-md-12 btn btn-success']) !!}

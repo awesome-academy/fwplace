@@ -52,7 +52,6 @@
         <i class="la la-arrow-up"></i>
     </div>
 
-
     @include('admin.assets.js')
     @include('sweetalert::alert')
 

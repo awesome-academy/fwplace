@@ -23,10 +23,8 @@ class User extends Authenticatable
     protected $fillable = [
         'seat_id',
         'name',
-        'images',
         'email',
         'password',
-        'status',
         'avatar',
         'program_id',
         'workspace_id',
@@ -80,7 +78,7 @@ class User extends Authenticatable
 
     public function seat()
     {
-        return $this->belongsTo('App\Models\Seat', 'seat_id', 'id');
+        return $this->hasOne('App\Models\Seat', 'user_id', 'id');
     }
     /**
      * Get roles many to many

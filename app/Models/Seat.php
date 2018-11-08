@@ -9,6 +9,7 @@ class Seat extends Model
     protected $fillable = [
         'name',
         'location_id',
+        'user_id',
     ];
     public $timestamps = false;
 
@@ -19,6 +20,6 @@ class Seat extends Model
 
     public function user()
     {
-        return $this->hasOne('App\Models\User', 'seat_id', 'id');
+        return $this->belongsTo('App\Models\User', 'user_id', 'id');
     }
 }

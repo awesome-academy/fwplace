@@ -74,4 +74,6 @@ Route::group(['prefix' => 'workspace'], function () {
     Route::get('detail/{id}', 'Admin\DiagramController@detail')->name('detail_workspace');
     Route::post('save-ajax', 'Admin\DiagramController@saveAjaxLocation')->name('save_location_color');
     Route::post('save-info-location', 'Admin\DiagramController@saveInfoLocation')->name('save_info_location');
+    Route::post('edit-info-location', 'Admin\DiagramController@editInfoLocation')->name('edit_info_location');
+    Route::get('image-map', 'Admin\DiagramController@imageMap')->name('image_map');
 });

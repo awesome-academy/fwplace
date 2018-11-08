@@ -10,6 +10,8 @@ use App\Repositories\ProgramInterface;
 use App\Repositories\UserRepository;
 use App\Repositories\PositionRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class DiagramController extends Controller
 {
@@ -98,8 +100,12 @@ class DiagramController extends Controller
                 $colorLocation[$key][$id]['seat_id'] = $seat->id;
                 if ($seat->user != null) {
                     $colorLocation[$key][$id]['user_name'] = $seat->user->name;
+                    $colorLocation[$key][$id]['avatar'] = $seat->user->avatar;
+                    $colorLocation[$key][$id]['user_id'] =  $seat->user->id;
                 } else {
                     $colorLocation[$key][$id]['user_name'] = $seat->name;
+                    $colorLocation[$key][$id]['avatar'] = null;
+                    $colorLocation[$key][$id]['user_id'] = null;
                 }
                 $colorLocation[$key][$id]['name'] = $seat->name;
                 $colorLocation[$key][$id]['color'] = $location->color;
@@ -225,5 +231,28 @@ class DiagramController extends Controller
         $colorLocation = json_encode($colorLocation);
 
         return view('test.workspace.detail', compact('workspace', 'renderSeat', 'colorLocation', 'locations'));
+    }
+
+    public function saveInfoLocation(Request $request)
+    {
+        $data = $request->only('user_id', 'seat_id');
+        $this->seat->findOrFail($request->seat_id);
+        $this->seat->update($data, $request->seat_id);
+
+        Alert::success(trans('Edit Program'), trans('Successfully!!!'));
+
+        return redirect()->back();
+    }
+
+    public function editInfoLocation(Request $request)
+    {
+        $data = $this->userRepository->where('id', $request->user_id)->first();
+
+        return response()->json($data);
+    }
+
+    public function imageMap()
+    {
+        return view('test.workspace.image_map');
     }
 }
