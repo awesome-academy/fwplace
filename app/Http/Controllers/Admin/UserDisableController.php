@@ -26,7 +26,9 @@ class UserDisableController extends Controller
         $this->programRepository = $programRepository;
         $this->positionRepository = $positionRepository;
         $this->workspaceRepository = $workspaceRepository;
-        $this->middleware('checkTrainer')->except('index', 'create', 'store', 'edit', 'update');
+
+        $this->middleware('checkLogin');
+        $this->middleware('permission:view-users')->only(['index']);
     }
 
     /**

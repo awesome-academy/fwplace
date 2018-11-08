@@ -45,19 +45,25 @@
                             </h3>
                         </div>
                     </div>
+
                     <div class="m-portlet__head-tools">
                         <ul class="m-portlet__nav">
-                            <li class="m-portlet__nav-item">
-                                <a href="{{ url('admin/users/create') }}" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
-                                    <span>
-                                        <i class="la la-plus"></i>
-                                        <span>{{ __('New User') }}</span>
-                                    </span>
-                                </a>
-                            </li>
+
+                            @if (Entrust::can(['add-users']))
+                                <li class="m-portlet__nav-item">
+                                    <a href="{{ url('admin/users/create') }}" class="btn btn-primary m-btn m-btn--pill m-btn--custom m-btn--icon m-btn--air">
+                                        <span>
+                                            <i class="la la-plus"></i>
+                                            <span>{{ __('New User') }}</span>
+                                        </span>
+                                    </a>
+                                </li>
+                            @endif
+                            
                         </ul>
                     </div>
                 </div>
+
                 <div class="m-portlet__body">
                     {!! Form::open(['url' => 'admin/users', 'method' => 'GET', 'class' => 'm-form m-form--fit m--margin-bottom-20']) !!}
                         <div class="row m--margin-bottom-20">
@@ -88,7 +94,7 @@
                             </div>
                         </div>
                     {!! Form::close() !!}
-                    <!--begin::Section-->
+
                     <div class="m-section">
                         <div class="m-section__content">
                             <table class="table m-table m-table--head-bg-primary">
@@ -159,14 +165,20 @@
                                                 </td>
 
                                                 <td>
-                                                    <a href="{{ route('users.show', $user->id) }}" class="btn btn-success m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" data-toggle="m-tooltip" data-placement="top" data-original-title="{{ __('Role') }}">
-                                                        <i class="flaticon-lock-1"></i>
-                                                    </a>
-                                                    <a href="{{ url('admin/users/' . $user->id . '/edit') }}" class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" data-toggle="m-tooltip" data-placement="top" data-original-title="{{ __('Edit') }}">
-                                                        <i class="flaticon-edit-1"></i>
-                                                    </a>
-                                                    @if (Auth::user()->role == config('site.permission.admin'))
-                                                        {!! Form::open(['url' => 'admin/users/' . $user->id, 'method' => 'DELETE', 'class' => 'd-inline']) !!}
+                                                    @if (Entrust::can(['role-users']))
+                                                        <a href="{{ route('users.show', $user->id) }}" class="btn btn-success m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" data-toggle="m-tooltip" data-placement="top" data-original-title="{{ __('Role') }}">
+                                                            <i class="flaticon-lock-1"></i>
+                                                        </a>
+                                                    @endif
+
+                                                    @if (Entrust::can(['edit-users']))
+                                                        <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" data-toggle="m-tooltip" data-placement="top" data-original-title="{{ __('Edit') }}">
+                                                            <i class="flaticon-edit-1"></i>
+                                                        </a>
+                                                    @endif
+
+                                                    @if (Entrust::can(['delete-users']))
+                                                        {!! Form::open(['route' => ['users.destroy', $user->id], 'method' => 'DELETE', 'class' => 'd-inline']) !!}
                                                         {!! Form::button('<i class="flaticon-cancel"></i>', ['type' => 'submit', 'class' => 'btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill delete', 'data-toggle' => 'm-tooltip', 'data-placement' => 'top', 'data-original-title' => __('Delete')]) !!}
                                                         {!! Form::close() !!}
                                                     @endif
@@ -180,7 +192,7 @@
                         </div>
                         {{ $users->links() }}
                     </div>
-                    <!--end::Section-->
+
                 </div>
             </div>
         </div>

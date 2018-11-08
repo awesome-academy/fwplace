@@ -11,7 +11,7 @@
 |
 */
 
-Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['checkLogin', 'CheckAdmin']], function () {
+Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['checkLogin']], function () {
     Route::get('/', 'DashboardController@index')->name('admin.index');
 
     Route::get('/roles/get-roles', 'RoleController@getRoles')->name('roles.get_roles');

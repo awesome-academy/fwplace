@@ -1,0 +1,13 @@
+.td-permission {
+    width: 50%;
+}
+
+.span-permission {
+    margin-bottom: 3px;
+}
+
+.update-role {
+    cursor: pointer;
+    color: #3598dc;
+    font-size: 20px;
+}

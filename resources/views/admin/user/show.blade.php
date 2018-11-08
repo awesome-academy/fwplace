@@ -5,7 +5,7 @@
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('bower_components/metro-asset/vendors/custom/datatables/datatables.bundle.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('bower_components/lib_fwplace/css/toastr.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ mix('css/datatable.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ mix('css/role-user.css') }}">
 @endsection
 
 @section('module')
@@ -47,11 +47,11 @@
             <table class="table table-striped- table-bordered table-hover table-checkable" id="roles_table">
                 <thead>
                     <tr>
-                        <th>{{ __('#') }}</th>
-                        <th>{{ __('Role') }}</th>
-                        <th>{{ __('Description') }}</th>
-                        <th>{{ __('Permission') }}</th>
-                        <th>{{ __('Action') }}</th>
+                        <th class="text-center">{{ __('#') }}</th>
+                        <th class="text-center">{{ __('Role') }}</th>
+                        <th class="text-center">{{ __('Description') }}</th>
+                        <th class="text-center">{{ __('Permission') }}</th>
+                        <th class="text-center">{{ __('Action') }}</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -60,13 +60,13 @@
                         @foreach ($roles as $key => $role)
 
                             <tr>
-                                <td>{{ $key + 1 }}</td>
-                                <td>{{ $role->display_name }}</td>
-                                <td>{{ $role->description }}</td>
-                                <td>
+                                <td class="text-center">{{ $key + 1 }}</td>
+                                <td class="text-center">{{ $role->display_name }}</td>
+                                <td class="text-center">{{ $role->description }}</td>
+                                <td class="td-permission">
                                     @if (!empty($role->permissions))
                                         @foreach ($role->permissions as $permission)
-                                            <span class="m-badge m-badge--success m-badge--wide">
+                                            <span class="m-badge m-badge--success m-badge--wide span-permission">
                                                 {{ $permission->display_name }}
                                             </span>
                                         @endforeach
@@ -76,9 +76,9 @@
                                     <input type="hidden" id="checked-{{ $role->id }}" value="{{ $role->checked }}">
 
                                     @if ($role->checked == 1)
-                                        <i id="action-{{ $role->id }}" class="fa fa-check-circle" onclick="updateRole({{ $user->id }}, {{ $role->id }})" aria-hidden="true" style="cursor: pointer; color: #3598dc; font-size: 20px;"></i>
-                                    @else
-                                        <i id="action-{{ $role->id }}" class="fa fa-circle-notch" onclick="updateRole({{ $user->id }}, {{ $role->id }})" aria-hidden="true" style="cursor: pointer; color: #3598dc; font-size: 20px;"></i>
+                                        <i id="action-{{ $role->id }}" class="fa fa-check-circle update-role" data-userid="{{ $user->id }}" data-roleid="{{ $role->id }}" aria-hidden="true"></i>
+                                    @else 
+                                        <i id="action-{{ $role->id }}" class="fa fa-circle-notch update-role" data-userid="{{ $user->id }}" data-roleid="{{ $role->id }}" aria-hidden="true"></i>
                                     @endif
                                 </td>
                             </tr>
@@ -101,49 +101,6 @@
     <script src="{{ asset('bower_components/metro-asset/demo/default/custom/crud/datatables/data-sources/html.js') }}"></script>
     <script src="{{ asset('bower_components/lib_fwplace/js/toastr.min.js') }}"></script>
 
-    <script>
-        /*Lang-i18n*/
-        var add_success_lang = $('#add_success_lang').val();
-        var delete_success_lang = $('#delete_success_lang').val();
-        /*---------*/
-
-        /*Thay đổi vai trò*/
-        function updateRole(user_id, role_id) {
-            var checked = $('#checked-' + role_id).val();
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
-            $.ajax({
-                type: 'POST',
-                url: '{{ route('users.update_role_user') }}',
-                data: {
-                    user_id: user_id,
-                    role_id: role_id,
-                    checked: checked,
-                },
-                success: function(res)
-                {
-                    if (res.message == 'deleted') {
-                        $('#action-' + role_id).removeClass('fa-check-circle').addClass('fa-circle-notch');
-                        $('#checked-' + role_id).val(0);
-                        toastr.success(delete_success_lang);
-                    }
-
-                    if (res.message == 'added') {
-                        $('#action-' + role_id).removeClass('fa-circle-notch').addClass('fa-check-circle');
-                        $('#checked-' + role_id).val(1);
-                        toastr.success(add_success_lang);
-                    }
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    //
-                }
-            });
-        }
-        /*-------------------*/
-    </script>
+    @routes
+    <script src="{{ mix('js/role-user.js') }}"></script>
 @endsection

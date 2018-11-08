@@ -29,7 +29,10 @@ mix.scripts('resources/js/image_mapping.js', 'public/js/image_mapping.js');
 mix.styles('resources/css/image_map.css', 'public/css/image_map.css');
 
 mix.styles('resources/css/datatable.css', 'public/css/datatable.css');
+mix.styles('resources/css/role-user.css', 'public/css/role-user.css');
 
 mix.js('resources/js/role.js', 'public/js/role.js');
+mix.js('resources/js/permission-role.js', 'public/js/permission-role.js');
+mix.js('resources/js/role-user.js', 'public/js/role-user.js');
 
 mix.version();
