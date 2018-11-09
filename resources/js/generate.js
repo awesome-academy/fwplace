@@ -1,35 +1,63 @@
 $(document).ready(function () {
-
     var paint = $('#colorLocation').val();
     var paintLocation = JSON.parse(paint);
+
     for (var i = 0 ; i < paintLocation.length; i++)
     {
         var colorNote = paintLocation[i][0]['color'];
         var nameLocation = paintLocation[i][0]['location'];
         var workspace_id = paintLocation[i][0]['workspace_id'];
-        $('#noteaddlocation').append(
-            '<div class="seat seat-info" info-id = "' + workspace_id + '" info-name = "' + nameLocation + '" info-color = "' + colorNote + '" style="background-color: ' + colorNote + '; width: 15px; height: 15px;">\n' + '</div> : ' + nameLocation + '<br>');
+        $('#noteaddlocation').append('<div class="seat seat-info" info-id = "' + workspace_id + '" info-name = "' + nameLocation + '" info-color = "' + colorNote + '" style="background-color: ' + colorNote + '; width: 15px; height: 15px;">\n' + '</div> : ' + nameLocation + '<br>');
         for (var j = 0; j < paintLocation[i].length; j++)
         {
             var id = paintLocation[i][j]['name'];
-            var name_user = paintLocation[i][j]['user_name'].split(' ');
+            var user_name = paintLocation[i][j]['user_name'];
             var avatar = paintLocation[i][j]['avatar'];
             var color = paintLocation[i][j]['color'];
             var user_id = paintLocation[i][j]['user_id'];
+            var program = paintLocation[i][j]['program'];
+            var position = paintLocation[i][j]['position'];
+            var status = '<small><i class="fa fa-circle" style="color: green; padding-right: 10px"></i></small>';
             $('#' + id + '').attr('seat_id', paintLocation[i][j]['seat_id']);
-            $('#' + id + '').css('background-color', color);
+            $('#' + id + '').css({
+                'background-color': color,
+                'font-size': '18px',
+                'color': '#232121'
+            });
             $('#' + id + '').removeClass('ui-selectee');
             $('#' + id + '').addClass('disabled');
-            $('#' + id + '').attr('full_name', paintLocation[i][j]['user_name']);
-            $('#' + id + '').html(name_user[name_user.length -1]);
+
+            var x = '';
+            if (Array.isArray(user_name) && Array.isArray(avatar)) {
+                var result =  Object.assign.apply({}, user_name.map( (v, i) => ( {[v]: avatar[i]} ) ) );
+                var count_user = 0;
+                for (var k in result) {
+                    if (result.hasOwnProperty(k)) {
+                        if (user_name.length <= 1) {
+                            x += '<button type="button" class="btn m-btn--pill  btn-outline-success button-hover" data-toggle="modal" href="#modal-info-user-1" data-id="'+ user_id[count_user] +'" position = "' + position + '" program="' + program + '" id="' + k + '" info-avatar="'+ result[k] +'">' + status + k + ' </button><br><a class="btn m-btn--pill m-btn--air btn-secondary" data-toggle="modal" data-target="#modal-info-user" data-placement="left" data-original-title="Add Workspace"> <i class="flaticon-add"></i></a>';
+                            count_user++;
+                        } else {
+                            x += '<button type="button" class="btn m-btn--pill  btn-outline-success button-hover" data-toggle="modal" href="#modal-info-user-1" data-id="'+user_id[count_user]+'" position = "' + position + '"program="' + program + '" id="' + k + '" info-avatar="'+ result[k] +'">' + status + k + ' </button>';
+                            count_user++;
+                        }
+
+                    }
+                }
+                $('#' + id + '').parent().removeAttr('href ata-toggle');
+            } else {
+                x = '<small><i class="fa fa-circle" style="color: #dcdcdc; padding-right: 10px"></i></small>'+ user_name;
+            }
+            $('#' + id + '').html(x);
+            $('#' + id + '').attr('full_name', x);
             $('#' + id + '').attr('avatar', avatar);
             $('#' + id + '').attr('user_id', user_id);
+
         }
     }
 
-    $('#show').click(function () {
+    $('#show').click(function() {
         var array = [];
-        $('.ui-selected').each(function () {
+        $('.ui-selected').each(function() {
             array.push($(this).attr('id'));
         });
         $('#seats').val(array);
@@ -52,12 +80,12 @@ $(document).ready(function () {
         }
     });
 
-    $(document).on('click', '.seat-info', function () {
+    $(document).on('click', '.seat-info', function() {
         var name = $(this).attr('info-name');
         var color = $(this).attr('info-color');
         var id = $(this).attr('info-id');
         var array = [];
-        $('.ui-selected').each(function () {
+        $('.ui-selected').each( function () {
             array.push($(this).attr('id'));
         });
         var seat = array;
@@ -72,7 +100,7 @@ $(document).ready(function () {
             url: url,
             data: {'id' : id, 'seat' : seat, 'name' : name, 'color' : color},
             success: function (data) {
-                var val = $('.ui-selected').each(function () {
+                var val = $('.ui-selected').each(function() {
                     $(this).css('background-color', data.color);
                 });
             }
@@ -81,15 +109,10 @@ $(document).ready(function () {
     })
 
     // Alert ID-User
-    $('.all_seat .seat').hover(function () {
-        var checkID = $(this).attr('full_name');
-        var avatar = $(this).attr('avatar');
-        if (avatar) {
-            $(this).append('<div id="hello"><span><small><i class="fa fa-circle" style="color: green"></i></small> ' + checkID + ' <br> <img src="storage/user/'+avatar+'" alt="" style = "width: 40px; "></span></div>');
-        } else {
-            $(this).append('<div id="hello"><span><small><i class="fa fa-circle" style="color: green"></i></small> ' + checkID + ' <br> </span></div>');
-        }
-
+    $('.all_seat .seat button').hover(function() {
+        var checkID = $(this).attr('id');
+        var checkAvatar = $(this).attr('info-avatar');
+        $(this).append('<div id="hello"><span><small><i class="fa fa-circle" style="color: green; padding-right: 10px"></i></small> ' + checkID + ' <br> <br> <img id="check-avatar" src="storage/user/' + checkAvatar + '" alt="" > </span></div>');
     },
     function() {
         $( this ).find('#hello').remove();
@@ -100,7 +123,7 @@ $(document).ready(function () {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
             reader.onload = function(e) {
-                $('#imagePreview').css('background-image', 'url('+e.target.result +')');
+                $('#imagePreview').css('background-image', 'url(' + e.target.result + ')');
                 $('#imagePreview').hide();
                 $('#imagePreview').fadeIn(650);
             }
@@ -111,35 +134,75 @@ $(document).ready(function () {
         readURL(this);
     });
 
-
     $(document).on('click',  '.seat', function() {
-        var user_id = $(this).attr('user_id');
-        $('#locations').val(user_id);
-        var avatar = $(this).attr('avatar');
-        if (avatar != '') {
-            var id = $(this).attr('id');
+        var seat_id = $(this).attr('seat_id');
+        $('#locations').val(seat_id);
+    });
+
+    $(document).on('click', '.seat button', function() {
+        var seat_id = $(this).closest('span').attr('seat_id');
+        var user_id = $(this).data('id');
+        $('#locations-1').val(seat_id);
+        $('#user-id-current').val(user_id);
+
+    });
+
+    $( '#list-name' ).change(function () {
+        $( '#list-name option:selected').each(function() {
             var $this = $(this);
-            var url = route('edit_info_location');
+            var url = 'workspace/avatar-info/';
+            var id = $(this).val();
             $.ajaxSetup({
                 headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    }
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: 'GET',
+                url: url + id,
+                success: function (data) {
+                    var avatar = urlAvatar + data.avatar;
+                    $('#modal-info-user').find('#imagePreview').css('background-image', 'url(' + avatar + ')');
+                }
+            });
+        });
+    }).change();
+
+    $( '.list-name' ).change(function() {
+        $( '.list-name option:selected').each( function() {
+            var $this = $(this);
+            var url = 'workspace/avatar-info/';
+            var id = $(this).val();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
             });
             $.ajax({
                 type: 'POST',
-                url: url,
-                data: {'user_id' : user_id},
-                success: function (data) {
-                    var url ='../storage/user/'+ data.avatar;
-                        if (url) {
-                            $('#modal-info-user').find('#imagePreview').css('background-image', 'url(' + url + ')');
-                        }
-                        $('#modal-info-user').find('#list-name option[value = '+data.id+']').attr('selected','selected');
-                        $('#modal-info-user').find('#list-language option[value = '+data.program_id+']').attr('selected','selected');
-                        $('#modal-info-user').find('#list-position option[value = '+data.position_id+']').attr('selected','selected');
+                url: url + id,
+                success: function(data) {
+                    if(data) {
+                        var avatarInfo =  urlAvatar + data.avatar;
+                        $('#modal-info-user-1').find('#imagePreview').css('background-image', 'url(' + avatarInfo + ')');
+                    }
                 }
             });
-        };
+        });
+    }).change();
+
+    $('button[data-toggle=modal]').click( function() {
+        var target = $($(this).attr('href'));
+        var id = $(this).data('id');
+        var program = $(this).attr('program');
+        var position = $(this).attr('position');
+
+        target.find('form').trigger('reset');
+        target.find('#imagePreview').attr('style', '');
+        target.find('.list-name').val(id).trigger('change');
+        target.find('.list-program').val(program).trigger('change');
+        target.find('.list-position').val(position).trigger('change');
+
     });
 
 })

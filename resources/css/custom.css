@@ -36,7 +36,8 @@ img.workspace_image {
 }
 #hello {
     position: absolute;
-    top: -184%;
+    bottom: 120%;
+    z-index: 2;
 }
 #hello::before {
     border-top: 30px solid #fffaf0;
@@ -45,7 +46,7 @@ img.workspace_image {
     width: 0;
     height: 0px;
     top: 100%;
-    left: 25px;
+    left: 70px;
     display: block;
     position: absolute;
     z-index: 999;
@@ -59,11 +60,11 @@ img.workspace_image {
     border: 1px solid #dcdcdc;
     border-radius: 25px;
     background: #fff;
+    color: cadetblue ;
 }
 .seat {
-    width: 80px;
-    position: relative;
-    height: 80px;
+    width: 200px;
+    height: 115px;
     line-height: 50px;
     background-color: #eef9f5;
     border: 1px solid #333;
@@ -115,4 +116,20 @@ img.workspace_image {
 }
 #imagePreview {
     background-image: url(../images/default.jpg);
+}
+#create-location {
+    margin: 0px auto;
+}
+#save-create-location {
+    text-align: right;
+    margin-top:  15px;
+}
+.button-hover {
+    position: relative!important;
+}
+#check-avatar {
+    width: 40px;
+}
+#m_modal_4 {
+    display: none;
 }

@@ -145,5 +145,24 @@
     "Information user": "THÔNG TIN CÁ NHÂN",
     "Full Time": "Toàn Thời Gian",
     "Part Time": "Bán Thời Gian",
-    "Design Diagram": "Thiết Kế Sơ Đồ"
+    "Design Diagram": "Thiết Kế Sơ Đồ",
+    "Link": "Đường Dẫn",
+    "Title": "Tiêu Đề",
+    "Add New Area": "THÊM MƠÍ",
+    "Show Code": "Lấy Mã Code",
+    "Enter Name Diagram": "Nhập Tên Sơ Đồ",
+    "Generated Image Map Output": "Code Sơ Đồ Hình Ảnh",
+    "Select Image from My PC": "Chọn Ảnh Từ Máy Tính",
+    "Load Image from Website": "Chọn Links Ảnh Onlie",
+    "diagram list": "danh sách sơ đồ",
+    "Diagram List": "Danh Sách Sơ Đồ",
+    "diagram detail": "chi tiết sơ đồ",
+    "Exists": "Tên Đã Tồn Tại ..!",
+    "Add error" : "Add error",
+    "Error": "Quá Trình Bị Lỗi..!",
+    "Image": "Chọn Ảnh Văn Phòng",
+    "Shape": "Hình Dạng",
+    "Target": "Điều Hướng",
+    " Registered Workspace Form": "Đăng Ký Khu Vực Làm Việc"
+
 }
