@@ -36,7 +36,7 @@ class UserController extends Controller
         $this->roleRepository = $roleRepository;
 
         $this->middleware('checkLogin');
-        $this->middleware('permission:view-users')->only(['index']);
+        $this->middleware('permission:view-users')->only('index');
         $this->middleware('permission:add-users')->only(['create', 'store']);
         $this->middleware('permission:role-users')->only(['show', 'updateRoleUser']);
         $this->middleware('permission:edit-users')->only(['edit', 'update']);

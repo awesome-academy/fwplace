@@ -22,6 +22,14 @@ class WorkingScheduleController extends Controller
         $this->workspace = $workspaceRepository;
         $this->userRepository = $userRepository;
         $this->program = $programRepository;
+
+        $this->middleware('checkLogin');
+        $this->middleware('permission:work-schedules')->only([
+            'viewByWorkplace',
+            'getData',
+            'chooseWorkplace',
+            'getOneDate',
+        ]);
     }
 
     public function viewByWorkplace(Request $request, $workspaceId)

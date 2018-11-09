@@ -18,7 +18,13 @@ class PositionController extends Controller
     {
         $this->positionRepository = $positionRepository;
         $this->userRepository = $userRepository;
-        $this->middleware('checkTrainer')->except('index');
+
+        $this->middleware('checkLogin');
+        $this->middleware('permission:view-positions')->only('index');
+        $this->middleware('permission:add-positions')->only(['create', 'store']);
+        $this->middleware('permission:detail-positions')->only('show');
+        $this->middleware('permission:edit-positions')->only(['edit', 'update']);
+        $this->middleware('permission:delete-positions')->only('destroy');
     }
 
     /**

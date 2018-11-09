@@ -27,7 +27,6 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['che
     Route::resource('programs', 'ProgramController');
     Route::resource('locations', 'LocationController');
     Route::resource('userdisables', 'UserDisableController');
-    Route::get('/traineelists/{id}', 'UserController@getListTrainee');
 
     Route::group(['prefix' => 'schedule', 'as' => 'schedule.'], function () {
         Route::get('/', 'WorkingScheduleController@chooseWorkplace')->name('workplace.list');
@@ -54,7 +53,7 @@ Route::group(['middleware' => 'checkLogin'], function () {
     Route::get('/', 'HomeController@index')->name('home');
     Route::get('/logout', 'HomeController@logout');
     Route::resource('user', 'UserController')->middleware('checkUser');
-    Route::get('/workschedule-register', 'WorkScheduleController@index');
+    Route::get('/workschedule-register', 'WorkScheduleController@index')->name('register.index');
     Route::post('/registerworkschedule', 'WorkScheduleController@registerWork')->name('workschedule');
     Route::get('/workschedule', 'WorkScheduleController@index');
     Route::get('schedule/users/{id}', 'Admin\WorkingScheduleController@viewByUser')->name('user.schedule');

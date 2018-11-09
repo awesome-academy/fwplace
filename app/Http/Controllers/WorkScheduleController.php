@@ -16,6 +16,9 @@ class WorkScheduleController extends Controller
     ) {
         $this->workingSchedule = $workingScheduleRepository;
         $this->locationRepository = $locationRepository;
+
+        $this->middleware('checkLogin');
+        $this->middleware('permission:register-work-schedules')->only(['index', 'registerWork']);
     }
 
     public function index()
