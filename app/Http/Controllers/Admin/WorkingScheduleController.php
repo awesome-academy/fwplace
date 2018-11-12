@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Repositories\UserRepository;
+use App\Repositories\WorkingScheduleRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Repositories\LocationRepository;
@@ -12,17 +13,24 @@ use Carbon\Carbon;
 
 class WorkingScheduleController extends Controller
 {
+    protected $location;
+    protected $workspace;
+    protected $userRepository;
+    protected $program;
+    protected $workschedule;
+
     public function __construct(
         LocationRepository $locationRepository,
         WorkspaceRepository $workspaceRepository,
         UserRepository $userRepository,
-        ProgramRepository $programRepository
+        ProgramRepository $programRepository,
+        WorkingScheduleRepository $workingScheduleRepository
     ) {
         $this->location = $locationRepository;
         $this->workspace = $workspaceRepository;
         $this->userRepository = $userRepository;
         $this->program = $programRepository;
-
+        $this->workschedule = $workingScheduleRepository;
         $this->middleware('checkLogin');
         $this->middleware('permission:work-schedules')->only([
             'viewByWorkplace',
@@ -32,16 +40,12 @@ class WorkingScheduleController extends Controller
         ]);
     }
 
-    public function viewByWorkplace(Request $request, $workspaceId)
+    public function viewByWorkplace($workspaceId)
     {
-        $request->session()->forget('ws_program_id');
         $workspace = $this->workspace->findOrFail($workspaceId);
-        $programs = $this->program->listProgram();
-        if ($request->has('program_id')) {
-            $request->session()->put('ws_program_id', $request->program_id);
-        }
+        $locationList = $this->workspace->getListLocation($workspaceId);
 
-        return view('admin.work_schedules.workspace', compact('workspace', 'programs'));
+        return view('admin.work_schedules.view_location', compact('workspace', 'locationList'));
     }
 
     public function getData(Request $request, $workspaceId)
@@ -111,6 +115,37 @@ class WorkingScheduleController extends Controller
             return response()->json(null);
         }
         $data = $this->workspace->getOneDate($workspaceId, $request->date);
+
+        return $data;
+    }
+
+    public function getScheduleByLocation($locationId)
+    {
+        $location = $this->location->findOrFail($locationId);
+
+        return view('admin.work_schedules.schedule_by_location', compact('location'));
+    }
+
+    public function getScheduleData(Request $request, $locationId)
+    {
+        $location = $this->location->findOrFail($locationId);
+
+        $this->validate(
+            $request,
+            [
+                'start' => 'required',
+                'end' => 'required',
+            ]
+        );
+        $filter = [
+            'start' => $request->start,
+            'end' => $request->end,
+        ];
+        if ($request->session()->has('ws_program_id')) {
+            $filter['program_id'] = $request->session()->get('ws_program_id');
+        }
+
+        $data = $this->location->setDataForCalenDar($location, $filter);
 
         return $data;
     }

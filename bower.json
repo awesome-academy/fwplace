@@ -19,6 +19,8 @@
     "sweetalert2": "^7.28.4",
     "fieldChooser": "https://github.com/mateagar/fieldChooser.git#^1.0.6",
     "lib_fwplace": "https://github.com/HaCongThanh/lib_fwplace.git",
-    "lib_image_map": "https://github.com/duongdinhmanh/lib-image-map.git"
+    "lib_image_map": "https://github.com/duongdinhmanh/lib-image-map.git",
+    "datatables.net": "^1.10.19",
+    "datatables.net-dt": "^3.2.2"
   }
 }
