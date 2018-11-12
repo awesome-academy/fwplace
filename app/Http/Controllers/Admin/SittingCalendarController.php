@@ -24,6 +24,15 @@ class SittingCalendarController extends Controller
         $this->user = $userRepository;
         $this->workspace = $workspaceRepository;
         $this->program = $programRepository;
+
+        $this->middleware('checkLogin');
+        $this->middleware('permission:seat-statistical')->only([
+            'chooseWorkplace',
+            'locationList',
+            'locationAnalystic',
+            'getAnalysticData',
+            'detailLocation',
+        ]);
     }
 
     public function chooseWorkplace()

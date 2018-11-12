@@ -21,7 +21,13 @@ class ProgramController extends Controller
     public function __construct(ProgramRepository $programRepository)
     {
         $this->programRepository = $programRepository;
-        $this->middleware('checkTrainer')->except('index');
+
+        $this->middleware('checkLogin');
+        $this->middleware('permission:view-programs')->only('index');
+        $this->middleware('permission:add-programs')->only(['create', 'store']);
+        $this->middleware('permission:detail-programs')->only('show');
+        $this->middleware('permission:edit-programs')->only(['edit', 'update']);
+        $this->middleware('permission:delete-programs')->only('destroy');
     }
 
     public function index()
