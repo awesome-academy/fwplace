@@ -149,5 +149,15 @@
     "Image": "Image Office",
     "Shape": "Shape",
     "Target": "Target",
-    " Registered Workspace Form": " Registered Workspace Form"
+    "Registered Workspace Form": " Registered Workspace Form",
+    "Add new Position": "Add new position",
+    "Partime": "Partime",
+    "Fulltime": "Fulltime",
+    "Allow register": "Allow register",
+    "Success": "Success",
+    "Fail": "Fail",
+    "Edit position": "Edit position",
+    "Edit program": "Edit program",
+    "Not workspace": "Not workspace",
+    "Not program": "Not program"
 }

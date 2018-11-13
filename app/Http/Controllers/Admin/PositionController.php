@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Http\Request;
+use Yajra\Datatables\Datatables;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\PositionFormRequest;
 use App\Repositories\PositionRepository;
 use App\Repositories\UserRepository;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use RealRashid\SweetAlert\Facades\Alert;
+use Validator;
+use Entrust;
+use DB;
 
 class PositionController extends Controller
 {
@@ -20,7 +24,7 @@ class PositionController extends Controller
         $this->userRepository = $userRepository;
 
         $this->middleware('checkLogin');
-        $this->middleware('permission:view-positions')->only('index');
+        $this->middleware('permission:view-positions')->only(['index', 'getPositions']);
         $this->middleware('permission:add-positions')->only(['create', 'store']);
         $this->middleware('permission:detail-positions')->only('show');
         $this->middleware('permission:edit-positions')->only(['edit', 'update']);
@@ -34,9 +38,7 @@ class PositionController extends Controller
      */
     public function index()
     {
-        $positions = $this->positionRepository->get();
-
-        return view('admin.positions.index', compact('positions'));
+        return view('admin.positions.index');
     }
 
     /**
@@ -55,16 +57,52 @@ class PositionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(PositionFormRequest $request)
+    public function store(Request $request)
     {
         $data = $request->all();
-        if (!$request->has('allow_register')) {
-            $data['allow_register'] = config('site.disallow_register');
-        }
-        $this->positionRepository->create($data);
-        Alert::success(trans('Add new Position'), trans('Successfully!!!'));
 
-        return redirect('admin/positions');
+        DB::beginTransaction();
+
+        try {
+            $rules = [
+                'name' => 'required|string|unique:positions',
+            ];
+
+            $messages = [
+                'name.required' => __('Position') . __('Required'),
+                'name.string' => __('Position') . __('String'),
+                'name.unique' => __('Position') . __('Unique'),
+            ];
+
+            $validator = Validator::make($data, $rules, $messages);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'error' => 'valid',
+                    'message' => $validator->errors(),
+                ]);
+            } else {
+                if (!$request->has('allow_register')) {
+                    $data['allow_register'] = config('site.disallow_register');
+                }
+
+                $this->positionRepository->create($data);
+
+                DB::commit();
+
+                return response()->json([
+                    'error' => false,
+                    'message' => __('Success'),
+                ]);
+            }
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return response()->json([
+                'error' => true,
+                'message' => __('Fail'),
+            ]);
+        }
     }
 
     /**
@@ -86,9 +124,26 @@ class PositionController extends Controller
      */
     public function edit($id)
     {
-        $position = $this->positionRepository->findOrFail($id);
+        DB::beginTransaction();
 
-        return view('admin.positions.edit', compact('position'));
+        try {
+            $position = $this->positionRepository->findOrFail($id);
+
+            DB::commit();
+
+            return response()->json([
+                'error' => false,
+                'message' => __('Success'),
+                'position' => $position,
+            ]);
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return response()->json([
+                'error' => true,
+                'message' => __('Fail'),
+            ]);
+        }
     }
 
     /**
@@ -98,16 +153,53 @@ class PositionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(PositionFormRequest $request, $id)
+    public function update(Request $request, $id)
     {
         $data = $request->all();
-        if (!$request->has('allow_register')) {
-            $data['allow_register'] = config('site.disallow_register');
-        }
-        $this->positionRepository->update($data, $id);
-        Alert::success(trans('Edit Position'), trans('Successfully!!!'));
 
-        return redirect('admin/positions');
+        DB::beginTransaction();
+
+        try {
+            $rules = [
+                'name' => 'required|string',
+            ];
+
+            $messages = [
+                'name.required' => __('Position') . __('Required'),
+                'name.string' => __('Position') . __('String'),
+            ];
+
+            $validator = Validator::make($data, $rules, $messages);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'error' => 'valid',
+                    'message' => $validator->errors(),
+                ]);
+            } else {
+                if ($request->checked == 'true') {
+                    $data['allow_register'] = 1;
+                } else {
+                    $data['allow_register'] = 0;
+                }
+
+                $this->positionRepository->update($data, $id);
+
+                DB::commit();
+
+                return response()->json([
+                    'error' => false,
+                    'message' => __('Success'),
+                ]);
+            }
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return response()->json([
+                'error' => true,
+                'message' => __('Fail'),
+            ]);
+        }
     }
 
     /**
@@ -118,14 +210,68 @@ class PositionController extends Controller
      */
     public function destroy($id)
     {
-        $count = $this->userRepository->where('position_id', '=', $id)->count();
-        if ($count > 0) {
-            Alert::error(trans('Failed!!!'), trans('Can not delete the Position having User'));
-        } else {
-            $this->positionRepository->delete($id);
-            Alert::success(trans('Successfully!!!'), trans('Delete Position'));
-        }
+        DB::beginTransaction();
 
-        return redirect('admin/positions');
+        try {
+            DB::table('positions')->where('id', $id)->delete();
+
+            DB::commit();
+
+            return response()->json([
+                'error' => false,
+                'message' => __('Success'),
+            ]);
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return response()->json([
+                'error' => true,
+                'message' => __('Fail'),
+            ]);
+        }
+    }
+
+    /**
+     * [getPositions : Lấy ra danh sách các chức danh]
+     * @return [type] [description]
+     */
+    public function getPositions()
+    {
+        $positions = $this->positionRepository->orderBy('id', 'desc')->get();
+
+        return Datatables::of($positions)
+            ->addIndexColumn()
+
+            ->editColumn('is_fulltime', function ($position) {
+                if ($position->is_fulltime == 1) {
+                    $isFulltime = 'Full-time';
+                } else {
+                    $isFulltime = 'Part-time';
+                }
+
+                return $isFulltime;
+            })
+
+            ->addColumn('action', function ($position) {
+                if (Entrust::can(['edit-positions'])) {
+                    $editPositions = 1;
+                } else {
+                    $editPositions = 0;
+                }
+
+                if (Entrust::can(['delete-positions'])) {
+                    $deletePositions = 1;
+                } else {
+                    $deletePositions = 0;
+                }
+
+                return [
+                    'editPositions' => $editPositions,
+                    'deletePositions' => $deletePositions,
+                    'positionId' => $position->id,
+                ];
+            })
+
+        ->make(true);
     }
 }

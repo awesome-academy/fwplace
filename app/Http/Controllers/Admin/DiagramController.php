@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\DesignDiagramRequests;
 use DB;
 use Validator;
+use Entrust;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -145,7 +146,28 @@ class DiagramController extends Controller
         $colorLocation = json_encode($colorLocation);
         $listProgram = $this->programRepository->listProgramArray();
         $listPosition = $this->positionRepository->listpositionArray();
-        $listUser = $this->userRepository->getList('program_id', 1)->pluck('name', 'id');
+
+        if (Entrust::can(['php-manager']) &&
+            Entrust::can(['ruby-manager']) &&
+            Entrust::can(['ios-manager']) &&
+            Entrust::can(['android-manager']) &&
+            Entrust::can(['qa-manager']) &&
+            Entrust::can(['design-manager'])
+        ) {
+            $listUser = $this->userRepository->pluck('name', 'id');
+        } elseif (Entrust::can(['php-manager'])) {
+            $listUser = $this->userRepository->getList('program_id', 1)->pluck('name', 'id');
+        } elseif (Entrust::can(['ruby-manager'])) {
+            $listUser = $this->userRepository->getList('program_id', 2)->pluck('name', 'id');
+        } elseif (Entrust::can(['ios-manager'])) {
+            $listUser = $this->userRepository->getList('program_id', 3)->pluck('name', 'id');
+        } elseif (Entrust::can(['android-manager'])) {
+            $listUser = $this->userRepository->getList('program_id', 4)->pluck('name', 'id');
+        } elseif (Entrust::can(['qa-manager'])) {
+            $listUser = $this->userRepository->getList('program_id', 5)->pluck('name', 'id');
+        } elseif (Entrust::can(['design-manager'])) {
+            $listUser = $this->userRepository->getList('program_id', 6)->pluck('name', 'id');
+        }
 
         return view('test.workspace.generate', compact(
             'renderSeat',

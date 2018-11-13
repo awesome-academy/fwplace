@@ -3,11 +3,15 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
+use Yajra\Datatables\Datatables;
 use App\Http\Controllers\Controller;
 use App\Repositories\ProgramRepository;
 use App\Http\Requests\ProgramRequest;
 use App\Models\Program;
 use RealRashid\SweetAlert\Facades\Alert;
+use Validator;
+use Entrust;
+use DB;
 
 class ProgramController extends Controller
 {
@@ -23,7 +27,7 @@ class ProgramController extends Controller
         $this->programRepository = $programRepository;
 
         $this->middleware('checkLogin');
-        $this->middleware('permission:view-programs')->only('index');
+        $this->middleware('permission:view-programs')->only(['index', 'getPrograms']);
         $this->middleware('permission:add-programs')->only(['create', 'store']);
         $this->middleware('permission:detail-programs')->only('show');
         $this->middleware('permission:edit-programs')->only(['edit', 'update']);
@@ -32,9 +36,7 @@ class ProgramController extends Controller
 
     public function index()
     {
-        $dataPrograms = $this->programRepository->model()::all();
-
-        return view('admin.programs.index', compact('dataPrograms'));
+        return view('admin.programs.index');
     }
 
     /**
@@ -53,13 +55,48 @@ class ProgramController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProgramRequest $request)
+    public function store(Request $request)
     {
-        $this->programRepository->create($request->all());
+        $data = $request->all();
 
-        Alert::success(trans('Created Program'), trans('Successfully!!!'));
+        DB::beginTransaction();
 
-        return redirect()->route('programs.index');
+        try {
+            $rules = [
+                'name' => 'required|string|unique:programs',
+            ];
+
+            $messages = [
+                'name.required' => __('Program') . __('Required'),
+                'name.string' => __('Program') . __('String'),
+                'name.unique' => __('Program') . __('Unique'),
+            ];
+
+            $validator = Validator::make($data, $rules, $messages);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'error' => 'valid',
+                    'message' => $validator->errors(),
+                ]);
+            } else {
+                $this->programRepository->create($data);
+
+                DB::commit();
+
+                return response()->json([
+                    'error' => false,
+                    'message' => __('Success'),
+                ]);
+            }
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return response()->json([
+                'error' => true,
+                'message' => __('Fail'),
+            ]);
+        }
     }
 
     /**
@@ -81,9 +118,26 @@ class ProgramController extends Controller
      */
     public function edit($id)
     {
-        $pro = $this->programRepository->findOrFail($id);
+        DB::beginTransaction();
 
-        return view('admin.programs.edit', compact('pro'));
+        try {
+            $program = $this->programRepository->findOrFail($id);
+
+            DB::commit();
+
+            return response()->json([
+                'error' => false,
+                'message' => __('Success'),
+                'program' => $program,
+            ]);
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return response()->json([
+                'error' => true,
+                'message' => __('Fail'),
+            ]);
+        }
     }
 
     /**
@@ -93,13 +147,47 @@ class ProgramController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(ProgramRequest $request, $id)
+    public function update(Request $request, $id)
     {
-        $this->programRepository->update($request->all(), $id);
+        $data = $request->all();
 
-        Alert::success(trans('Edit Program'), trans('Successfully!!!'));
+        DB::beginTransaction();
 
-        return redirect()->route('programs.index');
+        try {
+            $rules = [
+                'name' => 'required|string',
+            ];
+
+            $messages = [
+                'name.required' => __('Program') . __('Required'),
+                'name.string' => __('Program') . __('String'),
+            ];
+
+            $validator = Validator::make($data, $rules, $messages);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'error' => 'valid',
+                    'message' => $validator->errors(),
+                ]);
+            } else {
+                $this->programRepository->update($data, $id);
+
+                DB::commit();
+
+                return response()->json([
+                    'error' => false,
+                    'message' => __('Success'),
+                ]);
+            }
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return response()->json([
+                'error' => true,
+                'message' => __('Fail'),
+            ]);
+        }
     }
 
     /**
@@ -110,10 +198,58 @@ class ProgramController extends Controller
      */
     public function destroy($id)
     {
-        $this->programRepository->delete($id);
+        DB::beginTransaction();
 
-        Alert::success(trans('Delete Program'), trans('Successfully!!!'));
+        try {
+            DB::table('programs')->where('id', $id)->delete();
 
-        return redirect()->route('programs.index');
+            DB::commit();
+
+            return response()->json([
+                'error' => false,
+                'message' => __('Success'),
+            ]);
+        } catch (Exception $e) {
+            DB::rollback();
+
+            return response()->json([
+                'error' => true,
+                'message' => __('Fail'),
+            ]);
+        }
+    }
+
+    /**
+     * [getPrograms : Lấy ra danh sách các ngôn ngữ]
+     * @return [type] [description]
+     */
+    public function getPrograms()
+    {
+        $programs = $this->programRepository->orderBy('id', 'desc')->get();
+
+        return Datatables::of($programs)
+            ->addIndexColumn()
+
+            ->addColumn('action', function ($program) {
+                if (Entrust::can(['edit-programs'])) {
+                    $editPrograms = 1;
+                } else {
+                    $editPrograms = 0;
+                }
+
+                if (Entrust::can(['delete-programs'])) {
+                    $deletePrograms = 1;
+                } else {
+                    $deletePrograms = 0;
+                }
+
+                return [
+                    'editPrograms' => $editPrograms,
+                    'deletePrograms' => $deletePrograms,
+                    'programId' => $program->id,
+                ];
+            })
+
+        ->make(true);
     }
 }

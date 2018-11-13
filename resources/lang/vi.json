@@ -36,7 +36,8 @@
     "Off:": "4. Nghỉ: ",
     "Morning": "Sáng",
     "Afternoon": "Chiều",
-    "Fulltime": "Fulltime",
+    "Fulltime": "Toàn thời gian",
+    "Partime": "Bán thời gian",
     "Off": "Nghỉ",
     "Detail": "Chi tiết",
     "Close": "Đóng",
@@ -163,6 +164,12 @@
     "Image": "Chọn Ảnh Văn Phòng",
     "Shape": "Hình Dạng",
     "Target": "Điều Hướng",
-    " Registered Workspace Form": "Đăng Ký Khu Vực Làm Việc"
-
+    "Registered Workspace Form": "Đăng Ký Khu Vực Làm Việc",
+    "Allow register": "Hiện trong đăng ký tài khoản",
+    "Success": "Thành công",
+    "Fail": "Thất bại",
+    "Edit position": "Chỉnh sửa chức danh",
+    "Edit program": "Chỉnh sửa ngôn ngữ",
+    "Not workspace": "Văn phòng không tồn tại",
+    "Not program": "Không thuộc ngôn ngữ nào"
 }
