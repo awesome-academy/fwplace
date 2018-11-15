@@ -125,6 +125,11 @@ class PermissionsTableSeeder extends Seeder
 
         /*Workspaces*/
         Permission::create([
+            'name' => 'design-diagrams',
+            'display_name' => 'Design diagram',
+        ]);
+
+        Permission::create([
             'name' => 'view-workspaces',
             'display_name' => 'Workspace list',
         ]);
@@ -188,5 +193,37 @@ class PermissionsTableSeeder extends Seeder
             'display_name' => 'Permission list',
         ]);
         /*-----------*/
+
+        /*Other*/
+        Permission::create([
+            'name' => 'php-manager',
+            'display_name' => 'PHP manager',
+        ]);
+
+        Permission::create([
+            'name' => 'ruby-manager',
+            'display_name' => 'Ruby manager',
+        ]);
+
+        Permission::create([
+            'name' => 'ios-manager',
+            'display_name' => 'IOS manager',
+        ]);
+
+        Permission::create([
+            'name' => 'android-manager',
+            'display_name' => 'Android manager',
+        ]);
+
+        Permission::create([
+            'name' => 'qa-manager',
+            'display_name' => 'QA manager',
+        ]);
+
+        Permission::create([
+            'name' => 'design-manager',
+            'display_name' => 'Design manager',
+        ]);
+        /*-----*/
     }
 }

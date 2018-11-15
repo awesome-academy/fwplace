@@ -22,9 +22,13 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['che
     Route::post('/users/update-role-user', 'UserController@updateRoleUser')->name('users.update_role_user');
     Route::resource('users', 'UserController');
 
+    Route::get('/positions/get-positions', 'PositionController@getPositions')->name('positions.get_positions');
     Route::resource('positions', 'PositionController');
-    Route::resource('workspaces', 'WorkspaceController');
+
+    Route::get('/programs/get-programs', 'ProgramController@getPrograms')->name('programs.get_programs');
     Route::resource('programs', 'ProgramController');
+
+    Route::resource('workspaces', 'WorkspaceController'); 
     Route::resource('locations', 'LocationController');
     Route::resource('userdisables', 'UserDisableController');
 

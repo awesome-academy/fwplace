@@ -22,8 +22,33 @@ class RolesTableSeeder extends Seeder
         ]);
 
         Role::create([
-            'name' => 'trainer',
-            'display_name' => 'Trainer',
+            'name' => 'php-trainer',
+            'display_name' => 'PHP trainer',
+        ]);
+
+        Role::create([
+            'name' => 'ruby-trainer',
+            'display_name' => 'Ruby trainer',
+        ]);
+
+        Role::create([
+            'name' => 'ios-trainer',
+            'display_name' => 'IOS trainer',
+        ]);
+
+        Role::create([
+            'name' => 'android-trainer',
+            'display_name' => 'Android trainer',
+        ]);
+
+        Role::create([
+            'name' => 'qa-trainer',
+            'display_name' => 'QA trainer',
+        ]);
+
+        Role::create([
+            'name' => 'design-trainer',
+            'display_name' => 'Design trainer',
         ]);
 
         Role::create([

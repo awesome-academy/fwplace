@@ -130,11 +130,22 @@
                                                     </div>
                                                 </td>
                                                 <td>{{ $user->email }}</td>
-                                                <td>{{ $user->program->name }}</td>
-                                                <td>{{ $user->position->name }}</td>
-                                                <td>{{ $user->workspace->name }}</td>
 
-                                                @if($user->position->is_fulltime == config('site.partime'))
+                                                @if (!empty($user->program->name))
+                                                    <td>{{ $user->program->name }}</td>
+                                                @else
+                                                    <td>{{ __('Not program') }}</td>
+                                                @endif
+                                                
+                                                <td>{{ $user->position->name }}</td>
+
+                                                @if (!empty($user->workspace->name))
+                                                    <td>{{ $user->workspace->name }}</td>
+                                                @else
+                                                    <td>{{ __('Not workspace') }}</td>
+                                                @endif
+
+                                                @if ($user->position->is_fulltime == config('site.partime'))
                                                     <td>{{ __('Partime') }}</td>
                                                 @else
                                                     <td>{{ __('Fulltime') }}</td>

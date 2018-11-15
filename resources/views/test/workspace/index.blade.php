@@ -1,10 +1,33 @@
 @extends('admin.layout.master')
+
 @section('title', __('Workspace'))
+
 @section('module')
-    <div class="mr-auto">
-        <h3 class="m-subheader__title m-subheader__title--separator">{{ __('Employee') }}</h3>
-    </div>
+
+    <h3 class="m-subheader__title m-subheader__title--separator">{{ __('Workspace List') }}</h3>
+
+    <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+        <li class="m-nav__item m-nav__item--home">
+            <a href="{{ route('admin.index') }}" class="m-nav__link m-nav__link--icon">
+                <i class="m-nav__link-icon la la-home"></i>
+            </a>
+        </li>
+        <li class="m-nav__separator">-</li>
+        <li class="m-nav__item">
+            <a class="m-nav__link">
+                <span class="m-nav__link-text">{{ __('Model Workspace') }}</span>
+            </a>
+        </li>
+        <li class="m-nav__separator">-</li>
+        <li class="m-nav__item">
+            <a class="m-nav__link">
+                <span class="m-nav__link-text">{{ __('Workspace List') }}</span>
+            </a>
+        </li>
+    </ul>
+
 @endsection
+
 @section('content')
     <div class="m-portlet">
         <div class="m-portlet__body">
@@ -17,13 +40,15 @@
                             <th>@lang('Workspace')</th>
                             <th>@lang('Location')</th>
                             <th>@lang('Total Seat')</th>
-                            @if (Auth::user()->role == config('site.permission.admin'))
-                                <th>@lang('Add Location')</th>
+
+                            @if (Entrust::can(['add-workspaces']))
                                 <th>
                                     <a class="btn m-btn--pill m-btn--air btn-secondary" data-toggle="modal" data-target="#m_modal_4" data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Add Workspace')">
                                         <i class="flaticon-add"></i>
                                     </a>
                                 </th>
+                            @else
+                                <th>{{ __('Action') }}</th>
                             @endif
                         </tr>
                         </thead>
@@ -48,13 +73,44 @@
                                 <td>
                                     <h5>{{ $item->total_seat }}</h5>
                                 </td>
-                                @if (Auth::user()->role == config('site.permission.admin'))
-                                    <td>
+                                <td>
+                                    @if (Entrust::can(['php-manager']) && $item->id == 1)
                                         <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}"  data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
                                             <i class="flaticon-edit-1"></i>
                                         </a>
-                                    </td>
-                                    <td>
+                                    @endif
+
+                                    @if (Entrust::can(['ruby-manager']) && $item->id == 2)
+                                        <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}"  data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
+                                            <i class="flaticon-edit-1"></i>
+                                        </a>
+                                    @endif
+
+                                    @if (Entrust::can(['ios-manager']) && $item->id == 3)
+                                        <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}"  data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
+                                            <i class="flaticon-edit-1"></i>
+                                        </a>
+                                    @endif
+
+                                    @if (Entrust::can(['android-manager']) && $item->id == 4)
+                                        <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}"  data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
+                                            <i class="flaticon-edit-1"></i>
+                                        </a>
+                                    @endif
+
+                                    @if (Entrust::can(['qa-manager']) && $item->id == 5)
+                                        <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}"  data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
+                                            <i class="flaticon-edit-1"></i>
+                                        </a>
+                                    @endif
+
+                                    @if (Entrust::can(['design-manager']) && $item->id == 6)
+                                        <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}"  data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
+                                            <i class="flaticon-edit-1"></i>
+                                        </a>
+                                    @endif
+
+                                    @if (Entrust::can(['delete-workspaces']))
                                         {!! Form::open(['route' => ['workspaces.destroy', $item->id],
                                             'class' => 'd-inline',
                                             'method' => 'DELETE'
@@ -65,8 +121,8 @@
                                             'message' => __('Delete this item?')
                                         ]) !!}
                                         {!! Form::close() !!}
-                                    </td>
-                                @endif
+                                    @endif
+                                </td>
                             </tr>
                         @empty
                             @include('admin.components.alert', ['type' => 'warning', 'message' => __('Have no data!')])

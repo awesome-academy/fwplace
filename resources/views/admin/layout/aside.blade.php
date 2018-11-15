@@ -116,64 +116,79 @@
                 </li>
             @endif
 
-            <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                <a href="javascript:;" class="m-menu__link m-menu__toggle">
-                    <i class="m-menu__link-icon flaticon-interface-9"></i>
-                    <span class="m-menu__link-text color-manager">
-                        @lang('Model Workspace')
-                    </span>
-                    <i class="m-menu__ver-arrow la la-angle-right"></i>
-                </a>
+            @if (Entrust::can([
+                'design-diagrams',
+                'view-workspaces',
+                'add-workspaces',
+                'detail-workspaces',
+                'edit-workspaces',
+                'delete-workspaces'
+            ]))
+                <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+                    <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                        <i class="m-menu__link-icon flaticon-interface-9"></i>
+                        <span class="m-menu__link-text color-manager">
+                            @lang('Model Workspace')
+                        </span>
+                        <i class="m-menu__ver-arrow la la-angle-right"></i>
+                    </a>
 
-                <div class="m-menu__submenu ">
-                    <span class="m-menu__arrow"></span>
-                    <ul class="m-menu__subnav">
-                        <li class="m-menu__item" aria-haspopup="true">
-                            <a href="{{ url('workspace/create') }}" class="m-menu__link ">
-                                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
-                                    <span></span>
-                                </i>
-                                <span class="m-menu__link-text color-manager">
-                                    @lang('Add Workspace')
-                                </span>
-                            </a>
-                        </li>
+                    <div class="m-menu__submenu ">
+                        <span class="m-menu__arrow"></span>
+                        <ul class="m-menu__subnav">
+                            @if (Entrust::can(['add-workspaces']))
+                                <li class="m-menu__item" aria-haspopup="true">
+                                    <a href="{{ url('workspace/create') }}" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text color-manager">
+                                            @lang('Add Workspace')
+                                        </span>
+                                    </a>
+                                </li>
+                            @endif
+                            
+                            @if (Entrust::can(['design-diagrams']))
+                                <li class="m-menu__item" aria-haspopup="true">
+                                    <a href="{{ route('image_map') }}" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text color-manager">
+                                            @lang('Design Diagram')
+                                        </span>
+                                    </a>
+                                </li>
+                            @endif
 
-                        <li class="m-menu__item" aria-haspopup="true">
-                            <a href="{{ route('image_map') }}" class="m-menu__link ">
-                                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
-                                    <span></span>
-                                </i>
-                                <span class="m-menu__link-text color-manager">
-                                    @lang('Design Diagram')
-                                </span>
-                            </a>
-                        </li>
+                            @if (Entrust::can(['view-workspaces']))
+                                <li class="m-menu__item" aria-haspopup="true">
+                                    <a href="{{ route('list_diagram') }}" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text color-manager">
+                                            @lang('Diagram List')
+                                        </span>
+                                    </a>
+                                </li>
 
-                        <li class="m-menu__item" aria-haspopup="true">
-                            <a href="{{ route('list_diagram') }}" class="m-menu__link ">
-                                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
-                                    <span></span>
-                                </i>
-                                <span class="m-menu__link-text color-manager">
-                                    @lang('Diagram List')
-                                </span>
-                            </a>
-                        </li>
-
-                        <li class="m-menu__item" aria-haspopup="true">
-                            <a href="{{ route('list_workspace') }}" class="m-menu__link ">
-                                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
-                                    <span></span>
-                                </i>
-                                <span class="m-menu__link-text color-manager">
-                                    @lang('Workspace List')
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
+                                <li class="m-menu__item" aria-haspopup="true">
+                                    <a href="{{ route('list_workspace') }}" class="m-menu__link ">
+                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                            <span></span>
+                                        </i>
+                                        <span class="m-menu__link-text color-manager">
+                                            @lang('Workspace List')
+                                        </span>
+                                    </a>
+                                </li>
+                            @endif
+                        </ul>
+                    </div>
+                </li>
+            @endif
 
             @if (Entrust::can(['view-roles', 'view-permissions']))
                 <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">

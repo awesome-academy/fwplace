@@ -1,10 +1,42 @@
 @extends('admin.layout.master')
 
 @section('title', __('Add Workspace'))
+
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/addlocation.css') }}">
 @endsection
-@section('module', __('Add Workspace'))
+
+@section('module')
+
+    <h3 class="m-subheader__title m-subheader__title--separator">{{ __('Edit Workspace') }}</h3>
+
+    <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
+        <li class="m-nav__item m-nav__item--home">
+            <a href="{{ route('admin.index') }}" class="m-nav__link m-nav__link--icon">
+                <i class="m-nav__link-icon la la-home"></i>
+            </a>
+        </li>
+        <li class="m-nav__separator">-</li>
+        <li class="m-nav__item">
+            <a class="m-nav__link">
+                <span class="m-nav__link-text">{{ __('Model Workspace') }}</span>
+            </a>
+        </li>
+        <li class="m-nav__separator">-</li>
+        <li class="m-nav__item">
+            <a href="{{ route('list_workspace') }}" class="m-nav__link">
+                <span class="m-nav__link-text">{{ __('Workspace List') }}</span>
+            </a>
+        </li>
+        <li class="m-nav__separator">-</li>
+        <li class="m-nav__item">
+            <a class="m-nav__link">
+                <span class="m-nav__link-text">{{ __('Edit Workspace') }}</span>
+            </a>
+        </li>
+    </ul>
+
+@endsection
 
 @section('content')
 <div class="m-portlet pl-5 py-5">

@@ -35,5 +35,7 @@ mix.styles('resources/css/role-user.css', 'public/css/role-user.css');
 mix.js('resources/js/role.js', 'public/js/role.js');
 mix.js('resources/js/permission-role.js', 'public/js/permission-role.js');
 mix.js('resources/js/role-user.js', 'public/js/role-user.js');
+mix.js('resources/js/position.js', 'public/js/position.js');
+mix.js('resources/js/program.js', 'public/js/program.js');
 
 mix.version();
