@@ -23,6 +23,14 @@ return [
         'image' => 'public/user/',
         'display-image' => 'storage/user/'
     ],
+    'diagram' => [
+        'image' => 'public/diagram/',
+        'display-image' => 'storage/diagram/'
+    ],
+    'workspace' => [
+        'image' => 'public/workspace/',
+        'display-image' => 'storage/workspace/'
+    ],
     'disable' => 0,
     'active' => 1,
     'partime' => 0,
@@ -65,5 +73,15 @@ return [
     ],
     'allow_register' => 1,
     'disallow_register' => 0,
-
+    'default_img_map_target' => [
+        '_blank' => '_blank',
+        '_parent' => '_parent',
+        '_self' => '_self',
+        '_top' => '_top'
+    ],
+    'default_img_map_shape' => [
+        'rect' => 'rect',
+        'poly' => 'poly',
+        'circle' => 'circle'
+    ]
 ];

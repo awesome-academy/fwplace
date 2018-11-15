@@ -5,28 +5,41 @@
     <link rel="stylesheet" href="bower_components/lib_image_map/cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/image_map.css">
 @endsection
-@section('module', __('Add Workspace'))
+@section('module')
+    <div class="mr-auto">
+        <h3 class="m-subheader__title m-subheader__title--separator">{{ __('Add Workspace') }}</h3>
+    </div>
+@endsection
 
 @section('content')
-<div class="container">
+{!! Form::open(['url' => route('save_design_diagram'), 'files' => true, 'method' => 'POST']) !!}
+    <div class="container">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12" >
                 <div class="step">
-                    <button type="button" class="btn btn-success btn-lg" id="image-mapper-upload">Select Image from My PC</button>
-                    <input type="file" name="" id="image-mapper-file"><span class="divider">&nbsp; &nbsp; &nbsp; -- OR -- &nbsp; &nbsp; &nbsp;</span>
-                    <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#image-mapper-load">Load Image from Website</button>
+                    {!! Form::button(__('Select Image from My PC'), ['class' => 'btn btn-success btn-lg', 'id' => 'image-mapper-upload']) !!}
+                    {!! Form::file('diagram', ['accept' => '.png, .jpg, .jpeg', 'id' => 'image-mapper-file']) !!}
+                    <span class="divider">&nbsp; &nbsp; &nbsp; -- OR -- &nbsp; &nbsp; &nbsp;</span>
+                    {!! Form::button(__('Load Image from Website'), ['class' => 'btn btn-success btn-lg', 'data-toggle' => 'modal', 'data-target' => '#image-mapper-load']) !!}
+                </div>
+                {!! Form::text('name', '', ['class' => 'col-lg-8 col-lg-offset-2 form-control input-sm ', 'placeholder' => __('Enter Name Diagram'), 'id' => 'title-diagram']) !!}
+                <div class="clearfix"> </div>
+                <div class="col-lg-8 col-lg-offset-2">
+                    <small class="text-danger" >{{$errors->first('name') }}</small>
                 </div>
             </div>
         </div>
     </div>
-    <div class="container toggle-content">
+    <div class="container-fluid toggle-content">
         <div class="row">
             <div class="col-md-12">
-                <div class="container">
+                <div class="container-fluid">
                     <div class="row">
                         <div class="col-md-12" id="image-map-wrapper">
                             <div id="image-map-container">
-                                <div id="image-map" style="max-width: 100%"><span class="glyphicon glyphicon-picture"></span></div>
+                                <div id="image-map">
+                                    <span class="glyphicon glyphicon-picture"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -34,53 +47,46 @@
                 <table class="table" id="image-mapper-table">
                     <thead>
                         <tr>
-                            <th>Active</th>
-                            <th>Shape</th>
-                            <th>Link</th>
-                            <th>Title</th>
-                            <th>Target</th>
-                            <th style="width: 25px"></th>
+                            <th>{{ __('Active') }}</th>
+                            <th>{{ __('Shape') }}</th>
+                            <th>{{ __('Link') }}</th>
+                            <th>{{ __('Shape') }}</th>
+                            <th>{{ __('Target') }}</th>
+                            <th id="image-mapper-table-1"></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td style="width: 65px">
+                            <td id="image-mapper-table-2">
                                 <div class="control-label input-sm">
-                                    <input type="radio" name="im[0][active]" value="1">
+                                    {!! Form::radio('im[0][active]', 1) !!}
                                 </div>
                             </td>
                             <td>
-                                <select name="im[0][shape]" class="form-control input-sm">
-                                    <option value="">---</option>
-                                    <option value="rect">Rect</option>
-                                    <option value="poly">Poly</option>
-                                    <option value="circle">Circle</option>
+                                {!! Form::select('im[0][shape]', config('site.default_img_map_shape'), null, ['class' => 'form-control input-sm'])  !!}
+                            </td>
+                            <td>
+                                <select name="im[0][href]" class="form-control input-sm">
+                                    @foreach ($workspaces as $id)
+                                       <option value="{{ route('generate', ['id' => $id]) }}">{{ $id->name }}</option>
+                                    @endforeach
                                 </select>
                             </td>
                             <td>
-                                <input type="text" name="im[0][href]" value="" placeholder="Link" class="form-control input-sm">
+                                {!! Form::text('im[0][title]', '', ['placeholder' => __('Title'), 'class' => 'form-control input-sm']) !!}
                             </td>
                             <td>
-                                <input type="text" name="im[0][title]" value="" placeholder="Title" class="form-control input-sm">
+                                {!! Form::select('im[0][target]', config('site.default_img_map_target'), '', ['class' => 'form-control input-sm'])  !!}
                             </td>
                             <td>
-                                <select name="im[0][target]" class="form-control input-sm">
-                                    <option value="">---</option>
-                                    <option value="_blank">_blank</option>
-                                    <option value="_parent">_parent</option>
-                                    <option value="_self">_self</option>
-                                    <option value="_top">_top</option>
-                                </select>
-                            </td>
-                            <td>
-                                <button class="btn btn-default btn-sm remove-row" name="im[0][remove]"><span class="glyphicon glyphicon-remove"></span></button>
+                                {!! htmlspecialchars_decode(Form::button('Click Me!'.'<span class="glyphicon glyphicon-remove"></span>', ['class' => 'btn btn-default btn-sm remove-row', 'name' => 'im[0][remove]'])) !!}
                             </td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
-                            <th colspan="6" style="text-align: right">
-                                <button type="button" class="btn btn-danger btn-sm add-row"><span class="glyphicon glyphicon-plus"></span> Add New Area</button>
+                            <th colspan="6" id="add-new-area">
+                                {!! htmlspecialchars_decode(Form::button(__('Add New Area').' <span class="glyphicon glyphicon-plus"></span>', ['class' => 'btn btn-danger btn-sm add-row'])) !!}
                             </th>
                         </tr>
                     </tfoot>
@@ -90,8 +96,8 @@
     </div>
     <div class="container toggle-content segment">
         <div class="row">
-            <div class="col-md-12" style="text-align: center">
-                <button type="button" class="btn btn-success btn-lg" data-toggle="modal" data-target="#modal-code">Show Me The Code!</button>
+            <div class="col-md-12 text-center" id="show-me-the-code">
+                {!! htmlspecialchars_decode(Form::button(__('Show Code').' <span class="glyphicon glyphicon-plus"></span>', ['class' => 'btn btn-success btn-lg', 'data-toggle' => 'modal', 'data-target' => '#modal-code'])) !!}
             </div>
         </div>
     </div>
@@ -99,16 +105,20 @@
         <div class="modal-dialog">
             <div class="modal-content" id="image-mapper-dialog">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="image-mapper-load-label">Load Image from Website</h4></div>
+                    {!! Form::button('&times;', ['class' => 'close', 'data-dismiss' => 'modal', 'aria-hidden' => 'true']) !!}
+                    <h4 class="modal-title" id="image-mapper-load-label">{{ __('Load Image from Website') }}</h4></div>
                 <div class="modal-body">
                     <div class="input-group input-group-sm has-error">
-                        <input type="text" value="" placeholder="http://..." id="image-mapper-url" class="form-control input-sm"><span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                        {!! Form::text('', '', ['calss' => 'form-control input-sm', 'id' => 'image-mapper-url']) !!}
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-remove">
+                            </span>
+                        </span>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="image-mapper-continue">Continue</button>
+                    {!! Form::button(__('Close'), ['class' => 'btn btn-default', 'data-dismiss' => 'modal']) !!}
+                    {!! Form::button(__('Continue'), ['class' => 'btn btn-primary', 'id' => 'image-mapper-continue']) !!}
                 </div>
             </div>
         </div>
@@ -117,17 +127,20 @@
         <div class="modal-dialog">
             <div class="modal-content" id="modal-code-dialog">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="modal-code-label">Generated Image Map Output</h4></div>
+                    <h4 class="modal-title" id="modal-code-label">{{ __('Generated Image Map Output') }}</h4>
+                    {!! Form::button('&times;', ['class' => 'close', 'data-dismiss' => 'modal', 'aria-hidden' => 'true']) !!}
+                </div>
                 <div class="modal-body">
-                    <textarea class="form-control input-sm" readonly="readonly" id="modal-code-result" rows="10"></textarea>
+                    {!! Form::textarea('content', null, ['class' => 'form-control input-sm', 'readonly'=>'readonly', 'id' => 'modal-code-result', 'row' => '10' ]) !!}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    {!! Form::submit(__('Save'), ['class' => 'btn btn btn-success ']) !!}
+                    {!! Form::button(__('Close'), ['class' => 'btn btn-default', 'data-dismiss' => 'modal']) !!}
                 </div>
             </div>
         </div>
     </div>
+{!! Form::close() !!}
 @endsection
 @section('js')
     <script src="bower_components/lib_image_map/cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>

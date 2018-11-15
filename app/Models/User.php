@@ -76,10 +76,6 @@ class User extends Authenticatable
         return $this->hasMany('App\Models\WorkSchedule', 'user_id');
     }
 
-    public function seat()
-    {
-        return $this->hasOne('App\Models\Seat', 'user_id', 'id');
-    }
     /**
      * Get roles many to many
      * @return [type] [description]

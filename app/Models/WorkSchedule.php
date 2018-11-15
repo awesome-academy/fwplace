@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class WorkSchedule extends Model
 {
+    protected $table = 'work_schedules';
     protected $guarded = ['id'];
 
     public function calendars()

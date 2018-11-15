@@ -22,46 +22,6 @@
                 </h4>
                 <i class="m-menu__section-icon flaticon-more-v3"></i>
             </li>
-
-            <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                <a href="javascript:;" class="m-menu__link m-menu__toggle">
-                    <i class="m-menu__link-icon flaticon-interface-9"></i>
-                    <span class="m-menu__link-text color-manager">
-                        @lang('Workspaces')
-                    </span>
-                    <i class="m-menu__ver-arrow la la-angle-right"></i>
-                </a>
-
-                <div class="m-menu__submenu ">
-                    <span class="m-menu__arrow"></span>
-                    <ul class="m-menu__subnav">
-                        @if (Auth::user()->role == config('site.permission.admin'))
-                            <li class="m-menu__item" aria-haspopup="true">
-                                <a href="{{ route('workspaces.create') }}" class="m-menu__link ">
-                                    <i class="m-menu__link-bullet m-menu__link-bullet--dot">
-                                        <span></span>
-                                    </i>
-                                    <span class="m-menu__link-text color-manager">
-                                        @lang('Add Workspace')
-                                    </span>
-                                </a>
-                            </li>
-                        @endif
-
-                        <li class="m-menu__item" aria-haspopup="true">
-                            <a href="{{ route('workspaces.index') }}" class="m-menu__link ">
-                                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
-                                    <span></span>
-                                </i>
-                                <span class="m-menu__link-text color-manager">
-                                    @lang('Workspaces List')
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
-
             @if (Entrust::can(['view-positions']))
                 <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
                     <a href="{{ route('positions.index') }}" class="m-menu__link m-menu__toggle">
@@ -83,45 +43,6 @@
                     </a>
                 </li>
             @endif
-
-            <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                <a href="javascript:;" class="m-menu__link m-menu__toggle">
-                    <i class="m-menu__link-icon flaticon-interface-9"></i>
-                    <span class="m-menu__link-text color-manager">
-                        @lang('Locations')
-                    </span>
-                    <i class="m-menu__ver-arrow la la-angle-right"></i>
-                </a>
-
-                <div class="m-menu__submenu ">
-                    <span class="m-menu__arrow"></span>
-                    <ul class="m-menu__subnav">
-                        @if (Auth::user()->role == config('site.permission.admin'))
-                            <li class="m-menu__item" aria-haspopup="true">
-                                <a href="{{ route('locations.create') }}" class="m-menu__link ">
-                                    <i class="m-menu__link-bullet m-menu__link-bullet--dot">
-                                        <span></span>
-                                    </i>
-                                    <span class="m-menu__link-text color-manager">
-                                        @lang('Add Location')
-                                    </span>
-                                </a>
-                            </li>
-                        @endif
-
-                        <li class="m-menu__item" aria-haspopup="true">
-                            <a href="{{ route('locations.index') }}" class="m-menu__link ">
-                                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
-                                    <span></span>
-                                </i>
-                                <span class="m-menu__link-text color-manager">
-                                    @lang('Locations List')
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-            </li>
 
             @if (Entrust::can(['view-users']))
                 <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
@@ -230,6 +151,17 @@
                         </li>
 
                         <li class="m-menu__item" aria-haspopup="true">
+                            <a href="{{ route('list_diagram') }}" class="m-menu__link ">
+                                <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                    <span></span>
+                                </i>
+                                <span class="m-menu__link-text color-manager">
+                                    @lang('Diagram List')
+                                </span>
+                            </a>
+                        </li>
+
+                        <li class="m-menu__item" aria-haspopup="true">
                             <a href="{{ route('list_workspace') }}" class="m-menu__link ">
                                 <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                     <span></span>
@@ -269,7 +201,7 @@
                                     </a>
                                 </li>
                             @endif
-                            
+
                             @if (Entrust::can(['view-permissions']))
                                 <li class="m-menu__item" aria-haspopup="true">
                                     <a href="#" class="m-menu__link ">

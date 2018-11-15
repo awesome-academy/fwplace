@@ -25,6 +25,7 @@ mix.copyDirectory('resources/js/generate.js', 'public/js');
 mix.copyDirectory('resources/js/location.js', 'public/js');
 mix.copyDirectory('resources/css/custom.css', 'public/css');
 mix.scripts('resources/js/image_map.js', 'public/js/image_map.js');
+mix.scripts('resources/js/config.js', 'public/js/config.js');
 mix.scripts('resources/js/image_mapping.js', 'public/js/image_mapping.js');
 mix.styles('resources/css/image_map.css', 'public/css/image_map.css');
 

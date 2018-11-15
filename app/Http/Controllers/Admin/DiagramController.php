@@ -9,7 +9,12 @@ use App\Repositories\WorkspaceRepository;
 use App\Repositories\ProgramInterface;
 use App\Repositories\UserRepository;
 use App\Repositories\PositionRepository;
+use App\Repositories\DesignDiagramRepository;
+use APP\Repositories\WorkingScheduleRepository;
 use Illuminate\Http\Request;
+use App\Http\Requests\DesignDiagramRequests;
+use DB;
+use Validator;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 
@@ -19,6 +24,8 @@ class DiagramController extends Controller
     protected $programRepository;
     protected $positionRepository;
     protected $locationRepository;
+    protected $designDiagramRepository;
+    protected $workingScheduleRepository;
 
     public function __construct(
         LocationRepository $locationRepository,
@@ -26,7 +33,8 @@ class DiagramController extends Controller
         SeatRepository $seatRepository,
         UserRepository $userRepository,
         ProgramInterface $programRepository,
-        PositionRepository $positionRepository
+        PositionRepository $positionRepository,
+        DesignDiagramRepository $designDiagramRepository
     ) {
         $this->locationRepository = $locationRepository;
         $this->workspace = $workspaceRepository;
@@ -34,6 +42,7 @@ class DiagramController extends Controller
         $this->userRepository = $userRepository;
         $this->programRepository = $programRepository;
         $this->positionRepository = $positionRepository;
+        $this->designDiagramRepository = $designDiagramRepository;
     }
 
     public function typeWorkspaceInformation()
@@ -43,12 +52,12 @@ class DiagramController extends Controller
 
     public function saveWorkspace(Request $request)
     {
-        $workspace = $this->workspace->create([
-            'name' => $request->name,
-            'total_seat' => $request->total_seat,
-            'seat_per_row' => $request->seat_per_row,
-            'image' => '',
-        ]);
+        $data = $request->all();
+        if ($request->image) {
+            $request->image->store(config('site.workspace.image'));
+            $data['image'] = $request->image->hashName();
+        }
+        $workspace = $this->workspace->create($data);
 
         return redirect()->route('generate', ['id' => $workspace->id]);
     }
@@ -94,24 +103,45 @@ class DiagramController extends Controller
         }
         $locations = $workspace->locations;
         $colorLocation = [];
+
         foreach ($locations as $key => $location) {
             foreach ($location->seats as $id => $seat) {
+                $userId = $this->userRepository->get();
+                $listUserId = unserialize($seat->user_id);
                 $colorLocation[$key][$id]['location'] = $location->name;
                 $colorLocation[$key][$id]['seat_id'] = $seat->id;
-                if ($seat->user != null) {
-                    $colorLocation[$key][$id]['user_name'] = $seat->user->name;
-                    $colorLocation[$key][$id]['avatar'] = $seat->user->avatar;
-                    $colorLocation[$key][$id]['user_id'] =  $seat->user->id;
+                if ($seat->user_id != null) {
+                    $checkName = [];
+                    $checkAvatar = [];
+                    $checkUserId = [];
+                    foreach ($userId as $value) {
+                        if (in_array($value->id, $listUserId)) {
+                            $checkAvatar[] = $value->avatar;
+                            $checkUserId[] =  $value->id;
+                            $checkName[] = $value->name;
+                            $checkProgram = $value->program_id;
+                            $position= $this->userRepository->findOrFail($value->id)->position->id;
+                        }
+                    }
+                    $colorLocation[$key][$id]['user_name'] = $checkName;
+                    $colorLocation[$key][$id]['avatar'] = $checkAvatar;
+                    $colorLocation[$key][$id]['user_id'] =  $checkUserId;
+                    $colorLocation[$key][$id]['position'] = $position;
+                    $colorLocation[$key][$id]['program'] = $checkProgram;
                 } else {
                     $colorLocation[$key][$id]['user_name'] = $seat->name;
                     $colorLocation[$key][$id]['avatar'] = null;
                     $colorLocation[$key][$id]['user_id'] = null;
+                    $colorLocation[$key][$id]['program'] = null;
+                    $colorLocation[$key][$id]['position'] = null;
                 }
+
                 $colorLocation[$key][$id]['name'] = $seat->name;
                 $colorLocation[$key][$id]['color'] = $location->color;
                 $colorLocation[$key][$id]['workspace_id'] = $location->workspace_id;
             }
         }
+
         $colorLocation = json_encode($colorLocation);
         $listProgram = $this->programRepository->listProgramArray();
         $listPosition = $this->positionRepository->listpositionArray();
@@ -235,8 +265,17 @@ class DiagramController extends Controller
 
     public function saveInfoLocation(Request $request)
     {
+        $seatUserId = $this->seat->findOrFail($request->seat_id);
+        $checkUserId = unserialize($seatUserId->user_id);
+        if (is_array($checkUserId) && !empty($checkUserId)) {
+            $request->merge([ 'user_id' => serialize(array_merge($checkUserId, $request->user_id)) ]);
+        } else {
+            $request->merge([ 'user_id' => serialize($request->user_id) ]);
+        }
+
         $data = $request->only('user_id', 'seat_id');
-        $this->seat->findOrFail($request->seat_id);
+
+
         $this->seat->update($data, $request->seat_id);
 
         Alert::success(trans('Edit Program'), trans('Successfully!!!'));
@@ -253,6 +292,82 @@ class DiagramController extends Controller
 
     public function imageMap()
     {
-        return view('test.workspace.image_map');
+        $workspaces = $this->workspace->get();
+
+        return view('test.workspace.image_map', compact('workspaces'));
+    }
+
+    public function saveDesignDiagram(DesignDiagramRequests $request)
+    {
+        $data = $request->only('name', 'diagram', 'content');
+        DB::beginTransaction();
+        try {
+            if ($request->diagram) {
+                $request->diagram->store(config('site.diagram.image'));
+                $data['diagram'] = $request->diagram->hashName();
+            }
+            $this->designDiagramRepository->create($data);
+            DB::commit();
+            Alert::success(trans('Add success'), trans('Successfully!!!'));
+
+            return redirect()->route('list_diagram');
+        } catch (Exception $e) {
+            DB::rollback();
+
+            Alert::error(trans('Add error'), __('Required'));
+        }
+    }
+
+    public function listDiagram()
+    {
+        $listDiagram = $this->designDiagramRepository->getListDiagram();
+
+        return view('test.workspace.diagram_list', compact('listDiagram'));
+    }
+
+    public function diagramDetail($id)
+    {
+        $diagramDetail = $this->designDiagramRepository->findOrFail($id);
+
+        return view('test.workspace.diagram_detail', compact('diagramDetail'));
+    }
+
+    public function avatarInfo(Request $request, $id)
+    {
+        $data = $this->userRepository->findOrFail($id);
+
+        return response()->json($data);
+    }
+
+    public function editInfoUser(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $checkUser = $this->seat->findOrFail($request->seat_id);
+            $checkUserId = unserialize($checkUser->user_id);
+            foreach ($checkUserId as $key => $val) {
+                if ($request->user_id == $val) {
+                    $arr = array_replace(
+                        $checkUserId,
+                        array_fill_keys(
+                            array_keys($checkUserId, $val),
+                            $request->edit_userId
+                        )
+                    );
+                }
+            }
+            $request->merge(['user_id' => serialize($arr)]);
+            $data = $request->only('user_id', 'seat_id');
+            $this->seat->update($data, $request->seat_id);
+            DB::commit();
+
+            Alert::success(trans('Edit Program'), trans('Successfully!!!'));
+
+            return redirect()->back();
+        } catch (Exception $e) {
+            DB::rollback();
+
+            Alert::error(trans('Add error'), __('Required'));
+        }
     }
 }
