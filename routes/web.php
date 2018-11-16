@@ -38,8 +38,10 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['che
         Route::get('/{id}/get', 'WorkingScheduleController@getData')->name('workplace.get_data');
         Route::get('/{id}/one', 'WorkingScheduleController@getOneDate')->name('workplace.get_one_date');
         Route::get('location/{id}', 'WorkingScheduleController@viewByLocation')->name('location.month');
-        Route::get('users/{id}', 'WorkingScheduleController@viewByUser');
+        Route::get('users/{id}', 'WorkingScheduleController@viewByUser')->name('detail.location');
         Route::get('users/{id}/get', 'WorkingScheduleController@getDataUser');
+        Route::get('/view-by-location/{id}', 'WorkingScheduleController@getScheduleByLocation')->name('by.location');
+        Route::get('view-by-location/{id}/get-schedule', 'WorkingScheduleController@getScheduleData')->name('get.data');
     });
 
     Route::group(['prefix' => 'calendar', 'as' => 'calendar.'], function () {

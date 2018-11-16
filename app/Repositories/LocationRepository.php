@@ -23,14 +23,14 @@ class LocationRepository extends EloquentRepository
             if ($filter['name']) {
                 $model->where('name', 'like', '%' . $filter['name'] . '%');
             }
-            
+
             return $model->latest()->paginate(config('database.paginate'));
         }
 
         return $this->model
-                ->with('workspace')
-                ->latest()
-                ->paginate(config('database.paginate'));
+            ->with('workspace')
+            ->latest()
+            ->paginate(config('database.paginate'));
     }
 
     public function getByWorkspace($workspaceId)
@@ -156,9 +156,9 @@ class LocationRepository extends EloquentRepository
             ->select(DB::raw('COUNT(user_id) as total, date as start, shift'))
             ->whereBetween('date', [$filter['start'], $filter['end']])
             ->where('shift', $shift);
-            
+
         if (array_key_exists('program_id', $filter) && $filter['program_id']) {
-            $getUserByProGram = DB::table('users')->where('program_id', $filter['program_id'])->pluck('id');
+            $getUserByProGram = User::where('program_id', $filter['program_id'])->pluck('id');
             $shiftData = $shiftData->whereIn('user_id', $getUserByProGram);
         }
         $shiftData = $shiftData->groupBy('date', 'shift')->get();
@@ -188,7 +188,62 @@ class LocationRepository extends EloquentRepository
         if (array_key_exists('program_id', $filter) && $filter['program_id']) {
             $users = $users->where('program_id', $filter['program_id']);
         }
-        $data = $users->orderBy('program_id')->paginate(config('database.paginate'));
+        $data = $users->orderBy('program_id')->get();
+
+        return $data;
+    }
+
+    public function setDataForCalenDar($location, $filter)
+    {
+        $data = $this->getTotalUsersInDay($location, $filter);
+        $dates = $this->getDatesOfFilter($filter);
+        $totalData = [];
+        foreach ($dates as $key => $date) {
+            if (array_key_exists($date, $data)) {
+                $totalData[] = [
+                    'start' => $date,
+                    'title' => trans_choice(':count employee | :count employees', $data[$date]),
+                    'className' => config('site.analystic.fulltime-color'),
+                    'url' => route(
+                        'calendar.location.detail_location',
+                        [
+                            'id' => $location->id,
+                            'date' => $date,
+                        ]
+                    ),
+                    'description' => __('Click to view detail'),
+                ];
+            } else {
+                $totalData[] = [
+                    'start' => $date,
+                    'title' => __('No employee'),
+                    'className' => '',
+                    'url' => route(
+                        'calendar.location.detail_location',
+                        [
+                            'id' => $location->id,
+                            'date' => $date,
+                        ]
+                    ),
+                    'description' => __('Click to view detail'),
+                ];
+            }
+        }
+
+        return $totalData;
+    }
+
+    public function getTotalUsersInDay($location, $filter)
+    {
+        $data = $location->workSchedules()
+            ->select(DB::raw('COUNT(user_id) as total, date as start'))
+            ->whereBetween('date', [$filter['start'], $filter['end']]);
+
+        if (array_key_exists('program_id', $filter) && $filter['program_id']) {
+            $getUserByProGram = User::where('program_id', $filter['program_id'])->pluck('id');
+            $data = $data->whereIn('user_id', $getUserByProGram);
+        }
+        $data = $data->groupBy('date')->pluck('total', 'start')->toArray();
 
         return $data;
     }
