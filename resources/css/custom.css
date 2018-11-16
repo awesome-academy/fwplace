@@ -133,3 +133,18 @@ img.workspace_image {
 #m_modal_4 {
     display: none;
 }
+#image-display {
+    width: 600px;
+    height: 340px;
+    overflow: hidden;
+    object-fit: cover;
+}
+.m-menu__link-text {
+    font-size: 1.02em!important;
+}
+.m-card-user.m-card-user--sm .m-card-user__pic img {
+    max-width: 40px!important;
+    height: 40px!important;;
+    overflow: hidden;
+    object-fit: cover;
+}

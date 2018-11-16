@@ -40,7 +40,6 @@
                             <th>@lang('Workspace')</th>
                             <th>@lang('Location')</th>
                             <th>@lang('Total Seat')</th>
-
                             @if (Entrust::can(['add-workspaces']))
                                 <th>
                                     <a class="btn m-btn--pill m-btn--air btn-secondary" data-toggle="modal" data-target="#m_modal_4" data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Add Workspace')">

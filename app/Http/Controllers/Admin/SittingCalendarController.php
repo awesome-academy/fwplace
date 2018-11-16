@@ -80,7 +80,7 @@ class SittingCalendarController extends Controller
             $filter['program_id'] = $request->session()->get('ws_program_id');
         }
         $data = $this->location->getData($locationId, $filter);
-        
+
         return $data;
     }
 

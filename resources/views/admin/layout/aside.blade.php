@@ -136,19 +136,6 @@
                     <div class="m-menu__submenu ">
                         <span class="m-menu__arrow"></span>
                         <ul class="m-menu__subnav">
-                            @if (Entrust::can(['add-workspaces']))
-                                <li class="m-menu__item" aria-haspopup="true">
-                                    <a href="{{ url('workspace/create') }}" class="m-menu__link ">
-                                        <i class="m-menu__link-bullet m-menu__link-bullet--dot">
-                                            <span></span>
-                                        </i>
-                                        <span class="m-menu__link-text color-manager">
-                                            @lang('Add Workspace')
-                                        </span>
-                                    </a>
-                                </li>
-                            @endif
-                            
                             @if (Entrust::can(['design-diagrams']))
                                 <li class="m-menu__item" aria-haspopup="true">
                                     <a href="{{ route('image_map') }}" class="m-menu__link ">
