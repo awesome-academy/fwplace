@@ -19,6 +19,9 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['che
     Route::get('/roles/get-permission-role/{role_id}', 'RoleController@getPermissionRole')->name('roles.get_permission_role');
     Route::resource('roles', 'RoleController');
 
+    Route::get('/permissions/get-permissions', 'PermissionController@getPermissions')->name('permissions.get_permissions');
+    Route::resource('permissions', 'PermissionController');
+
     Route::post('/users/update-role-user', 'UserController@updateRoleUser')->name('users.update_role_user');
     Route::resource('users', 'UserController');
 
