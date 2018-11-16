@@ -28,7 +28,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['che
     Route::get('/programs/get-programs', 'ProgramController@getPrograms')->name('programs.get_programs');
     Route::resource('programs', 'ProgramController');
 
-    Route::resource('workspaces', 'WorkspaceController'); 
+    Route::resource('workspaces', 'WorkspaceController');
     Route::resource('locations', 'LocationController');
     Route::resource('userdisables', 'UserDisableController');
 
@@ -69,7 +69,6 @@ Route::post('/register', 'UserController@store');
 Route::get('/register/trainer', 'UserController@selectTrainer')->name('get_trainer_by_program');
 
 Route::group(['prefix' => 'workspace'], function () {
-    Route::get('create', 'Admin\DiagramController@typeWorkspaceInformation')->name('create_workspace');
     Route::post('save', 'Admin\DiagramController@saveWorkspace')->name('test.save');
     Route::get('edit-locations/{id}', 'Admin\DiagramController@generateDiagram')->name('generate');
     Route::post('add-locations/{id}', 'Admin\DiagramController@saveLocation')->name('save_location');

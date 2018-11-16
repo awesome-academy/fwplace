@@ -46,11 +46,6 @@ class DiagramController extends Controller
         $this->designDiagramRepository = $designDiagramRepository;
     }
 
-    public function typeWorkspaceInformation()
-    {
-        return view('test.workspace.create');
-    }
-
     public function saveWorkspace(Request $request)
     {
         $data = $request->all();
