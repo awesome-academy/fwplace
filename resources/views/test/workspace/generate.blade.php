@@ -46,13 +46,15 @@
                 @include('admin.components.alert', ['type' => 'danger', 'message' => $error])
             @endforeach
         </div>
-        <div class="form-workspace">
-            {!! Form::open(['url' => route('save_location', ['id' => $idWorkspace]), 'method' => 'POST']) !!}
-                <p id="list-seat"></p>
-                {!! Form::hidden('seats', null, ['id' => 'seats']) !!}
-                {!! Form::text('name', null, ['placeholder' => __('Name')]) !!}
-                {!! Form::color('color', null, ['placeholder' => __('Color')]) !!}
-                {!! Form::submit(__('Save'), ['class' => 'btn btn-success']) !!}
+        <div class="col-md-4 form-workspace">
+            {!! Form::open(['url' => route('save_location', ['id' => $idWorkspace]), 'method' => 'POST', 'class' => 'm-form m-form--fit m--margin-bottom-20']) !!}
+                <div class="row">
+                    <p id="list-seat"></p>
+                    {!! Form::hidden('seats', null, ['id' => 'seats']) !!}
+                    {!! Form::text('name', null, ['placeholder' => __('Name'), 'class' => 'form-control m-input col-md-8']) !!}
+                    {!! Form::color('color', null, ['placeholder' => __('Color'), 'id' => 'input-color']) !!}
+                    {!! Form::submit(__('Save'), ['class' => 'btn btn-success form-control m-input col-md-2']) !!}
+                    </div>
             {!! Form::close() !!}
         </div>
         {!! Form::button(__('Add location'), ['class' => 'btn btn-success', 'id' => 'show']) !!}

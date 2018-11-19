@@ -144,7 +144,12 @@ img.workspace_image {
 }
 .m-card-user.m-card-user--sm .m-card-user__pic img {
     max-width: 40px!important;
-    height: 40px!important;;
+    height: 40px!important;
     overflow: hidden;
     object-fit: cover;
+}
+#input-color {
+    position: relative;
+    right: 49px;
+    top: 8px;
 }
