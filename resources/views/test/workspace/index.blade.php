@@ -73,37 +73,37 @@
                                     <h5>{{ $item->total_seat }}</h5>
                                 </td>
                                 <td>
-                                    @if (Entrust::can(['php-manager']) && $item->id == 1)
+                                    @if (Entrust::can(['php-manager']) && Auth::user()->program_id == 1)
                                         <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}"  data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
                                             <i class="flaticon-edit-1"></i>
                                         </a>
                                     @endif
 
-                                    @if (Entrust::can(['ruby-manager']) && $item->id == 2)
+                                    @if (Entrust::can(['ruby-manager']) && Auth::user()->program_id == 2)
                                         <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}"  data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
                                             <i class="flaticon-edit-1"></i>
                                         </a>
                                     @endif
 
-                                    @if (Entrust::can(['ios-manager']) && $item->id == 3)
+                                    @if (Entrust::can(['ios-manager']) && Auth::user()->program_id == 3)
                                         <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}"  data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
                                             <i class="flaticon-edit-1"></i>
                                         </a>
                                     @endif
 
-                                    @if (Entrust::can(['android-manager']) && $item->id == 4)
+                                    @if (Entrust::can(['android-manager']) && Auth::user()->program_id == 4)
                                         <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}"  data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
                                             <i class="flaticon-edit-1"></i>
                                         </a>
                                     @endif
 
-                                    @if (Entrust::can(['qa-manager']) && $item->id == 5)
+                                    @if (Entrust::can(['qa-manager']) && Auth::user()->program_id == 5)
                                         <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}"  data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
                                             <i class="flaticon-edit-1"></i>
                                         </a>
                                     @endif
 
-                                    @if (Entrust::can(['design-manager']) && $item->id == 6)
+                                    @if (Entrust::can(['design-manager']) && Auth::user()->program_id == 6)
                                         <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}"  data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
                                             <i class="flaticon-edit-1"></i>
                                         </a>
