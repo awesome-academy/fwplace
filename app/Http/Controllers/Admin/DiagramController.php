@@ -222,7 +222,9 @@ class DiagramController extends Controller
     {
         $workspaces = $this->workspace->get();
 
-        return view('test.workspace.index', compact('workspaces'));
+        return view('test.workspace.index', [
+            'workspaces' => $workspaces,
+        ]);
     }
 
     public function detail($id)
