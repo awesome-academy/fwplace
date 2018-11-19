@@ -35,76 +35,79 @@
                 <div class="m-section__content">
                     <table class="table m-table m-table--head-bg-success table-middle">
                         <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>@lang('Workspace')</th>
-                            <th>@lang('Location')</th>
-                            <th>@lang('Total Seat')</th>
-                            @if (Entrust::can(['add-workspaces']))
-                                <th>
-                                    <a class="btn m-btn--pill m-btn--air btn-secondary" data-toggle="modal" data-target="#m_modal_4" data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Add Workspace')">
-                                        <i class="flaticon-add"></i>
-                                    </a>
-                                </th>
-                            @else
-                                <th>{{ __('Action') }}</th>
-                            @endif
-                        </tr>
+                            <tr>
+                                <th>#</th>
+                                <th>@lang('Workspace')</th>
+                                <th>@lang('Location')</th>
+                                <th>@lang('Total Seat')</th>
+                                @if (Entrust::can(['add-workspaces']))
+                                    <th>
+                                        <a class="btn m-btn--pill m-btn--air btn-secondary" data-toggle="modal" data-target="#m_modal_4" data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Add Workspace')">
+                                            <i class="flaticon-add"></i>
+                                        </a>
+                                    </th>
+                                @else
+                                    <th>{{ __('Action') }}</th>
+                                @endif
+                            </tr>
                         </thead>
                         <tbody>
+                            @php
+                                $programIndex = 1;
+                            @endphp
 
-                        @php
-                            $programIndex = 1;
-                        @endphp
-
-                        @forelse($workspaces as $key => $item)
-                            <tr>
-                                <th scope="row">{{ ($key+1) }}</th>
-                                <td class="sorting_1" tabindex="0">
-                                    <div>
-                                        <div class="m-card-user__details">
-                                            <h3 class="m-card-user__name">
-                                                <a href="{{ route('detail_workspace', $item->id) }}">{{ $item->name }}</a>
-                                            </h3>
+                            @forelse($workspaces as $key => $item)
+                                <tr>
+                                    <th scope="row">{{ ($key+1) }}</th>
+                                    <td class="sorting_1" tabindex="0">
+                                        <div>
+                                            <div class="m-card-user__details">
+                                                <h3 class="m-card-user__name">
+                                                    <a href="{{ route('detail_workspace', $item->id) }}">{{ $item->name }}</a>
+                                                </h3>
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    @foreach($item->locations as $location)
-                                        <p>{{ $location->name }} : {{ $location->total_seat }} @lang('seat')</p>
-                                    @endforeach
-                                </td>
-                                <td>
-                                    <h5>{{ $item->total_seat }}</h5>
-                                </td>
-                                <td>
-                                    @if (Auth::user()->program_id == $programIndex)
-                                        <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}" data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
-                                            <i class="flaticon-edit-1"></i>
-                                        </a>                                
-                                    @endif
+                                    </td>
+                                    <td>
+                                        @foreach($item->locations as $location)
+                                            <p>{{ $location->name }} : {{ $location->total_seat }} @lang('seat')</p>
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        <h5>{{ $item->total_seat }}</h5>
+                                    </td>
+                                    <td>
+                                        @if (Entrust::hasRole('admin'))
+                                            <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}" data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
+                                                <i class="flaticon-edit-1"></i>
+                                            </a>
+                                        @elseif (Auth::user()->program_id == $programIndex)
+                                            <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}" data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
+                                                <i class="flaticon-edit-1"></i>
+                                            </a>
+                                        @endif
 
-                                    @php
-                                        $programIndex++;
-                                    @endphp
+                                        @php
+                                            $programIndex++;
+                                        @endphp
 
-                                    @if (Entrust::can(['delete-workspaces']))
-                                        {!! Form::open(['route' => ['workspaces.destroy', $item->id],
-                                            'class' => 'd-inline',
-                                            'method' => 'DELETE'
-                                        ]) !!}
-                                        {!! Form::button('<i class="flaticon-cancel"></i>', [
-                                            'class' => 'delete btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill',
-                                            'type' => 'submit',
-                                            'message' => __('Delete this item?')
-                                        ]) !!}
-                                        {!! Form::close() !!}
-                                    @endif
-                                </td>
-                            </tr>
-                        @empty
-                            @include('admin.components.alert', ['type' => 'warning', 'message' => __('Have no data!')])
-                        @endforelse
+                                        @if (Entrust::can(['delete-workspaces']))
+                                            {!! Form::open(['route' => ['workspaces.destroy', $item->id],
+                                                'class' => 'd-inline',
+                                                'method' => 'DELETE'
+                                            ]) !!}
+                                            {!! Form::button('<i class="flaticon-cancel"></i>', [
+                                                'class' => 'delete btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill',
+                                                'type' => 'submit',
+                                                'message' => __('Delete this item?')
+                                            ]) !!}
+                                            {!! Form::close() !!}
+                                        @endif
+                                    </td>
+                                </tr>
+                            @empty
+                                @include('admin.components.alert', ['type' => 'warning', 'message' => __('Have no data!')])
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
