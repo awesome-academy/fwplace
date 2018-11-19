@@ -52,6 +52,11 @@
                         </tr>
                         </thead>
                         <tbody>
+
+                        @php
+                            $programIndex = 1;
+                        @endphp
+
                         @forelse($workspaces as $key => $item)
                             <tr>
                                 <th scope="row">{{ ($key+1) }}</th>
@@ -73,41 +78,15 @@
                                     <h5>{{ $item->total_seat }}</h5>
                                 </td>
                                 <td>
-                                    @if (Entrust::can(['php-manager']) && $item->id == 1)
-                                        <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}"  data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
+                                    @if (Auth::user()->program_id == $programIndex)
+                                        <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}" data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
                                             <i class="flaticon-edit-1"></i>
-                                        </a>
+                                        </a>                                
                                     @endif
 
-                                    @if (Entrust::can(['ruby-manager']) && $item->id == 2)
-                                        <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}"  data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
-                                            <i class="flaticon-edit-1"></i>
-                                        </a>
-                                    @endif
-
-                                    @if (Entrust::can(['ios-manager']) && $item->id == 3)
-                                        <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}"  data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
-                                            <i class="flaticon-edit-1"></i>
-                                        </a>
-                                    @endif
-
-                                    @if (Entrust::can(['android-manager']) && $item->id == 4)
-                                        <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}"  data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
-                                            <i class="flaticon-edit-1"></i>
-                                        </a>
-                                    @endif
-
-                                    @if (Entrust::can(['qa-manager']) && $item->id == 5)
-                                        <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}"  data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
-                                            <i class="flaticon-edit-1"></i>
-                                        </a>
-                                    @endif
-
-                                    @if (Entrust::can(['design-manager']) && $item->id == 6)
-                                        <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}"  data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
-                                            <i class="flaticon-edit-1"></i>
-                                        </a>
-                                    @endif
+                                    @php
+                                        $programIndex++;
+                                    @endphp
 
                                     @if (Entrust::can(['delete-workspaces']))
                                         {!! Form::open(['route' => ['workspaces.destroy', $item->id],
