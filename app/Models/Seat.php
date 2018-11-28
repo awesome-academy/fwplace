@@ -10,11 +10,12 @@ class Seat extends Model
         'name',
         'location_id',
         'user_id',
+        'usable',
     ];
     public $timestamps = false;
 
     public function location()
     {
-        return $this->belongsTo('App\Models\Location', 'location_id');
+        return $this->belongsTo(Location::class);
     }
 }

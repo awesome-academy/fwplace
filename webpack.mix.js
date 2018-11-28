@@ -38,5 +38,6 @@ mix.js('resources/js/permission-role.js', 'public/js/permission-role.js');
 mix.js('resources/js/role-user.js', 'public/js/role-user.js');
 mix.js('resources/js/position.js', 'public/js/position.js');
 mix.js('resources/js/program.js', 'public/js/program.js');
+mix.copyDirectory('resources/js/add_location.js', 'public/js');
 
 mix.version();

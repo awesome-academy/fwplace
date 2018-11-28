@@ -3,7 +3,7 @@
 @section('title', __('Add Workspace'))
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/addlocation.css') }}">
+    {{ Html::style(asset('css/addlocation.css')) }}
 @endsection
 
 @section('module')
@@ -44,17 +44,22 @@
         <div class="p-3">
             @forelse($errors->all() as $error)
                 @include('admin.components.alert', ['type' => 'danger', 'message' => $error])
-            @endforeach
+            @empty
+            @endforelse
         </div>
         <div class="col-md-4 form-workspace">
             {!! Form::open(['url' => route('save_location', ['id' => $idWorkspace]), 'method' => 'POST', 'class' => 'm-form m-form--fit m--margin-bottom-20']) !!}
                 <div class="row">
                     <p id="list-seat"></p>
                     {!! Form::hidden('seats', null, ['id' => 'seats']) !!}
-                    {!! Form::text('name', null, ['placeholder' => __('Name'), 'class' => 'form-control m-input col-md-8']) !!}
+                    {!! Form::text('name', null, ['placeholder' => __('Name'), 'class' => 'form-control m-input col-md-6']) !!}
                     {!! Form::color('color', null, ['placeholder' => __('Color'), 'id' => 'input-color']) !!}
-                    {!! Form::submit(__('Save'), ['class' => 'btn btn-success form-control m-input col-md-2']) !!}
+                    <div class="col-md-2">
+                        {!! Form::label('usable', __('Usable')) !!}
+                        {!! Form::checkbox('usable', config('site.default.usable'), null, ['class' => 'form-control m-input col-md']) !!}
                     </div>
+                    {!! Form::submit(__('Save'), ['class' => 'btn btn-success form-control m-input col-md-2']) !!}
+                </div>
             {!! Form::close() !!}
         </div>
         {!! Form::button(__('Add location'), ['class' => 'btn btn-success', 'id' => 'show']) !!}
@@ -67,7 +72,7 @@
                 <div class="row">
                     @foreach($row as $seat)
                         <a data-toggle="modal" href='#modal-info-user'  class="register-info-user">
-                            <span seat_id="" avatar="" program="" position="" user_id="" class="seat @if ($seat === null) disabled @endif" id="{{ $seat }}">
+                            <span seat_id="" avatar="" program="" position="" user_id="" class="seat {{ $seat === null ? 'disabled' : '' }}" id="{{ $seat }}">
                                 {{ $seat ?? 'X' }}
                             </span>
                         </a>
@@ -92,7 +97,7 @@
                                 {!! Html::image( asset(config('site.static') . 'favicon.png'), 'alt' ) !!}
                                 <p></p>
                             </div>
-                            {!! Form::open([ 'method' => 'POST', 'route' => 'save_info_location','files' => true, 'class'=>'m-form m-form--fit'] ) !!}
+                            {!! Form::open(['method' => 'POST', 'route' => 'save_info_location', 'files' => true, 'class'=>'m-form m-form--fit']) !!}
                                 <div class="m-portlet__body">
                                     <div class="form-group m-form__group row">
                                         <div class="col-12">
@@ -110,24 +115,24 @@
                                         </div>
                                     </div>
                                     <div class="form-group m-form__group row">
-                                        {!! htmlspecialchars_decode( Form::label( 'name', __('User Name').'<span class="required">*</span>', [ 'class' => 'control-label col-md-4 col-sm-4 col-xs-12']  ) )  !!}
+                                        {!! htmlspecialchars_decode(Form::label('name', __('User Name').'<span class="required">*</span>', ['class' => 'control-label col-md-4 col-sm-4 col-xs-12'])) !!}
                                         <div class="col-8">
-                                            {!! Form::select('user_id[]',$listUser, null, ['class' => 'form-control m-input', 'required'=>'', 'id' => 'list-name', 'placeholder' => 'User - Name' ])  !!}
+                                            {!! Form::select('user_id[]', $listUser, null, ['class' => 'form-control m-input', 'required'=>'', 'id' => 'list-name', 'placeholder' => 'User - Name']) !!}
                                         </div>
                                     </div>
                                     <div class="form-group m-form__group row">
-                                        {!! htmlspecialchars_decode( Form::label( 'language', __('Language').'<span class="required">*</span>', [ 'class' => 'control-label col-md-4 col-sm-4 col-xs-12']  ) )  !!}
+                                        {!! htmlspecialchars_decode(Form::label('language', __('Language').'<span class="required">*</span>', ['class' => 'control-label col-md-4 col-sm-4 col-xs-12'])) !!}
                                         <div class="col-8">
-                                            {!! Form::select('language',$listProgram, null, ['class' => 'form-control m-input', 'id' => 'list-language'])  !!}
+                                            {!! Form::select('language', $listProgram, null, ['class' => 'form-control m-input', 'id' => 'list-language']) !!}
                                         </div>
                                     </div>
                                     <div class="form-group m-form__group row">
-                                        {!! htmlspecialchars_decode( Form::label( 'position', __('Position').'<span class="required">*</span>', [ 'class' => 'control-label col-md-4 col-sm-4 col-xs-12']  ) )  !!}
+                                        {!! htmlspecialchars_decode(Form::label('position', __('Position').'<span class="required">*</span>', ['class' => 'control-label col-md-4 col-sm-4 col-xs-12'])) !!}
                                         <div class="col-8">
-                                            {!! Form::select('position',$listPosition, null, ['class' => 'form-control m-input', 'id' => 'list-position'])  !!}
+                                            {!! Form::select('position', $listPosition, null, ['class' => 'form-control m-input', 'id' => 'list-position']) !!}
                                         </div>
                                     </div>
-                                    {!! Form::hidden('seat_id','', ['id' => 'locations']) !!}
+                                    {!! Form::hidden('seat_id', '', ['id' => 'locations']) !!}
                                 </div>
                                 <div class="boder"></div>
                                 {!! Form::submit(__('Save'), ['class' => 'col-md-12 btn btn-success']) !!}
@@ -141,7 +146,7 @@
 
 @endsection
 @section('js')
-    <script src="{{ asset('js/jquery-ui.js') }}"></script>
-    <script src="js/config.js"></script>
-    <script src="{{ asset('js/generate.js') }}"></script>
+    {{ Html::script(asset('js/jquery-ui.js')) }}
+    {{ Html::script(asset('js/config.js')) }}
+    {{ Html::script(asset('js/add_location.js')) }}
 @endsection

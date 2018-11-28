@@ -69,7 +69,7 @@ return [
         0 => 'All',
         1 => 'Fulltime',
         2 => 'Morning',
-        3 => 'Afternoon'
+        3 => 'Afternoon',
     ],
     'allow_register' => 1,
     'disallow_register' => 0,
@@ -77,11 +77,15 @@ return [
         '_blank' => '_blank',
         '_parent' => '_parent',
         '_self' => '_self',
-        '_top' => '_top'
+        '_top' => '_top',
     ],
     'default_img_map_shape' => [
         'rect' => 'rect',
         'poly' => 'poly',
-        'circle' => 'circle'
+        'circle' => 'circle',
+    ],
+    'default' => [
+        'usable' => 1,
+        'unusable' => 0,
     ]
 ];
