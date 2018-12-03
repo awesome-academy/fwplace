@@ -73,7 +73,7 @@
                     @foreach($row as $seat)
                         <a data-toggle="modal" href='#modal-info-user'  class="register-info-user">
                             <span seat_id="" avatar="" program="" position="" user_id="" class="seat {{ $seat === null ? 'disabled' : '' }}" id="{{ $seat }}">
-                                {{ $seat ?? 'X' }}
+                                <span class="seat-name">{{ $seat ?? 'X' }}</span>
                             </span>
                         </a>
                     @endforeach
@@ -89,14 +89,19 @@
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
             </div>
-            <h4 class="modal-title">{{ __('Information user') }}</h4>
+            <div class="text-center mb-3">
+                <div class="seat-options btn btn-light selected col-md-5">
+                    <span>{{ __('Register Seat') }}</span>
+                </div>
+                <div class="seat-options btn btn-light col-md-5">
+                    <span>{{ __('Edit Seat') }}</span>
+                </div>
+            </div>
+            <div class="option-view">
+                <h4 class="modal-title">{{ __('Information user') }}</h4>
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-lg-12">
-                            <div class="text-center login-header clearfix">
-                                {!! Html::image( asset(config('site.static') . 'favicon.png'), 'alt' ) !!}
-                                <p></p>
-                            </div>
                             {!! Form::open(['method' => 'POST', 'route' => 'save_info_location', 'files' => true, 'class'=>'m-form m-form--fit']) !!}
                                 <div class="m-portlet__body">
                                     <div class="form-group m-form__group row">
@@ -135,12 +140,38 @@
                                     {!! Form::hidden('seat_id', '', ['id' => 'locations']) !!}
                                 </div>
                                 <div class="boder"></div>
-                                {!! Form::submit(__('Save'), ['class' => 'col-md-12 btn btn-success']) !!}
+                                {!! Form::submit(__('Save'), ['class' => 'col-md-5 btn btn-success']) !!}
+                                <button class="col-md-offset-2 btn btn-danger" data-dismiss="modal">{{ __('Delete Cell') }}</button>
                             {!! Form::close() !!}
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="option-view d-none">
+                <h1 class="modal-title">{{ __('Edit Location') }}</h1>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            {!! Form::open(['method' => 'POST', 'route' => 'edit_seat', 'class' => 'form-horizontal']) !!}
+                            <div class="form-group row">
+                                {!! Form::label('color', __('Color'), ['class' => 'col-md-3']) !!}
+                                <div class="col-md-5">
+                                    {!! Form::color('color', null, ['placeholder' => __('Color')]) !!}
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-md-3"></div>
+                                <div class="col-md-3">
+                                    {!! Form::submit('Submit', ['class' => 'btn btn-success']) !!}
+                                </div>
+                            </div>
+                            {!! Form::hidden('seat_id', '', ['class' => 'locations']) !!}
+                            {!! Form::close() !!}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -149,4 +180,5 @@
     {{ Html::script(asset('js/jquery-ui.js')) }}
     {{ Html::script(asset('js/config.js')) }}
     {{ Html::script(asset('js/generate.js')) }}
+    {{ Html::script(asset('js/edit_location.js')) }}
 @endsection

@@ -273,4 +273,19 @@ class DiagramController extends Controller
             Alert::error(trans('Add error'), __('Required'));
         }
     }
+
+    public function editSeat(Request $request)
+    {
+        $id = $request->seat_id;
+        $color = $request->color;
+
+        $seat = $this->seat->findOrFail($id);
+        $location = $this->locationRepository->findOrFail($seat->location_id);
+
+        $location->color = $color;
+
+        $location->save();
+
+        return redirect()->back();
+    }
 }

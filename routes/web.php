@@ -73,7 +73,7 @@ Route::get('/register', 'UserController@index');
 Route::post('/register', 'UserController@store');
 Route::get('/register/trainer', 'UserController@selectTrainer')->name('get_trainer_by_program');
 
-Route::group(['prefix' => 'workspace'], function () {
+Route::group(['prefix' => 'workspace', 'middleware' => ['checkLogin']], function () {
     Route::post('save', 'Admin\DiagramController@saveWorkspace')->name('test.save');
     Route::get('edit-locations/{id}', 'Admin\DiagramController@generateDiagram')->name('generate');
     Route::post('add-locations/{id}', 'Admin\DiagramController@saveLocation')->name('save_location');
@@ -89,4 +89,5 @@ Route::group(['prefix' => 'workspace'], function () {
     Route::post('avatar-info/{id}', 'Admin\DiagramController@avatarInfo')->name('avatar_info');
     Route::get('avatar-info/{id}', 'Admin\DiagramController@avatarInfo')->name('avatar_info_1');
     Route::post('edit-info-user', 'Admin\DiagramController@editInfoUser')->name('edit_info_user');
+    Route::post('edit-seat', 'Admin\DiagramController@editSeat')->name('edit_seat');
 });

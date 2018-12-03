@@ -17,7 +17,6 @@
 
 .container-img{
     max-width: 960px;
-    margin: 30px auto;
 }
 
 .title-img {
@@ -89,4 +88,15 @@
             background-position: center;
         }
     }
+}
+
+.seat-options {
+    height: 50px;
+    display:inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.selected {
+    border-bottom: 1px solid orangered;
 }
