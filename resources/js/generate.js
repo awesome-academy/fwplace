@@ -51,7 +51,9 @@ $(document).ready(function () {
             $('#' + id + '').attr('full_name', x);
             $('#' + id + '').attr('avatar', avatar);
             $('#' + id + '').attr('user_id', user_id);
-
+            if (paintLocation[i][j]['usable'] != 1) {
+                $('#' + id + '').parent('a').addClass('disabled');
+            }
         }
     }
 

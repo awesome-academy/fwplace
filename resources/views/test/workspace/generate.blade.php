@@ -148,5 +148,5 @@
 @section('js')
     {{ Html::script(asset('js/jquery-ui.js')) }}
     {{ Html::script(asset('js/config.js')) }}
-    {{ Html::script(asset('js/add_location.js')) }}
+    {{ Html::script(asset('js/generate.js')) }}
 @endsection
