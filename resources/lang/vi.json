@@ -171,5 +171,9 @@
     "Edit position": "Chỉnh sửa chức danh",
     "Edit program": "Chỉnh sửa ngôn ngữ",
     "Not workspace": "Văn phòng không tồn tại",
-    "Not program": "Không thuộc ngôn ngữ nào"
+    "Not program": "Không thuộc ngôn ngữ nào",
+    "Workspace List": "Danh sách địa điểm làm việc",
+    "Choose program": "-- Ngôn ngữ lập trình --",
+    "Choose workspace": "-- Văn phòng --",
+    "Choose position": "-- Chức danh --"
 }

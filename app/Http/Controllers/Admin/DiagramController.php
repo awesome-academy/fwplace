@@ -68,7 +68,6 @@ class DiagramController extends Controller
         $workspace = $this->workspace->findOrFail($idWorkspace);
         $renderSeat = $this->renderSeat($workspace);
         $locations = $workspace->locations;
-        $colorLocation = $this->getColorLocation($locations);
         $listProgram = $this->programRepository->listProgramArray();
         $listPosition = $this->positionRepository->listpositionArray();
 
@@ -97,11 +96,22 @@ class DiagramController extends Controller
         return view('test.workspace.generate', compact(
             'renderSeat',
             'idWorkspace',
-            'colorLocation',
             'listProgram',
             'listPosition',
             'listUser'
         ));
+    }
+
+    //return color location
+    public function getLocationColors(Request $request, $idWorkspace)
+    {
+        $workspace = $this->workspace->findOrFail($idWorkspace);
+        $locations = $workspace->locations;
+        $colorLocation = $this->getColorLocation($locations);
+
+        if ($request->ajax()) {
+            return $colorLocation;
+        }
     }
 
     public function saveLocation(Request $request, $id)
@@ -124,7 +134,7 @@ class DiagramController extends Controller
                 $this->seat->create([
                     'name' => $value,
                     'location_id' => $location->id,
-                    'usable' => $request->has('usable') ? $request->usable : config('site.default.unusable'),
+                    'usable' => isset($request->usable) ?? false,
                 ]);
             }
         });

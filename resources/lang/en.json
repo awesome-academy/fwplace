@@ -159,5 +159,8 @@
     "Edit position": "Edit position",
     "Edit program": "Edit program",
     "Not workspace": "Not workspace",
-    "Not program": "Not program"
+    "Not program": "Not program",
+    "Choose program": "-- Choose program --",
+    "Choose workspace": "-- Choose workspace --",
+    "Choose position": "-- Choose position --"
 }

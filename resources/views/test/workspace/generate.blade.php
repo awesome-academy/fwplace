@@ -56,7 +56,7 @@
                     {!! Form::color('color', null, ['placeholder' => __('Color'), 'id' => 'input-color']) !!}
                     <div class="col-md-2">
                         {!! Form::label('usable', __('Usable')) !!}
-                        {!! Form::checkbox('usable', config('site.default.usable'), null, ['class' => 'form-control m-input col-md']) !!}
+                        {!! Form::checkbox('usable', config('site.default.usable'), false, ['class' => 'form-control m-input col-md']) !!}
                     </div>
                     {!! Form::submit(__('Save'), ['class' => 'btn btn-success form-control m-input col-md-2']) !!}
                 </div>
@@ -67,7 +67,8 @@
             <p>@lang('Note*: Please select location before click button Add location')</p>
         </div>
         <div class="all_seat">
-            {!! Form::hidden('',$colorLocation, ['id' => 'colorLocation']) !!}
+            {{ Form::hidden('', $idWorkspace, ['id' => 'idWorkspace']) }}
+            {{-- {!! Form::hidden('', $colorLocation, ['id' => 'colorLocation']) !!} --}}
             @foreach($renderSeat as $row)
                 <div class="row">
                     @foreach($row as $seat)
