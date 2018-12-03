@@ -124,7 +124,7 @@ class DiagramController extends Controller
                 $this->seat->create([
                     'name' => $value,
                     'location_id' => $location->id,
-                    'usable' => $request->has('usable') ? $request->usable : config('site.default.unusable'),
+                    'usable' => isset($request->usable) ?? false,
                 ]);
             }
         });

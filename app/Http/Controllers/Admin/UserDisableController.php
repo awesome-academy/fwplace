@@ -38,9 +38,12 @@ class UserDisableController extends Controller
      */
     public function index(Request $request)
     {
-        $programs = $this->programRepository->pluckProgram()->prepend('', config('site.prepend'));
-        $positions = $this->positionRepository->pluckPosition()->prepend('', config('site.prepend'));
-        $workspaces = $this->workspaceRepository->pluckWorkspace()->prepend('', config('site.prepend'));
+        $programs = $this->programRepository->pluckProgram()
+            ->prepend(trans('Choose program'), config('site.prepend'));
+        $positions = $this->positionRepository->pluckPosition()
+            ->prepend(trans('Choose workspace'), config('site.prepend'));
+        $workspaces = $this->workspaceRepository->pluckWorkspace()
+            ->prepend(trans('Choose position'), config('site.prepend'));
         $users = $this->userRepository->newQuery();
         if ($request->has('name')) {
             $users->getListName($request->name);

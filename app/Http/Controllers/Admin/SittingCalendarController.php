@@ -99,6 +99,7 @@ class SittingCalendarController extends Controller
         }
         $data = $this->location->getLocationDetail($filter);
         $programs = $this->program->listProgram();
+        // dd($data);
 
         return view('admin.calendar.detailLocation', compact('data', 'location', 'date', 'programs'));
     }
