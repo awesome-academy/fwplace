@@ -59,6 +59,8 @@ trait Generating
         $colorLocation = [];
         foreach ($locations as $key => $location) {
             foreach ($location->seats as $id => $seat) {
+                $userId = $this->userRepository->get();
+                $listUserId = unserialize($seat->user_id);
                 $colorLocation[$key][$id]['location'] = $location->name;
                 $colorLocation[$key][$id]['seat_id'] = $seat->id;
                 $colorLocation[$key][$id]['name'] = $seat->name;
@@ -66,6 +68,31 @@ trait Generating
                 $colorLocation[$key][$id]['position_id'] = $seat->position_id;
                 $colorLocation[$key][$id]['usable'] = $seat->usable;
                 $colorLocation[$key][$id]['location_id'] = $seat->location_id;
+                if ($seat->user_id != null) {
+                    $checkName = [];
+                    $checkAvatar = [];
+                    $checkUserId = [];
+                    foreach ($userId as $value) {
+                        if (in_array($value->id, $listUserId)) {
+                            $checkAvatar[] = $value->avatar;
+                            $checkUserId[] =  $value->id;
+                            $checkName[] = $value->name;
+                            $checkProgram = $value->program_id;
+                            $position = $this->userRepository->findOrFail($value->id)->position->id;
+                        }
+                    }
+                    $colorLocation[$key][$id]['user_name'] = $checkName;
+                    $colorLocation[$key][$id]['avatar'] = $checkAvatar;
+                    $colorLocation[$key][$id]['user_id'] = $checkUserId;
+                    $colorLocation[$key][$id]['position'] = $position;
+                    $colorLocation[$key][$id]['program'] = $checkProgram;
+                } else {
+                    $colorLocation[$key][$id]['user_name'] = $seat->name;
+                    $colorLocation[$key][$id]['avatar'] = null;
+                    $colorLocation[$key][$id]['user_id'] = null;
+                    $colorLocation[$key][$id]['program'] = null;
+                    $colorLocation[$key][$id]['position'] = null;
+                }
             }
         }
         $colorLocation = json_encode($colorLocation);
