@@ -56,7 +56,7 @@
                     {!! Form::color('color', null, ['placeholder' => __('Color'), 'id' => 'input-color']) !!}
                     <div class="col-md-2">
                         {!! Form::label('usable', __('Usable')) !!}
-                        {!! Form::checkbox('usable', config('site.default.usable'), null, ['class' => 'form-control m-input col-md']) !!}
+                        {!! Form::checkbox('usable', config('site.default.usable'), false, ['class' => 'form-control m-input col-md']) !!}
                     </div>
                     {!! Form::submit(__('Save'), ['class' => 'btn btn-success form-control m-input col-md-2']) !!}
                 </div>

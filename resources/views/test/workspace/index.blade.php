@@ -63,7 +63,7 @@
                                         <div>
                                             <div class="m-card-user__details">
                                                 <h3 class="m-card-user__name">
-                                                    <a href="{{ route('detail_workspace', $item->id) }}">{{ $item->name }}</a>
+                                                    <a href="{{ route('generate', ['id' => $item->id]) }}">{{ $item->name }}</a>
                                                 </h3>
                                             </div>
                                         </div>
