@@ -287,7 +287,7 @@ class RoleController extends Controller
     {
         $role = $this->roleRepository->findOrFail($roleId);
 
-        $permissions = $this->permissionRepository->orderBy('id', 'desc')->get();
+        $permissions = $this->permissionRepository->orderBy('display_name', 'asc')->get();
 
         return Datatables::of($permissions)
             ->addIndexColumn()

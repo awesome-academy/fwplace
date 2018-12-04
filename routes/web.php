@@ -91,4 +91,5 @@ Route::group(['prefix' => 'workspace', 'middleware' => ['checkLogin']], function
     Route::get('avatar-info/{id}', 'Admin\DiagramController@avatarInfo')->name('avatar_info_1');
     Route::post('edit-info-user', 'Admin\DiagramController@editInfoUser')->name('edit_info_user');
     Route::post('edit-seat', 'Admin\DiagramController@editSeat')->name('edit_seat');
+    Route::post('delete-seat', 'Admin\DiagramController@deleteSeat')->name('delete_seat');
 });

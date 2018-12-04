@@ -7,18 +7,18 @@ $(document).ready(function() {
     });
     $.ajax({
         method: 'post',
-        url: 'workspace/getColorLocation/' + idWorkspace,
-    })
-    .done(function (result) {
+        url: 'workspace/getColorLocation/' + idWorkspace
+    }).done(function(result) {
         var paintLocation = JSON.parse(result);
 
         for (var i = 0; i < paintLocation.length; i++) {
             var colorNote = paintLocation[i][0]['color'];
             var nameLocation = paintLocation[i][0]['location'];
-            var workspace_id = paintLocation[i][0]['workspace_id'];
+            var locationId = paintLocation[i][0]['location_id'];
+            var workspace_id = idWorkspace;
             $('#noteaddlocation').append(
                 '<div class="seat seat-info" info-id = "' +
-                    workspace_id +
+                    locationId +
                     '" info-name = "' +
                     nameLocation +
                     '" info-color = "' +
@@ -40,7 +40,10 @@ $(document).ready(function() {
                 var position = paintLocation[i][j]['position'];
                 var status =
                     '<small><i class="fa fa-circle" style="color: green; padding-right: 10px"></i></small>';
-                $('#' + id + '').attr('seat_id', paintLocation[i][j]['seat_id']);
+                $('#' + id + '').attr(
+                    'seat_id',
+                    paintLocation[i][j]['seat_id']
+                );
                 $('#' + id + '').css({
                     'background-color': color,
                     'font-size': '18px',
@@ -125,7 +128,9 @@ $(document).ready(function() {
             if (array.length > 0) {
                 $('.form-workspace').show();
             } else {
-                alert('Please select location before click button Add location');
+                alert(
+                    'Please select location before click button Add location'
+                );
             }
         });
         $('.all_seat').selectable({
@@ -141,8 +146,6 @@ $(document).ready(function() {
         });
 
         $(document).on('click', '.seat-info', function() {
-            var name = $(this).attr('info-name');
-            var color = $(this).attr('info-color');
             var id = $(this).attr('info-id');
             var array = [];
             $('.ui-selected').each(function() {
@@ -150,6 +153,13 @@ $(document).ready(function() {
             });
             var seat = array;
             var url = route('save_location_color');
+            if (seat.length < 1) {
+                swal({
+                    type: 'error',
+                    title: 'Oops...',
+                    text: 'Please select location'
+                });
+            }
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -158,10 +168,11 @@ $(document).ready(function() {
             $.ajax({
                 type: 'POST',
                 url: url,
-                data: { id: id, seat: seat, name: name, color: color },
+                data: { id: id, seat: seat },
                 success: function(data) {
                     var val = $('.ui-selected').each(function() {
                         $(this).css('background-color', data.color);
+                        location.reload();
                     });
                 }
             });
@@ -206,10 +217,16 @@ $(document).ready(function() {
             readURL(this);
         });
 
+        function rgbToHex(red, green, blue) {
+            var rgb = blue | (green << 8) | (red << 16);
+            return '#' + (0x1000000 + rgb).toString(16).slice(1);
+        }
+
         $(document).on('click', '.seat', function() {
             var seat_id = $(this).attr('seat_id');
             $('#locations').val(seat_id);
             $('.locations').val(seat_id);
+            $('#seat_color').val(rgbToHex($(this).attr('background-color')));
         });
 
         $(document).on('click', '.seat button', function() {
@@ -300,6 +317,50 @@ $(document).ready(function() {
                 .find('.list-position')
                 .val(position)
                 .trigger('change');
+        });
+
+        $('.delete-cell').click(function() {
+            swal({
+                title: 'Are you sure?',
+                text: 'Are you sure want to delete this seat?',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes'
+            }).then(result => {
+                if (result.value) {
+                    let id = $('#locations').val();
+                    let span = $(`span[seat_id=${id}]`)[0];
+                    let element = document.createElement('span');
+                    let append = `<span seat_id="" avatar="" program="" position="" 
+                                    user_id="" class="seat ui-selectee" id="${$(
+                                        span
+                                    ).attr('id')}">
+                        <span class="seat-name">${span.innerText}</span>
+                    </span>`;
+                    $(element).html(append);
+
+                    $.ajax({
+                        url: route('delete_seat'),
+                        method: 'post',
+                        data: { seat_id: id },
+                        success: function(result) {
+                            $(span)
+                                .parents('a')
+                                .removeClass('disabled');
+                            span.replaceWith(element);
+                        },
+                        error: function(request, status, error) {
+                            swal({
+                                type: 'error',
+                                title: 'Oops...',
+                                text: request.responseJSON.message
+                            });
+                        }
+                    });
+                }
+            });
         });
     });
 });

@@ -19,6 +19,7 @@ use Entrust;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
 use App\Traits\Generating;
+use Mockery\Exception;
 
 class DiagramController extends Controller
 {
@@ -71,6 +72,8 @@ class DiagramController extends Controller
         $listProgram = $this->programRepository->listProgramArray();
         $listPosition = $this->positionRepository->listpositionArray();
 
+        $locations = $workspace->locations->pluck('name', 'id');
+
         if (Entrust::can(['php-manager']) &&
             Entrust::can(['ruby-manager']) &&
             Entrust::can(['ios-manager']) &&
@@ -96,6 +99,7 @@ class DiagramController extends Controller
         return view('test.workspace.generate', compact(
             'renderSeat',
             'idWorkspace',
+            'locations',
             'listProgram',
             'listPosition',
             'listUser'
@@ -144,19 +148,20 @@ class DiagramController extends Controller
 
     public function saveAjaxLocation(Request $request)
     {
-        $data = $this->locationRepository->create([
-            'name' => $request->name,
-            'workspace_id' => $request->id,
-            'color' => $request->color,
+        $this->validate($request, [
+            'id' => 'required',
+            'seat' => 'required',
         ]);
 
         $seats = $request->seat;
         foreach ($seats as $value) {
             $this->seat->create([
                 'name' => $value,
-                'location_id' => $data->id,
+                'location_id' => $request->id,
             ]);
         }
+
+        $data = $this->locationRepository->findOrFail($request->id);
 
         return response()->json($data);
     }
@@ -286,6 +291,11 @@ class DiagramController extends Controller
 
     public function editSeat(Request $request)
     {
+        $this->validate($request, [
+            'seat_id' => 'required',
+            'color' => 'required',
+        ]);
+
         $id = $request->seat_id;
         $color = $request->color;
 
@@ -297,5 +307,14 @@ class DiagramController extends Controller
         $location->save();
 
         return redirect()->back();
+    }
+
+    public function deleteSeat(Request $request)
+    {
+        $this->validate($request, [
+            'seat_id' => 'required',
+        ]);
+
+        return $this->seat->deleteSeat($request->seat_id);
     }
 }
