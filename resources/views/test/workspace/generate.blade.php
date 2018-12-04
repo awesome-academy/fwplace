@@ -67,7 +67,8 @@
             <p>@lang('Note*: Please select location before click button Add location')</p>
         </div>
         <div class="all_seat">
-            {!! Form::hidden('',$colorLocation, ['id' => 'colorLocation']) !!}
+            {{ Form::hidden('', $idWorkspace, ['id' => 'idWorkspace']) }}
+            {{-- {!! Form::hidden('', $colorLocation, ['id' => 'colorLocation']) !!} --}}
             @foreach($renderSeat as $row)
                 <div class="row">
                     @foreach($row as $seat)

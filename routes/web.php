@@ -76,6 +76,7 @@ Route::get('/register/trainer', 'UserController@selectTrainer')->name('get_train
 Route::group(['prefix' => 'workspace', 'middleware' => ['checkLogin']], function () {
     Route::post('save', 'Admin\DiagramController@saveWorkspace')->name('test.save');
     Route::get('edit-locations/{id}', 'Admin\DiagramController@generateDiagram')->name('generate');
+    Route::post('getColorLocation/{id}', 'Admin\DiagramController@getLocationColors');
     Route::post('add-locations/{id}', 'Admin\DiagramController@saveLocation')->name('save_location');
     Route::get('list', 'Admin\DiagramController@list')->name('list_workspace');
     Route::get('detail/{id}', 'Admin\DiagramController@detail')->name('detail_workspace');
