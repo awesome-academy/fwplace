@@ -8,7 +8,7 @@
 @section('content')
     <div class="m-portlet pl-5 py-5">
         <div class="workspace">
-            <input type="hidden" value='{!! $colorLocation !!}' id="colorLocation">
+            <input type="hidden" value="{!! $colorLocation !!}" id="colorLocation">
             <div id="noteLocation">
                 <p>{{ __('Note:') }}</p>
             </div>
