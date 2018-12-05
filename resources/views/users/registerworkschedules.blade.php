@@ -75,20 +75,5 @@
 @endsection
 
 @section('js')
-<script type="text/javascript">
-$( '#select_location' ).change(function() {
-    var all_value = $(this).val();
-    
-    $( '.target' ).each(function() {
-        $(this).val(all_value);
-    });
-});
-$( '#select_shift' ).change(function() {
-    var value = $(this).val();
-    
-    $( '.tar' ).each(function() {
-        $(this).val(value);
-    });
-});
-</script>
+<script src="{{ asset('js/register_work_schedules.js') }}"></script>
 @endsection
