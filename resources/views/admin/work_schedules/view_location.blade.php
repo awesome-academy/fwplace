@@ -17,13 +17,15 @@
                                     <span class="m-portlet__head-icon">
                                         <i class="fa fa-warehouse"></i>
                                     </span>
-                                        <h3 class="m-portlet__head-text">
-                                            <a href="{{ route('schedule.by.location', ['id' => $location->id]) }}" class="text-white">
-                                                {{ $location->name }}
-                                            </a>
-                                        </h3>
+                                    <h3 class="m-portlet__head-text">
+                                        <a href="{{ route('schedule.by.location', ['id' => $location->id]) }}" class="text-white">
+                                            {{ $location->name }}
+                                        </a>
+                                    </h3>
                                 </div>
                             </div>
+                            {!! Html::decode(link_to_route('locations.edit','<i class="flaticon-edit-1" aria-hidden="true"></i>', ['id' => $location->id], ['class' => 'mt-2 btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill edit_location'])) !!}
+
                         </div>
                         <div class="m-portlet__body">
                             <p>

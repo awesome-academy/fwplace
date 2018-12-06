@@ -14,15 +14,8 @@ trait Generating
 {
     public function renderSeat($workspace)
     {
-        $totalSeat = $workspace->total_seat;
+        $seatPerColumn = $workspace->seat_per_column;
         $seatPerRow = $workspace->seat_per_row;
-        $remainderSeat = $totalSeat % $seatPerRow; // Lấy số ghế dư ra
-
-        if ($remainderSeat > 0) {
-            $totalRow = floor($totalSeat / $seatPerRow) + 1; // Lấy số hàng, nếu có dư thì +1 hàng để lưu số dư
-        } else {
-            $totalRow = floor($totalSeat / $seatPerRow);
-        }
         $alphabet = range('A', 'Z'); // Tạo ra bảng chữ cái để đặt tên cho cột
         $columnName = $alphabet;
         if ($seatPerRow > count($alphabet)) {
@@ -35,19 +28,13 @@ trait Generating
         }
 
         $columnList = array_slice($columnName, 0, $seatPerRow); // Lấy danh sách tên các hàng
-        $rowList = range(1, $totalRow); // Lấy danh sách tên các cột
+        $rowList = range(1, $seatPerColumn); // Lấy danh sách tên các cột
         $renderSeat = [];
         $counting = 0; // Đếm số ghế được tạo ra
         foreach ($rowList as $key => $row) {
             foreach ($columnList as $column) {
                 $counting++;
-                if ($counting <= $totalSeat) {
-                    // Chưa max thì sẽ thêm
-                    $renderSeat[$row][] = $column . $row;
-                } else {
-                    // Nếu max thì thêm để tạo đủ ghế
-                    $renderSeat[$row][] = null;
-                }
+                $renderSeat[$row][] = $column . $row;
             }
         }
 

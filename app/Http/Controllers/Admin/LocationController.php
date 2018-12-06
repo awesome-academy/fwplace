@@ -113,7 +113,7 @@ class LocationController extends Controller
         $save = $this->location->update($data, $id);
         alert()->success(__('Edit Location'), __('Successfully!!!'));
 
-        return redirect()->route('locations.index');
+        return redirect()->route('schedule.workplace.view', ['id' => $request->workspace_id]);
     }
 
     /**
