@@ -152,7 +152,6 @@ $(function() {
         });
     });
     /*--------------------------*/
-
     /*Ấn nút Cập nhật chức danh*/
     $('#edit_position_btn').on('click', function (event) {
         event.preventDefault();

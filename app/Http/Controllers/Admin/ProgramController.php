@@ -62,17 +62,7 @@ class ProgramController extends Controller
         DB::beginTransaction();
 
         try {
-            $rules = [
-                'name' => 'required|string|unique:programs',
-            ];
-
-            $messages = [
-                'name.required' => __('Program') . __('Required'),
-                'name.string' => __('Program') . __('String'),
-                'name.unique' => __('Program') . __('Unique'),
-            ];
-
-            $validator = Validator::make($data, $rules, $messages);
+            $validator = ProgramRequest::rulesStore($request);
 
             if ($validator->fails()) {
                 return response()->json([
@@ -154,16 +144,7 @@ class ProgramController extends Controller
         DB::beginTransaction();
 
         try {
-            $rules = [
-                'name' => 'required|string',
-            ];
-
-            $messages = [
-                'name.required' => __('Program') . __('Required'),
-                'name.string' => __('Program') . __('String'),
-            ];
-
-            $validator = Validator::make($data, $rules, $messages);
+            $validator = ProgramRequest::rulesUpdate($request, $id);
 
             if ($validator->fails()) {
                 return response()->json([

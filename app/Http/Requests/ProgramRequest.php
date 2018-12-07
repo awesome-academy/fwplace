@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Validator;
+use App\Models\Program;
 
 class ProgramRequest extends FormRequest
 {
@@ -21,10 +23,49 @@ class ProgramRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public static function rulesStore($request)
     {
-        return [
-            'name' => 'required|unique:programs,name',
+        $messages = [
+            'name.required' => __('Program') . __('Required'),
+            'name.string' => __('Program') . __('String'),
+            'name.unique' => __('Program') . __('Unique'),
         ];
+
+        return Validator::make(
+            $request->all(),
+            [
+                'name' => 'required|string|unique:programs',
+            ],
+            $messages
+        );
+    }
+
+    public static function rulesUpdate($request, $id)
+    {
+        $messages = [
+            'name.required' => __('Program') . __('Required'),
+            'name.string' => __('Program') . __('String'),
+            'name.unique' => __('Program') . __('Unique'),
+        ];
+
+        $program = Program::findOrFail($id);
+        
+        if ($program->name == $request->name) {
+            return Validator::make(
+                $request->all(),
+                [
+                    'name' => 'required|string',
+                ],
+                $messages
+            );
+        } elseif ($program->name != $request->name) {
+            return Validator::make(
+                $request->all(),
+                [
+                    'name' => 'required|string|unique:programs',
+                ],
+                $messages
+            );
+        }
     }
 }
