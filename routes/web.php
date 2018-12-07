@@ -93,3 +93,6 @@ Route::group(['prefix' => 'workspace', 'middleware' => ['checkLogin']], function
     Route::post('edit-seat', 'Admin\DiagramController@editSeat')->name('edit_seat');
     Route::post('delete-seat', 'Admin\DiagramController@deleteSeat')->name('delete_seat');
 });
+Route::get('register-seat', 'SeatController@getListOfSeats')->name('register.seat');
+Route::post('get-seat-status', 'SeatController@getSeatStatusByDay')->name('get.seat.status');
+Route::post('register-seat', 'SeatController@registerSeat')->name('user.register.seat');

@@ -43,5 +43,6 @@ mix.js(
     'resources/js/register_work_schedules.js',
     'public/js/resigster_work_schedules.js'
 );
+mix.copy('resources/js/register_seat.js', 'public/js/register_seat.js');
 
 mix.version();

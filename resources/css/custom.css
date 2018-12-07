@@ -160,3 +160,20 @@ img.workspace_image {
     right: 49px;
     top: 8px;
 }
+.nor-seat {
+    width: 115px;
+    height: 115px;
+    line-height: 50px;
+    background-color: #eef9f5;
+    border: 1px solid #333;
+    display: inline-block;
+    text-align: center;
+    cursor: pointer;
+}
+a.disabled {
+    pointer-events: none;
+    cursor: default;
+}
+.load-location {
+    border: 3px solid #ff493b;
+}

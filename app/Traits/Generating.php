@@ -9,6 +9,7 @@
 namespace App\Traits;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 trait Generating
 {
@@ -100,6 +101,27 @@ trait Generating
         return $colorLocation;
     }
 
+    public function getColorLocationByDay($locations, $day)
+    {
+        $colorLocation = [];
+        foreach ($locations as $key => $location) {
+            foreach ($location->seats as $id => $seat) {
+                $colorLocation[$key][$id]['location'] = $location->name;
+                $colorLocation[$key][$id]['location_id'] = $seat->location_id;
+                $colorLocation[$key][$id]['seat_id'] = $seat->id;
+                $colorLocation[$key][$id]['name'] = $seat->name;
+                $colorLocation[$key][$id]['color'] = $location->color;
+                $colorLocation[$key][$id]['position_id'] = $seat->position_id;
+                $colorLocation[$key][$id]['usable'] = $seat->usable;
+                $colorLocation[$key][$id]['status'] = $seat->getSeatStatus($day);
+                $colorLocation[$key][$id]['seat_user'] = $seat->checkSeatByUser($day, Auth::id()) ? $seat->id : null;
+            }
+        }
+        $colorLocation = json_encode($colorLocation);
+
+        return $colorLocation;
+    }
+
     public function getWorkingDatesInMonth()
     {
         $dates = [];
@@ -111,5 +133,26 @@ trait Generating
         }
 
         return $dates;
+    }
+
+    public function getScheduleByUser()
+    {
+        $schedules = Auth::user()->workSchedules()
+            ->select('date', 'shift', 'location_id')
+            ->whereMonth('date', date('m'))
+            ->get();
+
+        return $schedules;
+    }
+
+    public function getDayIfWeekend($day)
+    {
+        $day = Carbon::createFromFormat('Y-m-d', $day);
+        //kiểm tra nếu là cuối tuần thì chuyển đến thứ 2 tuần sau
+        if ($day->isWeekend()) {
+            $day = $day->next(Carbon::MONDAY);
+        }
+
+        return $day->toDateString();
     }
 }

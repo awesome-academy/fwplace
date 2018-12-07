@@ -12,3 +12,21 @@ $('#select_shift').change(function() {
         $(this).val(value);
     });
 });
+$('form#add_form').on('submit', function () {
+    var totalDay = 0;
+    $('select.tar').each(function () {
+        var data = $(this).val();
+        if (data === '1') {
+            totalDay += 1;
+        } else if (data === '2' || data === '3') {
+            totalDay += 0.5;
+        }
+    });
+    if (totalDay < 10) {
+        alert('Not enough working day!\n You registered ' + totalDay + 'days.\n Please try again!');
+
+        return false;
+    } else {
+        return true;
+    }
+});

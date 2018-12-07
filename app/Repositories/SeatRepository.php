@@ -4,12 +4,14 @@ namespace App\Repositories;
 
 use Illuminate\Support\Facades\DB;
 use App\Repositories\LocationRepository;
+use Exception;
+use App\Models\Seat;
 
 class SeatRepository extends EloquentRepository
 {
     public function model()
     {
-        return \App\Models\Seat::class;
+        return Seat::class;
     }
 
     public function deleteSeat($id)
@@ -34,5 +36,14 @@ class SeatRepository extends EloquentRepository
 
             return $e;
         }
+    }
+
+    public function getUsersFromSeat($seatId, $date)
+    {
+        return $this->model
+            ->findOrFail($seatId)
+            ->users()
+            ->wherePivot('registration_date', $date)
+            ->get();
     }
 }

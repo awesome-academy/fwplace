@@ -110,4 +110,13 @@ class UserRepository extends EloquentRepository
         return $this->model->where('role', '=', config('site.permission.trainer'))
             ->where('program_id', '=', $programId)->pluck('name', 'id')->toArray();
     }
+
+    public function getSeatOfUserByDay($day, $userId)
+    {
+        return $this->model
+            ->find($userId)
+            ->seats()
+            ->wherePivot('registration_date', $day)
+            ->get();
+    }
 }

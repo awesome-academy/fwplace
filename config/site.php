@@ -87,5 +87,6 @@ return [
     'default' => [
         'usable' => 1,
         'unusable' => 0,
-    ]
+    ],
+    'default_day' => date('Y') . '-' . date('m') . '-01',
 ];
