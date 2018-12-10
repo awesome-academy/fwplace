@@ -13,11 +13,13 @@ class RemoveTrainerIdColumnInUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('trainer_id');
-            $table->dropColumn('seat_id');
-            $table->dropColumn('images');
-        });
+        if (Schema::hasColumn('trainer_id', 'seat_id', 'images')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->dropColumn('trainer_id');
+                $table->dropColumn('seat_id');
+                $table->dropColumn('images');
+            });
+        }
     }
 
     /**

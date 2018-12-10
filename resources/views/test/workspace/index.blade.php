@@ -139,8 +139,8 @@
                                             {!! Form::text('name', request('name'), ['class' => 'form-control m-input m-input--air m-input--pill', 'placeholder' => __('Name')]) !!}
                                         </div>
                                           <div class="form-group m-form__group">
-                                            {!! Form::label(__('total_seat')) !!}
-                                            {!! Form::number('total_seat', request('total_seat'), ['class' => 'form-control m-input m-input--air m-input--pill', 'placeholder' => __('total_seat')]) !!}
+                                            {!! Form::label(__('seat_per_column')) !!}
+                                            {!! Form::number('seat_per_column', request('seat_per_column'), ['class' => 'form-control m-input m-input--air m-input--pill', 'placeholder' => __('seat_per_column')]) !!}
                                         </div>
                                          <div class="form-group m-form__group">
                                             {!! Form::label(__('Workspace')) !!}

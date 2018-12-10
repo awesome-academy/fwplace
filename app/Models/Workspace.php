@@ -10,7 +10,7 @@ class Workspace extends Model
     protected $fillable = [
         'name',
         'image',
-        'total_seat',
+        'seat_per_column',
         'seat_per_row',
     ];
 

@@ -32,8 +32,6 @@ class LocationUpdateRequest extends FormRequest
                     return $query->where('id', '!=', $this->id)->where('workspace_id', $this->workspace_id);
                 }),
             ],
-            'total_seat' => 'required|min:1|max:1000|numeric',
-            'workspace_id' => 'required|exists:workspaces,id',
             'image' => 'image|nullable',
         ];
     }
