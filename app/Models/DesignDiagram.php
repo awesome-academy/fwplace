@@ -14,9 +14,9 @@ class DesignDiagram extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
-        'diagram',
         'content',
+        'status',
+        'workspace_id',
     ];
 
     public function getDesignDiagramAttribute()

@@ -100,3 +100,36 @@
 .selected {
     border-bottom: 1px solid orangered;
 }
+
+.seat-cell {
+    width: 30px;
+    height: 30px;
+    border: 1px solid black;
+    -webkit-user-drag: none;
+}
+
+.cell-selected {
+    background: blue;
+}
+
+.door {
+    background-color: #757575 !important;
+}
+
+.path {
+    background-color: #af5c5c !important;
+}
+
+.freespace {
+    background-color: #5caf8d !important;
+}
+
+.area-color {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+}
+
+.area-list {
+    list-style: none;
+}

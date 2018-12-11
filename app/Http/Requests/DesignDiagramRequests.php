@@ -24,8 +24,7 @@ class DesignDiagramRequests extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|unique:design_diagram,name',
-            'diagram' => 'required|nullable',
+            'diagram' => 'nullable',
             'content' => 'required',
         ];
     }
