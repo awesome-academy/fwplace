@@ -24,7 +24,7 @@ mix.copy('resources/js/location.js', 'public/js/location.js');
 mix.copy('resources/js/generate.js', 'public/js/generate.js');
 mix.copy('resources/js/edit_location.js', 'public/js/edit_location.js');
 mix.copyDirectory('resources/css/custom.css', 'public/css');
-mix.scripts('resources/js/image_map.js', 'public/js/image_map.js');
+mix.copyDirectory('resources/js/image_map.js', 'public/js/image_map.js');
 mix.scripts('resources/js/config.js', 'public/js/config.js');
 mix.scripts('resources/js/image_mapping.js', 'public/js/image_mapping.js');
 mix.styles('resources/css/image_map.css', 'public/css/image_map.css');
@@ -42,6 +42,11 @@ mix.copy('resources/js/add_location.js', 'public/js/add_location.js');
 mix.js(
     'resources/js/register_work_schedules.js',
     'public/js/resigster_work_schedules.js'
+);
+mix.js('resources/js/design.js', 'public/js/design.js');
+mix.js(
+    'resources/js/design_without_diagram.js',
+    'public/js/design_without_diagram.js'
 );
 
 mix.version();

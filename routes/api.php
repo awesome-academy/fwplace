@@ -16,10 +16,12 @@ use Illuminate\Http\Request;
 // Route::group(['prefix' => 'auth'], function () {
 //     Route::post('login', 'AuthController@login')->name('login');
 // });
-// Route::group(['middleware' => [
-//         'auth:api'
-//     ]
-// ], function () {
+Route::group([
+    'middleware' => [
+        'auth'
+    ],
+    'as' => 'api.',
+], function () {
 //     Route::post('signup', 'AuthController@signup');
 //     Route::get('logout', 'AuthController@logout');
 //     Route::get('current-user', 'AuthController@currentUser');
@@ -28,7 +30,7 @@ use Illuminate\Http\Request;
 //     Route::patch('/profile', 'UserController@update');
 //     Route::post('/profile/avatar', 'UserController@updateAvatar');
 //     Route::patch('/password', 'UserController@password');
-//     Route::resource('/workspaces', 'WorkspaceController');
+    Route::resource('/workspaces', 'Api\WorkspaceApi');
 //     Route::resource('/teams', 'TeamController');
 //     Route::resource('/types', 'TypeController');
 //     Route::resource('/batches', 'BatchController');
@@ -48,4 +50,4 @@ use Illuminate\Http\Request;
 //     Route::put('/schedules', 'ScheduleController@update');
 //     Route::resource('/roles', 'RoleController');
 //     Route::resource('users', 'UserController');
-// });
+});

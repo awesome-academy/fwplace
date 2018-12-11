@@ -210,21 +210,37 @@ class DiagramController extends Controller
 
     public function imageMap()
     {
-        $workspaces = $this->workspace->get();
+        $workspaces = $this->workspace->get()->pluck('name', 'id')->toArray();
 
         return view('test.workspace.image_map', compact('workspaces'));
     }
 
     public function saveDesignDiagram(DesignDiagramRequests $request)
     {
-        $data = $request->only('name', 'diagram', 'content');
+        $data = $request->only('content', 'workspace_id');
         DB::beginTransaction();
         try {
+            $this->designDiagramRepository
+                ->makeModel()
+                ->updateOrCreate(
+                    [
+                        'workspace_id' => $data['workspace_id'],
+                    ],
+                    $data
+                );
+
             if ($request->diagram) {
-                $request->diagram->store(config('site.diagram.image'));
+                $request->diagram->store(config('site.workspace.image'));
+
                 $data['diagram'] = $request->diagram->hashName();
+
+                $workspace = $this->workspace->findOrFail($request->workspace_id);
+
+                $workspace->image = $data['diagram'];
+
+                $workspace->save();
             }
-            $this->designDiagramRepository->create($data);
+
             DB::commit();
             Alert::success(trans('Add success'), trans('Successfully!!!'));
 
@@ -316,5 +332,14 @@ class DiagramController extends Controller
         ]);
 
         return $this->seat->deleteSeat($request->seat_id);
+    }
+
+    public function showDesignWithoutDiagram(Request $request)
+    {
+        return view('test.workspace.design_without_diagram');
+    }
+
+    public function saveDesignWithoutDiagram(Request $request)
+    {
     }
 }
