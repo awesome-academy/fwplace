@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <head>
     <meta charset="utf-8" />
     <title>FWP - @yield('title')</title>
@@ -55,7 +55,8 @@
 
     @include('admin.assets.js')
     @include('sweetalert::alert')
-
+    <script src="{{ asset('messages.js') }}"></script>
+    <script src="{{ asset('js/setLang.js') }}"></script>
     @yield('js')
 
 

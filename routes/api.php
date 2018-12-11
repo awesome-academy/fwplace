@@ -50,4 +50,6 @@ Route::group([
 //     Route::put('/schedules', 'ScheduleController@update');
 //     Route::resource('/roles', 'RoleController');
 //     Route::resource('users', 'UserController');
+    Route::get('design_diagram/{id}', 'Api\DesignDiagramApi@getDesignWithoutDiagram')
+        ->name('get_design_without_diagram');
 });

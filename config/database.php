@@ -12,6 +12,10 @@ return [
     | you may use many connections at once using the Database library.
     |
     */
+    'diagram_status' => [
+        'with_diagram' => '1',
+        'without_diagram' => '2'
+    ],
     'paginate' => 20,
     'default' => env('DB_CONNECTION', 'mysql'),
 

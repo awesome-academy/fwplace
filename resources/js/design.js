@@ -6,8 +6,9 @@ $(document).ready(function() {
     });
 
     $('.options.without-diagram').click(function() {
+        let id = $('#select_workspace').val();
         $.ajax({
-            url: route('design_without_diagram'),
+            url: route('design_without_diagram', [id]),
             method: 'get',
             success: function(result) {
                 $('.design.without-diagram').html(result);

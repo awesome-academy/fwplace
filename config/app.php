@@ -166,6 +166,7 @@ return [
         Zizaco\Entrust\EntrustServiceProvider::class,
         // Tightenco\Ziggy\ZiggyServiceProvider::class
         App\Providers\BroadcastServiceProvider::class,
+        Mariuzzo\LaravelJsLocalization\LaravelJsLocalizationServiceProvider::class,
 
     ],
 

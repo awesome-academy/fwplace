@@ -1,5 +1,17 @@
 const mix = require('laravel-mix');
 
+const WebpackShellPlugin = require('webpack-shell-plugin');
+
+// Add shell command plugin configured to create JavaScript language file
+mix.webpackConfig({
+    plugins: [
+        new WebpackShellPlugin({
+            onBuildStart: ['php artisan lang:js --quiet'],
+            onBuildEnd: []
+        })
+    ]
+});
+
 /*
  |--------------------------------------------------------------------------
  | Mix Asset Management
@@ -48,5 +60,6 @@ mix.js(
     'resources/js/design_without_diagram.js',
     'public/js/design_without_diagram.js'
 );
+mix.js('resources/js/setLang.js', 'public/js/setLang.js');
 
 mix.version();

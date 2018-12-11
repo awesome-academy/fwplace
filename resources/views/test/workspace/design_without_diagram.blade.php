@@ -3,11 +3,11 @@
         <div class="form-group row">
             {!! Form::label('row', __('Row'), ['class' => 'col-form-label col-md-1']) !!}
             <div class="col-md-2">
-                {!! Form::number('row', 0, ['class' => 'form-control']) !!}
+                {!! Form::number('row', $workspace->seat_per_row, ['class' => 'form-control']) !!}
             </div>
             {!! Form::label('column', __('Column'), ['class' => 'col-form-label col-md-1']) !!}
             <div class="col-md-2">
-                {!! Form::number('column', 0, ['class' => 'form-control']) !!}
+                {!! Form::number('column', $workspace->seat_per_column, ['class' => 'form-control']) !!}
             </div>
             <button class="generate btn btn-success">{{ __('Generate') }}</button>                 
         </div>
@@ -29,10 +29,24 @@
         </div>
     </div>
     <div class="area-section">
-
+        <div class="mb-3">
+            <button class="btn btn-success" id="saveDiagram">{{ __('Save') }}</button>
+            <button class="btn btn-dark" id="cancel"> {{ __('Cancel') }}</button>
+        </div>
     </div>
 
     <div class="design-section">
+        <table>
+            <tbody>
+                @for($i = 0; $i < $workspace->seat_per_row; $i++)
+                    <tr class="row">
+                        @for($j = 0; $j < $workspace->seat_per_column; $j++)
+                            <td class="seat-cell area-selected" row="{{ $i }}" column="{{ $j }}"></td>
+                        @endfor
+                    </tr>
+                @endfor
+            </tbody>
+        </table>
 
     </div>
 </div>

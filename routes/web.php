@@ -92,7 +92,7 @@ Route::group(['prefix' => 'workspace', 'middleware' => ['checkLogin']], function
     Route::post('edit-info-user', 'Admin\DiagramController@editInfoUser')->name('edit_info_user');
     Route::post('edit-seat', 'Admin\DiagramController@editSeat')->name('edit_seat');
     Route::post('delete-seat', 'Admin\DiagramController@deleteSeat')->name('delete_seat');
-    Route::get('design-without-diagram', 'Admin\DiagramController@showDesignWithoutDiagram')
+    Route::get('design-without-diagram/{id}', 'Admin\DiagramController@showDesignWithoutDiagram')
         ->name('design_without_diagram');
     Route::post('design-without-diagram', 'Admin\DiagramController@saveDesignWithoutDiagram')
         ->name('save_design_without_diagram');

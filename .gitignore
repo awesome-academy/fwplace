@@ -19,3 +19,4 @@ yarn-error.log
 /public/mix-manifest.json
 node_modules
 npm-debug.log
+/public/messages.js
