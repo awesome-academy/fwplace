@@ -19,7 +19,7 @@ class WorkspaceResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'image' => strlen($this->image) > 0 ? Storage::url('workspace/' . $this->image): '',
-            'total_seat' => $this->total_seat,
+            'seat_per_column' => $this->seat_per_column,
             'seat_per_row' => $this->seat_per_row,
         ];
     }

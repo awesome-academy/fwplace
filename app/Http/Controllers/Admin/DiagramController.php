@@ -225,6 +225,7 @@ class DiagramController extends Controller
                 ->updateOrCreate(
                     [
                         'workspace_id' => $data['workspace_id'],
+                        'status' => config('database.diagram_status.with_diagram'),
                     ],
                     $data
                 );
@@ -334,12 +335,55 @@ class DiagramController extends Controller
         return $this->seat->deleteSeat($request->seat_id);
     }
 
-    public function showDesignWithoutDiagram(Request $request)
+    public function showDesignWithoutDiagram(Request $request, $id)
     {
-        return view('test.workspace.design_without_diagram');
+        $workspace = $this->workspace->findOrFail($id);
+
+        return view('test.workspace.design_without_diagram', compact('workspace'));
     }
 
     public function saveDesignWithoutDiagram(Request $request)
     {
+        $this->validate($request, [
+            'content' => 'required',
+            'workspace_id' => 'required|exists:workspaces,id',
+            'row' => 'nullable|integer',
+            'column' => 'nullable|integer',
+        ]);
+
+        $data = $request->only('content', 'workspace_id');
+
+        $data['content'] = json_encode($data['content']);
+        
+        DB::beginTransaction();
+        try {
+            if ($request->has('row') && $request->has('column')) {
+                $workspace = $this->workspace->findOrFail($request->workspace_id);
+                $workspace->update([
+                    'seat_per_row' => $request->row,
+                    'seat_per_column' => $request->column,
+                ]);
+            }
+
+            array_merge(['status' => config('database.diagram_status.without_diagram')], $data);
+
+            $this->designDiagramRepository
+                ->makeModel()
+                ->updateOrCreate(
+                    [
+                        'workspace_id' => $data['workspace_id'],
+                        'status' => config('database.diagram_status.without_diagram'),
+                    ],
+                    $data
+                );
+                
+            DB::commit();
+
+            return response()->json(__('Success'), 200);
+        } catch (Exception $exception) {
+            DB::rollback();
+
+            return response()->json($exception, 422);
+        }
     }
 }

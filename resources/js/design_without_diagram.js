@@ -1,4 +1,36 @@
 $(document).ready(function() {
+    function created() {
+        console.log('created');
+        let id = $('#select_workspace').val();
+
+        $.ajax({
+            url: route('api.get_design_without_diagram', [id]),
+            method: 'get',
+            success: function(result) {
+                let diagram = result;
+                let keys = Object.keys(diagram);
+
+                for (let i = 0; i < keys.length; i++) {
+                    let color = diagram[keys[i]].color;
+                    let data = diagram[keys[i]].data;
+                    for (let j = 0; j < data.length; j++) {
+                        let cell = $(
+                            `.seat-cell[row=${data[j].row}][column=${
+                                data[j].column
+                            }]`
+                        );
+                        $(cell).css('background-color', color);
+                        $(cell).attr('data-name', keys[i]);
+                    }
+
+                    appendAreaList(color, keys[i]);
+                }
+            }
+        });
+    }
+
+    created();
+
     $('.generate').click(function() {
         let row = $('input[name=row]').val();
         let column = $('input[name=column').val();
@@ -13,6 +45,8 @@ $(document).ready(function() {
                 let td = document.createElement('td');
                 td.classList.add('seat-cell');
                 td.setAttribute('draggable', false);
+                td.setAttribute('row', i);
+                td.setAttribute('column', j);
                 tr.append(td);
             }
             tbody.append(tr);
@@ -125,12 +159,12 @@ $(document).ready(function() {
 
     function checkSelect() {
         if ($('.design-section').children().length == 0) {
-            swal('Please generate area table!');
+            swal(Lang.get('messages.swal_title.generate'));
 
             return false;
         }
         if ($('.cell-selected').length == 0) {
-            swal('Please select area!');
+            swal(Lang.get('messages.swal_title.select_area'));
 
             return false;
         }
@@ -140,7 +174,7 @@ $(document).ready(function() {
 
     $('#newArea').click(function() {
         if ($('input[type=text][name=name]').val().length < 1) {
-            swal('Please input area name!');
+            swal(Lang.get('messages.swal_title.input_name'));
 
             return;
         }
@@ -153,5 +187,78 @@ $(document).ready(function() {
             $('input[type=color][name=color]').val(),
             $('input[type=text][name=name]').val()
         );
+    });
+
+    function getName() {
+        let result = [];
+        $('.area-list').each(function() {
+            result.push($(this).attr('data-name'));
+        });
+
+        return result;
+    }
+
+    function getCellArray(elements) {
+        let result = {};
+        let data = [];
+        $(elements).each(function() {
+            let cell = {};
+            cell['row'] = $(this).attr('row');
+            cell['column'] = $(this).attr('column');
+            data.push(cell);
+        });
+
+        result['color'] = $(elements)
+            .first()
+            .css('background-color');
+        result['data'] = data;
+
+        return result;
+    }
+
+    $('#saveDiagram').click(function() {
+        let arrayName = getName();
+        let sendData = {};
+        let len = arrayName.length;
+        for (let i = 0; i < len; i++) {
+            sendData[arrayName[i]] = getCellArray(
+                $(`.area-selected[data-name='${arrayName[i]}']`)
+            );
+        }
+        let id = $('#select_workspace').val();
+        let row = $('#row').val();
+        let column = $('#column').val();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+        console.log(row);
+        console.log(column);
+        console.log(sendData);
+        $.ajax({
+            url: route('save_design_without_diagram'),
+            method: 'POST',
+            data: {
+                content: sendData,
+                workspace_id: id,
+                row: row,
+                column: column
+            },
+            success: function(result) {
+                swal({
+                    type: 'success',
+                    title: Lang.get('messages.swal_title.success'),
+                    text: result.message
+                });
+            },
+            error: function(result) {
+                swal({
+                    type: 'error',
+                    title: Lang.get('messages.swal_title.error'),
+                    text: result.message
+                });
+            }
+        });
     });
 });

@@ -15,4 +15,12 @@ class DesignDiagramRepository extends EloquentRepository
     {
         return $this->model->where('status', 1)->get();
     }
+
+    public function getDesignWithoutDiagram($id)
+    {
+        return $this->model
+            ->where('workspace_id', $id)
+            ->where('status', config('database.diagram_status.without_diagram'))
+            ->first();
+    }
 }
