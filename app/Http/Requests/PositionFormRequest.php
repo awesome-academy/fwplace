@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Validator;
+use App\Models\Position;
 
 class PositionFormRequest extends FormRequest
 {
@@ -21,10 +23,49 @@ class PositionFormRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public static function rulesStore($request)
     {
-        return [
-            'name' => 'required|min:2|max:255|unique:positions,name,' . $this->id,
+        $messages = [
+            'name.required' => __('Position') . __('Required'),
+            'name.string' => __('Position') . __('String'),
+            'name.unique' => __('Position') . __('Unique'),
         ];
+
+        return Validator::make(
+            $request->all(),
+            [
+                'name' => 'required|string|unique:positions',
+            ],
+            $messages
+        );
+    }
+
+    public static function rulesUpdate($request, $id)
+    {
+        $messages = [
+            'name.required' => __('Position') . __('Required'),
+            'name.string' => __('Position') . __('String'),
+            'name.unique' => __('Position') . __('Unique'),
+        ];
+
+        $position = Position::findOrFail($id);
+
+        if ($position->name == $request->name) {
+            return Validator::make(
+                $request->all(),
+                [
+                    'name' => 'required|string',
+                ],
+                $messages
+            );
+        } elseif ($position->name != $request->name) {
+            return Validator::make(
+                $request->all(),
+                [
+                    'name' => 'required|string|unique:positions',
+                ],
+                $messages
+            );
+        }
     }
 }

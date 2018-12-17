@@ -51,11 +51,11 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $programs = $this->programRepository->pluckProgram()
-            ->prepend(trans('Choose program'), config('site.prepend'));
+            ->prepend(__('Choose program'), config('site.prepend'));
         $positions = $this->positionRepository->pluckPosition()
-            ->prepend(trans('Choose workspace'), config('site.prepend'));
+            ->prepend(__('Choose position'), config('site.prepend'));
         $workspaces = $this->workspaceRepository->pluckWorkspace()
-            ->prepend(trans('Choose position'), config('site.prepend'));
+            ->prepend(__('Choose workspace'), config('site.prepend'));
         $users = $this->userRepository->newQuery();
         if ($request->has('name')) {
             $users->getListName($request->name);

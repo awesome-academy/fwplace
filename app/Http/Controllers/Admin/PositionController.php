@@ -64,17 +64,7 @@ class PositionController extends Controller
         DB::beginTransaction();
 
         try {
-            $rules = [
-                'name' => 'required|string|unique:positions',
-            ];
-
-            $messages = [
-                'name.required' => __('Position') . __('Required'),
-                'name.string' => __('Position') . __('String'),
-                'name.unique' => __('Position') . __('Unique'),
-            ];
-
-            $validator = Validator::make($data, $rules, $messages);
+            $validator = PositionFormRequest::rulesStore($request);
 
             if ($validator->fails()) {
                 return response()->json([
@@ -156,20 +146,10 @@ class PositionController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->all();
-
         DB::beginTransaction();
 
         try {
-            $rules = [
-                'name' => 'required|string',
-            ];
-
-            $messages = [
-                'name.required' => __('Position') . __('Required'),
-                'name.string' => __('Position') . __('String'),
-            ];
-
-            $validator = Validator::make($data, $rules, $messages);
+            $validator = PositionFormRequest::rulesUpdate($request, $id);
 
             if ($validator->fails()) {
                 return response()->json([
