@@ -23,6 +23,12 @@ class PositionFormRequest extends FormRequest
      *
      * @return array
      */
+    public function rules() {
+        return [
+            'name' => 'required|string|unique:positions',
+        ];
+    }
+
     public static function rulesStore($request)
     {
         $messages = [
