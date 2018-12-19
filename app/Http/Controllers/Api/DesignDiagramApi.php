@@ -19,7 +19,11 @@ class DesignDiagramApi extends Controller
     {
         $design = $this->designDiagramRepository->getDesignWithoutDiagram($id);
 
-        $content = json_decode($design->content);
+        $content = (object)[];
+
+        if ($design) {
+            $content = json_decode($design->content);
+        }
 
         return response()->json($content);
     }

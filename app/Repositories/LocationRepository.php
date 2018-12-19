@@ -247,4 +247,12 @@ class LocationRepository extends EloquentRepository
 
         return $data;
     }
+
+    public function getLocationIdByWorkspace($workspaceId)
+    {
+        return $this->model
+            ->where('workspace_id', $workspaceId)
+            ->get()
+            ->pluck('id');
+    }
 }

@@ -1,6 +1,5 @@
 $(document).ready(function() {
     function created() {
-        console.log('created');
         let id = $('#select_workspace').val();
 
         $.ajax({
@@ -21,6 +20,11 @@ $(document).ready(function() {
                         );
                         $(cell).css('background-color', color);
                         $(cell).attr('data-name', keys[i]);
+                        $(cell).append(
+                            `<a href="${route('generate', [
+                                diagram[keys[i]].id
+                            ])}"></a>`
+                        );
                     }
 
                     appendAreaList(color, keys[i]);
@@ -29,9 +33,39 @@ $(document).ready(function() {
         });
     }
 
-    created();
+    function appendAreaList(color, name) {
+        $('.area-section').append(
+            `<li class="area-list" data-name="${name}">
+                <a href="javascript:void(0)"><div class="area-color" style="background-color: ${color}"></div></a>
+                <label>${name}</label>
+                <a href="javascript:void(0)" class="remove-area">X</a>
+            </li>`
+        );
+        $('.cell-selected').css({
+            'background-color': color
+        });
+        $('.cell-selected').attr('data-name', name);
+        $('.cell-selected').attr('class', 'seat-cell area-selected');
+    }
 
-    $('.generate').click(function() {
+    $(document).on('click', '.options.without-diagram', function() {
+        created();
+    });
+
+    $(document).on('click', '#edit_diagram_trigger', function() {
+        editingFunc();
+    });
+
+    function editingFunc() {
+        $('.choose-column-row').removeClass('d-none');
+        $('#edit_diagram_trigger').addClass('d-none');
+        $('.area-selected')
+            .children('a')
+            .remove();
+        $('.design-section').addClass('editting');
+    }
+
+    $(document).on('click', '.generate', function() {
         let row = $('input[name=row]').val();
         let column = $('input[name=column').val();
         let table = document.createElement('table');
@@ -57,66 +91,53 @@ $(document).ready(function() {
     });
 
     $(document).on('mousedown', '.seat-cell', function(event) {
-        let flag;
-        $(document).on('dragging', '.seat-cell', function(event) {
-            $(document).on('mouseenter', '.seat-cell', function() {
-                if (flag === 1) {
-                    if ($(this).hasClass('cell-selected')) {
-                        $(this).attr('class', 'seat-cell');
-                        $(this).removeAttr('style');
-                    } else {
-                        $(this).attr('class', 'seat-cell cell-selected');
-                        $(this).removeAttr('style');
+        if ($('.design-section').hasClass('editting')) {
+            let flag;
+            $(document).on('dragging', '.seat-cell', function(event) {
+                $(document).on('mouseenter', '.seat-cell', function() {
+                    if (flag === 1) {
+                        if ($(this).hasClass('cell-selected')) {
+                            $(this).attr('class', 'seat-cell');
+                            $(this).removeAttr('style');
+                        } else {
+                            $(this).attr('class', 'seat-cell cell-selected');
+                            $(this).removeAttr('style');
+                        }
                     }
-                }
+                });
             });
-        });
-        $(document).on('dragend', '.seat-cell', function(event) {
-            $(this).trigger('mouseup');
-        });
-        if (event.which === 1) {
-            flag = 1;
-            if ($(this).hasClass('cell-selected')) {
-                $(this).attr('class', 'seat-cell');
-                $(this).removeAttr('style');
-                $(this).removeAttr('data-name');
-            } else {
-                $(this).attr('class', 'seat-cell cell-selected');
-                $(this).removeAttr('style');
-                $(this).removeAttr('data-name');
-            }
-            $(document).on('mouseenter', '.seat-cell', function() {
-                if (flag === 1) {
-                    if ($(this).hasClass('cell-selected')) {
-                        $(this).attr('class', 'seat-cell');
-                    } else {
-                        $(this).attr('class', 'seat-cell cell-selected');
-                        $(this).removeAttr('style');
-                        $(this).removeAttr('data-name');
+            $(document).on('dragend', '.seat-cell', function(event) {
+                $(this).trigger('mouseup');
+            });
+            if (event.which === 1) {
+                flag = 1;
+                if ($(this).hasClass('cell-selected')) {
+                    $(this).attr('class', 'seat-cell');
+                    $(this).removeAttr('style');
+                    $(this).removeAttr('data-name');
+                } else {
+                    $(this).attr('class', 'seat-cell cell-selected');
+                    $(this).removeAttr('style');
+                    $(this).removeAttr('data-name');
+                }
+                $(document).on('mouseenter', '.seat-cell', function() {
+                    if (flag === 1) {
+                        if ($(this).hasClass('cell-selected')) {
+                            $(this).attr('class', 'seat-cell');
+                        } else {
+                            $(this).attr('class', 'seat-cell cell-selected');
+                            $(this).removeAttr('style');
+                            $(this).removeAttr('data-name');
+                        }
                     }
-                }
-            });
+                });
 
-            $(document).on('mouseup', function() {
-                flag = 0;
-            });
+                $(document).on('mouseup', function() {
+                    flag = 0;
+                });
+            }
         }
     });
-
-    function appendAreaList(color, name) {
-        $('.area-section').append(
-            `<li class="area-list" data-name="${name}">
-                <div class="area-color" style="background-color: ${color}"></div>
-                <label>${name}</label>
-                <a href="javascript:void(0)" class="remove-area">X</a>
-            </li>`
-        );
-        $('.cell-selected').css({
-            'background-color': color
-        });
-        $('.cell-selected').attr('data-name', name);
-        $('.cell-selected').attr('class', 'seat-cell area-selected');
-    }
 
     $(document).on('click', '.default-areas', function() {
         if (!checkSelect()) {
@@ -143,18 +164,18 @@ $(document).ready(function() {
         $(areaList)
             .parents('li')
             .remove();
-        let elements = $(`.seat-cell[data-name=${name}]`);
+        let elements = $(`.seat-cell[data-name='${name}']`);
         $(elements).removeAttr('style');
         $(elements).removeAttr('data-name');
         $(elements).attr('class', 'seat-cell');
     }
 
     $(document).on('click', '.remove-area', function() {
-        let param;
         let name = $(this)
             .parents('li')
             .attr('data-name');
         removeArea(name, $(this));
+        editingFunc();
     });
 
     function checkSelect() {
@@ -163,7 +184,7 @@ $(document).ready(function() {
 
             return false;
         }
-        if ($('.cell-selected').length == 0) {
+        if ($('.seat-cell.cell-selected').length == 0) {
             swal(Lang.get('messages.swal_title.select_area'));
 
             return false;
@@ -172,7 +193,7 @@ $(document).ready(function() {
         return true;
     }
 
-    $('#newArea').click(function() {
+    $(document).on('click', '#newArea', function() {
         if ($('input[type=text][name=name]').val().length < 1) {
             swal(Lang.get('messages.swal_title.input_name'));
 
@@ -216,7 +237,7 @@ $(document).ready(function() {
         return result;
     }
 
-    $('#saveDiagram').click(function() {
+    $(document).on('click', '#saveDiagram', function() {
         let arrayName = getName();
         let sendData = {};
         let len = arrayName.length;
@@ -233,8 +254,6 @@ $(document).ready(function() {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        console.log(row);
-        console.log(column);
         console.log(sendData);
         $.ajax({
             url: route('save_design_without_diagram'),
@@ -260,5 +279,27 @@ $(document).ready(function() {
                 });
             }
         });
+    });
+
+    $(document).on('click', '.area-color', function() {
+        if (
+            $('.design-section').hasClass('editting') &&
+            $('.cell-selected').length > 0
+        ) {
+            let name = $(this)
+                .parents('li')
+                .attr('data-name');
+            let color = $(this).attr('style');
+
+            $('.cell-selected').each(function() {
+                $(this).attr('data-name', name);
+                $(this).attr('style', color);
+                $(this).attr('class', 'seat-cell area-selected');
+            });
+        }
+    });
+
+    $('#cancel').click(function() {
+        location.reload();
     });
 });

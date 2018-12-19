@@ -675,10 +675,13 @@
                         $('.design')
                             .first()
                             .removeClass('d-none');
+                        $('.design')
+                            .last()
+                            .addClass('d-none');
                         $('.options').removeClass('btn-warning');
                         $('.options')
                             .first()
-                            .addClass('btn-warning');
+                            .trigger('click');
 
                         var b = a('#image-mapper-dialog');
                         a('#image-map').imageMapper('update', {

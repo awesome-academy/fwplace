@@ -54,7 +54,6 @@
 
 
     @include('admin.assets.js')
-    @include('sweetalert::alert')
     <script src="{{ asset('messages.js') }}"></script>
     <script src="{{ asset('js/setLang.js') }}"></script>
     @yield('js')
