@@ -5,6 +5,7 @@ namespace App\Repositories;
 use DB;
 use Carbon\CarbonPeriod;
 use App\Models\User;
+use App\Models\Workspace;
 
 class LocationRepository extends EloquentRepository
 {
@@ -39,6 +40,19 @@ class LocationRepository extends EloquentRepository
             ->where('workspace_id', $workspaceId)
             ->pluck('name', 'id')
             ->toArray();
+    }
+
+    public function getAllLocation()
+    {
+        $data = [];
+        $locations = $this->model->all();
+
+        foreach ($locations as $location) {
+            $workspace = Workspace::findOrFail($location->workspace_id);
+            $data[$location->id] = $workspace->name . '(' . $location->name . ')';
+        }
+
+        return $data;
     }
 
     public function getData($locationId, $filter)

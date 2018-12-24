@@ -26,23 +26,33 @@ class WorkScheduleController extends Controller
         $dates = [];
         for ($i = 0; $i < 31; $i++) {
             $day = Carbon::now()->startOfMonth()->addDay($i);
-            if (!$day->isWeekend()) {
-                $dates[] = [
-                    'date' => $day->format('Y-m-d'),
-                    'day' => $day->format('l'),
-                    'format' => $day->format('d-m-Y'),
-                ];
-            } else {
-                $dates[] = [
-                    'date' => $day->format('Y-m-d'),
-                    'day' => $day->format('l'),
-                    'format' => $day->format('d-m-Y'),
-                    'weekend' => true,
-                ];
+
+            if ($day->month == Carbon::now()->month) {
+                if (!$day->isWeekend() && $day->day >= (Carbon::now()->day)) {
+                    $dates[] = [
+                        'date' => $day->format('Y-m-d'),
+                        'day' => $day->format('l'),
+                        'format' => $day->format('d-m-Y'),
+                    ];
+                } elseif (!$day->isWeekend() && $day->day < (Carbon::now()->day)) {
+                    $dates[] = [
+                        'date' => $day->format('Y-m-d'),
+                        'day' => $day->format('l'),
+                        'format' => $day->format('d-m-Y'),
+                        'old_day' => true,
+                    ];
+                } else {
+                    $dates[] = [
+                        'date' => $day->format('Y-m-d'),
+                        'day' => $day->format('l'),
+                        'format' => $day->format('d-m-Y'),
+                        'weekend' => true,
+                    ];
+                }
             }
         }
 
-        $locations = $this->locationRepository->getByWorkspace(Auth::user()->workspace_id);
+        $locations = $this->locationRepository->getAllLocation();
         $data = $this->workingSchedule->getUserSchedule(Auth::user()->id);
         $dataLocation = $this->workingSchedule->getLocation(Auth::user()->id);
 
