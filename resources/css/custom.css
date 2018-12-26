@@ -64,14 +64,13 @@ img.workspace_image {
 }
 .seat {
     width: 200px;
-    height: 115px;
+    height: 100%;
     line-height: 50px;
     background-color: #eef9f5;
-    border: 1px solid #333;
     display: inline-block;
-    margin-left: -4px;
     text-align: center;
     cursor: pointer;
+    margin-bottom: 10px;
 }
 
 .seat-name {
@@ -94,7 +93,7 @@ img.workspace_image {
 .all_seat {
     list-style-type: none;
     margin: 80px auto;
-    padding: 0;
+    padding: 0px 40px;
     width: max-content;
 }
 .all_seat li {
@@ -104,7 +103,7 @@ img.workspace_image {
     height: 18px;
 }
 .workspace {
-    overflow: visible;
+    overflow: scroll;
 }
 .form-workspace {
     display: none;
@@ -159,4 +158,8 @@ img.workspace_image {
     position: relative;
     right: 49px;
     top: 8px;
+}
+
+tr td {
+    border: 1px solid black;
 }

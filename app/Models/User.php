@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use App\Models\Seat;
+use App\Models\WorkSchedule;
 use Illuminate\Notifications\Notifiable;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
@@ -73,7 +75,7 @@ class User extends Authenticatable
 
     public function workSchedules()
     {
-        return $this->hasMany('App\Models\WorkSchedule', 'user_id');
+        return $this->hasMany(WorkSchedule::class, 'user_id');
     }
 
     /**

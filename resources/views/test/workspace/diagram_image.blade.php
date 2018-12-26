@@ -1,6 +1,6 @@
 <div class="col-lg-12 text-center">
-        {!! Html::image($workspace->photo, null, ['usemap' => '#image-map']) !!}
-    </div>
+    {!! Html::image($workspace->photo, null, ['usemap' => '#image-map']) !!}
+</div>
 @if($diagramDetail->diagramContent)
     {!! $diagramDetail->diagramContent !!}
 @else

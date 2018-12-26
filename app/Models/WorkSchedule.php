@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Carbon\Carbon;
 
 class WorkSchedule extends Model
 {
@@ -22,5 +23,20 @@ class WorkSchedule extends Model
     public function location()
     {
         return $this->belongsTo('App\Models\Location');
+    }
+
+    public function seats()
+    {
+        return $this->belongsToMany('App\Models\Seat', 'schedule_seat', 'work_schedule_id')->withPivot('shift');
+    }
+
+    public function getDateAttribute($value)
+    {
+        return Carbon::parse($value)->format('d-m-Y');
+    }
+
+    public function getWeekDayAttribute($value)
+    {
+        return __(Carbon::parse($this->date)->format('l'));
     }
 }

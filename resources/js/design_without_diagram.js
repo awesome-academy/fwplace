@@ -299,7 +299,7 @@ $(document).ready(function() {
         }
     });
 
-    $('#cancel').click(function() {
-        location.reload();
+    $(document).on('click', '#cancel', function() {
+        $('.options.without-diagram').trigger('click');
     });
 });

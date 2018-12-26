@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: jakelagger
- * Date: 27/11/2018
- * Time: 15:40
- */
 
 namespace App\Traits;
 
@@ -12,10 +6,10 @@ use Carbon\Carbon;
 
 trait Generating
 {
-    public function renderSeat($workspace)
+    public function renderSeat($location)
     {
-        $seatPerColumn = $workspace->seat_per_column;
-        $seatPerRow = $workspace->seat_per_row;
+        $seatPerColumn = $location->seat_per_column;
+        $seatPerRow = $location->seat_per_row;
         $alphabet = range('A', 'Z'); // Tạo ra bảng chữ cái để đặt tên cho cột
         $columnName = $alphabet;
         if ($seatPerRow > count($alphabet)) {
@@ -31,10 +25,10 @@ trait Generating
         $rowList = range(1, $seatPerColumn); // Lấy danh sách tên các cột
         $renderSeat = [];
         $counting = 0; // Đếm số ghế được tạo ra
-        foreach ($rowList as $key => $row) {
-            foreach ($columnList as $column) {
+        foreach ($columnList as $column) {
+            foreach ($rowList as $key => $row) {
                 $counting++;
-                $renderSeat[$row][] = $column . $row;
+                $renderSeat[$column][] = $column . $row;
             }
         }
 
