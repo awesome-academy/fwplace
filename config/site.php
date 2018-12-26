@@ -87,5 +87,6 @@ return [
     'default' => [
         'usable' => 1,
         'unusable' => 0,
-    ]
+    ],
+    'last_work_day_of_week' => 'Friday',
 ];

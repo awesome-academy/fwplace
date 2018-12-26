@@ -2,24 +2,31 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Repositories\LocationRepository;
-use App\Repositories\SeatRepository;
-use App\Repositories\WorkspaceRepository;
-use App\Repositories\ProgramInterface;
-use App\Repositories\UserRepository;
-use App\Repositories\PositionRepository;
-use App\Repositories\DesignDiagramRepository;
-use APP\Repositories\WorkingScheduleRepository;
-use Illuminate\Http\Request;
-use App\Http\Requests\DesignDiagramRequests;
 use DB;
-use Validator;
 use Entrust;
-use Illuminate\Support\Facades\Storage;
-use RealRashid\SweetAlert\Facades\Alert;
-use App\Traits\Generating;
+use Validator;
+use Carbon\Carbon;
+use App\Models\Seat;
+use App\Models\User;
 use Mockery\Exception;
+use App\Traits\Generating;
+use App\Models\WorkSchedule;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Repositories\SeatRepository;
+use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Auth;
+use App\Repositories\ProgramInterface;
+use Illuminate\Support\Facades\Storage;
+use App\Repositories\LocationRepository;
+use App\Repositories\PositionRepository;
+use RealRashid\SweetAlert\Facades\Alert;
+use App\Repositories\WorkspaceRepository;
+use App\Http\Requests\DesignDiagramRequests;
+use App\Repositories\DesignDiagramRepository;
+use App\Repositories\WorkingScheduleRepository;
+use App\Http\Resources\WorkScheduleSeatResource;
+use App\Models\ScheduleSeat;
 
 class DiagramController extends Controller
 {
@@ -41,7 +48,8 @@ class DiagramController extends Controller
         UserRepository $userRepository,
         ProgramInterface $programRepository,
         PositionRepository $positionRepository,
-        DesignDiagramRepository $designDiagramRepository
+        DesignDiagramRepository $designDiagramRepository,
+        WorkingScheduleRepository $workingScheduleRepository
     ) {
         $this->locationRepository = $locationRepository;
         $this->workspace = $workspaceRepository;
@@ -50,6 +58,7 @@ class DiagramController extends Controller
         $this->programRepository = $programRepository;
         $this->positionRepository = $positionRepository;
         $this->designDiagramRepository = $designDiagramRepository;
+        $this->workingScheduleRepository = $workingScheduleRepository;
     }
 
     public function saveWorkspace(Request $request)
@@ -64,15 +73,59 @@ class DiagramController extends Controller
         return redirect()->route('generate', ['id' => $workspace->id]);
     }
 
-    public function generateDiagram(Request $request, $idWorkspace)
+    public function getAvailableSeatsByDate(Request $request, $id)
     {
-        $workspace = $this->workspace->findOrFail($idWorkspace);
-        $renderSeat = $this->renderSeat($workspace);
-        $locations = $workspace->locations;
-        $listProgram = $this->programRepository->listProgramArray();
-        $listPosition = $this->positionRepository->listpositionArray();
+        $user = Auth::user();
+        $firstDay = date('Y') . '-' . date('m') . '-01';
+        $lastDay = date('Y') . '-' . date('m') . '-' . date('t');
+        $workSchedules = WorkSchedule::where('user_id', $user->id)
+                            ->with([
+                                'seats' => function ($query) {
+                                    $query->orderBy('schedule_seat.shift');
+                                },
+                            ])
+                            ->whereBetween('date', [$firstDay, $lastDay])
+                            ->get();
 
-        $locations = $workspace->locations->pluck('name', 'id');
+        foreach ($workSchedules as $schedule) {
+            switch ($schedule->shift) {
+                case config('site.shift.all'):
+                    //where not in
+                    $schedule->morningSeats = $this->seat
+                                                ->getAvailableSeats(
+                                                    $schedule,
+                                                    config('site.shift.afternoon')
+                                                );
+                    $schedule->afternoonSeats = $this->seat
+                                                ->getAvailableSeats(
+                                                    $schedule,
+                                                    config('site.shift.morning')
+                                                );
+                    break;
+                case config('site.shift.morning'):
+                    $schedule->morningSeats = $this->seat
+                                                ->getAvailableSeats(
+                                                    $schedule,
+                                                    config('site.shift.afternoon')
+                                                );
+                    break;
+                case config('site.shift.afternoon'):
+                    $schedule->afternoonSeats = $this->seat
+                                                ->getAvailableSeats(
+                                                    $schedule,
+                                                    config('site.shift.morning')
+                                                );
+                    break;
+            }
+        }
+
+        return WorkScheduleSeatResource::collection($workSchedules);
+    }
+
+    public function generateDiagram(Request $request, $id)
+    {
+        $location = $this->locationRepository->findOrFail($id);
+        $renderSeat = $this->renderSeat($location);
 
         if (Entrust::can(['php-manager']) &&
             Entrust::can(['ruby-manager']) &&
@@ -96,13 +149,11 @@ class DiagramController extends Controller
             $listUser = $this->userRepository->getList('program_id', 6)->pluck('name', 'id');
         }
 
+        $dates = $this->getAvailableSeatsByDate($request, $id);
+
         return view('test.workspace.generate', compact(
             'renderSeat',
-            'idWorkspace',
-            'locations',
-            'listProgram',
-            'listPosition',
-            'listUser'
+            'dates'
         ));
     }
 

@@ -99,3 +99,6 @@ Route::group(['prefix' => 'workspace', 'middleware' => ['checkLogin']], function
     Route::get('design-diagram-image/{id}', 'Admin\DiagramController@designDiagramImage')
         ->name('design_diagram_image');
 });
+
+Route::resource('seats', 'SeatController');
+Route::get('seats/available/{id}', 'SeatController@getAvailableSeats')->name('seats.available_seats');

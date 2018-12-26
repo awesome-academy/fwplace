@@ -53,7 +53,7 @@ mix.js('resources/js/program.js', 'public/js/program.js');
 mix.copy('resources/js/add_location.js', 'public/js/add_location.js');
 mix.js(
     'resources/js/register_work_schedules.js',
-    'public/js/resigster_work_schedules.js'
+    'public/js/register_work_schedules.js'
 );
 mix.js('resources/js/design.js', 'public/js/design.js');
 mix.js(
@@ -62,5 +62,6 @@ mix.js(
 );
 mix.js('resources/js/setLang.js', 'public/js/setLang.js');
 mix.js('resources/js/showName.js', 'public/js/showName.js');
+mix.js('resources/js/register_seat.js', 'public/js/register_seat.js');
 
 mix.version();

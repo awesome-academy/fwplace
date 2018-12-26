@@ -4,6 +4,9 @@ namespace App\Repositories;
 
 use Illuminate\Support\Facades\DB;
 use App\Repositories\LocationRepository;
+use App\Models\WorkSchedule;
+use App\Models\ScheduleSeat;
+use Illuminate\Support\Carbon;
 
 class SeatRepository extends EloquentRepository
 {
@@ -33,6 +36,83 @@ class SeatRepository extends EloquentRepository
             DB::rollback();
 
             return $e;
+        }
+    }
+
+    public function getAvailableSeats($schedule, $shift = null)
+    {
+        return $this->model->whereNotIn('id', function ($query) use ($schedule) {
+            $query->from(DB::raw('work_schedules, schedule_seat'))
+                ->select('seat_id')
+                ->where(DB::raw('`work_schedules`.`id`'), DB::raw('schedule_seat.work_schedule_id'))
+                ->where('date', Carbon::parse($schedule->date)->format('Y-m-d'))
+                ->where(function ($query) use ($schedule) {
+                    $query->where('work_schedules.shift', config('site.shift.all'));
+                    if (func_num_args() === 2) {
+                        $query->orWhere('work_schedules.shift', $shift);
+                    } else {
+                        $query->orWhere('work_schedules.shift', $schedule->shift);
+                    }
+                })
+                ->where(function ($query) {
+                    if (!empty($schedule->seat_id)) {
+                        $query->where('seat_id', $schedule->seat_id);
+                    }
+                })
+                ->whereNotNull('seat_id')
+                ->where('user_id', '!=', $schedule->user_id)
+                ->get();
+        })
+        ->get()
+        ->pluck('name', 'id');
+    }
+
+    public function getSaveData($requestData, $shift)
+    {
+        $saveData = [];
+        if (isset($requestData[$shift])) {
+            $data = $requestData[$shift];
+            foreach ($data as $key => $value) {
+                $saveData = array_merge($saveData, [
+                    [
+                        'work_schedule_id' => $key,
+                        'seat_id' => $value,
+                        'shift' => config('site.shift.' . $shift),
+                    ],
+                ]);
+            }
+        }
+
+        return $saveData;
+    }
+
+    public function registerSeats($requestData)
+    {
+        DB::beginTransaction();
+
+        try {
+            $saveData = [];
+            $saveData = array_merge($saveData, $this->getSaveData($requestData, 'morning'));
+            $saveData = array_merge($saveData, $this->getSaveData($requestData, 'afternoon'));
+
+            foreach ($saveData as $data) {
+                ScheduleSeat::updateOrCreate(
+                    [
+                        'work_schedule_id' => $data['work_schedule_id'],
+                        'shift' => $data['shift'],
+                    ],
+                    [
+                        'seat_id' => $data['seat_id'],
+                    ]
+                );
+            }
+            DB::commit();
+
+            return redirect()->back();
+        } catch (\Exception $exeption) {
+            DB::rollBack();
+
+            return $exeption;
         }
     }
 }

@@ -173,5 +173,13 @@
     "Workspace List": "Danh sách địa điểm làm việc",
     "Choose program": "-- Ngôn ngữ lập trình --",
     "Choose workspace": "-- Văn phòng --",
-    "Choose position": "-- Chức danh --"
+    "Choose position": "-- Chức danh --",
+    "This location don't have any seat": "Khu vực này không có ghế nào",
+    "Monday": "Thứ Hai",
+    "Tuesday": "Thứ Ba",
+    "Wednesday": "Thứ Tư",
+    "Thursday": "Thứ Năm",
+    "Friday": "Thứ Sáu",
+    "Saturday": "Thứ Bảy",
+    "Sunday": "Chủ Nhật"
 }
