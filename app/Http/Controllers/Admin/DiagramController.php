@@ -220,12 +220,51 @@ class DiagramController extends Controller
         $data = $request->only('content', 'workspace_id');
         DB::beginTransaction();
         try {
+            $html = new \DomDocument();
+            $html->loadHtml($data['content']);
+            $nodes = $html->getElementsByTagName('area');
+            $locationNames = [];
+            foreach ($nodes as $node) {
+                array_push($locationNames, $node->getAttribute('title'));
+            }
+
+            $ids = [];
+
+            foreach ($locationNames as $name) {
+                $location = $this->locationRepository
+                    ->makeModel()
+                    ->updateOrCreate(
+                        [
+                            'name' => $name,
+                            'workspace_id' => $data['workspace_id'],
+                        ],
+                        [
+                            'name' => $name,
+                            'workspace_id' => $data['workspace_id'],
+                        ]
+                    );
+
+                array_push($ids, $location->id);
+            }
+
+            $this->locationRepository->makeModel()
+                ->where('workspace_id', $request->workspace_id)
+                ->whereNotIn('id', $ids)
+                ->delete();
+
+            $i = 0;
+            foreach ($nodes as $node) {
+                $node->setAttribute('href', route('generate', ['id' => $ids[$i]]));
+                $i++;
+            }
+
+            $data['content'] = $html->saveHtml($html->getElementsByTagName('map')->item(0));
+
             $this->designDiagramRepository
                 ->makeModel()
                 ->updateOrCreate(
                     [
                         'workspace_id' => $data['workspace_id'],
-                        'status' => config('database.diagram_status.with_diagram'),
                     ],
                     $data
                 );
@@ -342,6 +381,21 @@ class DiagramController extends Controller
         return view('test.workspace.design_without_diagram', compact('workspace'));
     }
 
+    public function getLocationsArray($object, $workspaceId)
+    {
+        $keys = [];
+
+        foreach ($object as $key => $val) {
+            $newArray = [];
+            $newArray['name'] =  $key;
+            $newArray['color'] =  $val->color;
+            $newArray['workspace_id'] =  $workspaceId;
+            array_push($keys, $newArray);
+        }
+
+        return $keys;
+    }
+
     public function saveDesignWithoutDiagram(Request $request)
     {
         $this->validate($request, [
@@ -353,7 +407,11 @@ class DiagramController extends Controller
 
         $data = $request->only('content', 'workspace_id');
 
-        $data['content'] = json_encode($data['content']);
+        $data['content']= json_encode($data['content']);
+
+        $content = json_decode($data['content']);
+
+        $locations = $this->getLocationsArray($content, $data['workspace_id']);
         
         DB::beginTransaction();
         try {
@@ -365,6 +423,30 @@ class DiagramController extends Controller
                 ]);
             }
 
+            $ids = [];
+
+            foreach ($locations as $location) {
+                $location = $this->locationRepository
+                    ->makeModel()
+                    ->updateOrCreate(
+                        [
+                            'name' => $location['name'],
+                            'workspace_id' => $location['workspace_id'],
+                        ],
+                        $location
+                    );
+
+                array_push($ids, $location->id);
+            }
+
+            $i = 0;
+            foreach ($content as $key => $val) {
+                $val->id = $ids[$i];
+                $i++;
+            }
+
+            $data['content'] = json_encode($content);
+
             array_merge(['status' => config('database.diagram_status.without_diagram')], $data);
 
             $this->designDiagramRepository
@@ -372,10 +454,14 @@ class DiagramController extends Controller
                 ->updateOrCreate(
                     [
                         'workspace_id' => $data['workspace_id'],
-                        'status' => config('database.diagram_status.without_diagram'),
                     ],
                     $data
                 );
+            
+            $this->locationRepository->makeModel()
+                ->where('workspace_id', $request->workspace_id)
+                ->whereNotIn('id', $ids)
+                ->delete();
                 
             DB::commit();
 
@@ -385,5 +471,13 @@ class DiagramController extends Controller
 
             return response()->json($exception, 422);
         }
+    }
+
+    public function designDiagramImage(Request $request, $id)
+    {
+        $diagramDetail = $this->designDiagramRepository->where('workspace_id', $id)->first();
+        $workspace = $this->workspace->findOrFail($id);
+
+        return view('test.workspace.diagram_image', compact('diagramDetail', 'workspace'));
     }
 }

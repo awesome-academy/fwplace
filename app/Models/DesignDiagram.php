@@ -27,4 +27,13 @@ class DesignDiagram extends Model
 
         return asset(config('site.default-image'));
     }
+
+    public function getDiagramContentAttribute()
+    {
+        if ($this->content != strip_tags($this->content)) {
+            return $this->content;
+        }
+
+        return false;
+    }
 }

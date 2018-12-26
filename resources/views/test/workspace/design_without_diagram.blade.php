@@ -1,5 +1,5 @@
 <div>
-    <div class="choose-column-row">
+    <div class="choose-column-row d-none">
         <div class="form-group row">
             {!! Form::label('row', __('Row'), ['class' => 'col-form-label col-md-1']) !!}
             <div class="col-md-2">
@@ -27,12 +27,14 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="area-section">
+
         <div class="mb-3">
             <button class="btn btn-success" id="saveDiagram">{{ __('Save') }}</button>
             <button class="btn btn-dark" id="cancel"> {{ __('Cancel') }}</button>
         </div>
+    </div>
+    <button class="btn btn-primary" id="edit_diagram_trigger">{{ __('Edit') }}</button>
+    <div class="area-section mt-2">
     </div>
 
     <div class="design-section">
@@ -50,4 +52,3 @@
 
     </div>
 </div>
-<script src="{{ asset('js/design_without_diagram.js') }}"></script>

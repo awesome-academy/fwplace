@@ -96,4 +96,6 @@ Route::group(['prefix' => 'workspace', 'middleware' => ['checkLogin']], function
         ->name('design_without_diagram');
     Route::post('design-without-diagram', 'Admin\DiagramController@saveDesignWithoutDiagram')
         ->name('save_design_without_diagram');
+    Route::get('design-diagram-image/{id}', 'Admin\DiagramController@designDiagramImage')
+        ->name('design_diagram_image');
 });
