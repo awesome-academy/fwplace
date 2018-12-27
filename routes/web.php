@@ -32,7 +32,11 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['che
     Route::resource('programs', 'ProgramController');
 
     Route::resource('workspaces', 'WorkspaceController');
+
     Route::resource('locations', 'LocationController');
+    Route::put('locations/{id}/update-row-column', 'LocationController@updateRowColumn')
+        ->name('locations.update_row_column');
+
     Route::resource('userdisables', 'UserDisableController');
 
     Route::group(['prefix' => 'schedule', 'as' => 'schedule.'], function () {

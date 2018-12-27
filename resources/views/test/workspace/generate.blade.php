@@ -8,16 +8,45 @@
 
 @section('content')
 <div class="m-portlet pl-5 py-5">
+    @if(Entrust::can(['add-location']))
+        <div class="location">
+            <div class="form-horizontal col-md-9">
+                {!! Form::label('row', __('Row'), ['class' => 'col-form-label']) !!}
+                
+                <div class="form-group d-inline-block">
+                    {!! Form::number('row', $location->seat_per_row, ['class' => 'form-control ml-2', 'min' => 0]) !!}
+                </div>
+                {!! Form::label('column', __('Column'), ['class' => 'col-form-label ml-5']) !!}
+            
+                <div class="form-group d-inline-block">
+                    {!! Form::number('column', $location->seat_per_column, ['class' => 'form-control ml-2', 'min' => 0]) !!}
+                </div>
+                {!! Form::submit(__('Save'), ['class' => 'btn btn-success ml-5', 'id' => 'submit']) !!}
+                <div>
+                    @if($errors->any())
+                        <span class="text-danger">{{ __($errors->first()) }}</span>
+                    @endif
+                </div>
+            </div>
+        </div>
+    @endif
     <div class="workspace">
         <div class="all_seat">
             <table >
-                
+                @if (count($renderSeat) > 0 && Entrust::can('add-location'))
+                    <div class="mb-2">
+                        <button class="btn btn-primary btn-seat" id="disable-seat">{{ __('Disable Seat') }}</button>
+                        <button class="btn btn-primary btn-seat" id="enable-seat">{{ __('Enable Seat') }}</button>
+                        <button class="btn btn-success" id="cancel">{{ __('Cancel') }}</button>
+                    </div>
+                @endif
+
                 @forelse($renderSeat as $row)
                     <tr class="row">
-                        @foreach($row as $seat)
+                        @foreach($row as $key => $value)
                         <td>
-                            <div seat_id="" avatar="" program="" position="" user_id="" class="seat {{ $seat === null ? 'disabled' : '' }}" id="{{ $seat }}">
-                                <p class="seat-name">{{ $seat ?? 'X' }}</p>
+                            <div seat_id="" avatar="" program="" position="" user_id="" class="seat {{ $value === config('site.disable_seat') ? 'disabled' : '' }}" id="{{ $key }}">
+                                <p class="seat-name">{{ $key }}</p>
                             </div>
                         </td>
                         @endforeach
@@ -65,7 +94,7 @@
                                 </thead>
                                 {!! Form::open(['url' => route('seats.store'), 'method' => 'post' , 'id' => 'add_form' ]) !!}
                                 <tbody>
-                                    @foreach($dates as $day)
+                                    @forelse($dates as $day)
                                         <tr>
                                             <th scope="row" class="work-day">{{ $day->date }}</th>
                                             <td>{{ $day->weekDay }}</td>
@@ -94,7 +123,11 @@
                                                 <td colspan="3" class="bg-secondary"></td>
                                             </tr>
                                         @endif
-                                    @endforeach
+                                    @empty
+                                        <tr>
+                                            <td colspan="4" class="text-center text-danger">{{ __('You don\'t have work schedule in this location') }}</td>
+                                        </tr>        
+                                    @endforelse
                                 </tbody>
                             </table>
                             <div class="m-form m-form--fit m-form--label-align-right">
@@ -114,4 +147,7 @@
     {{ Html::script(asset('js/jquery-ui.js')) }}
     {{ Html::script(asset('js/config.js')) }}
     <script src="{{ asset('js/register_seat.js') }}"></script>
+    @if(Entrust::can('add-location'))
+        <script src="{{ asset('js/edit_seat.js') }}"></script>
+    @endif
 @endsection
