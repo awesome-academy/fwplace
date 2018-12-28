@@ -7,7 +7,6 @@ use App\Models\User;
 
 class WorkspaceRepository extends EloquentRepository
 {
-
     public function model()
     {
         return \App\Models\Workspace::class;
@@ -15,7 +14,7 @@ class WorkspaceRepository extends EloquentRepository
 
     public function getWorkspaces()
     {
-        return $this->model->latest()->get();
+        return $this->model->orderBy('name')->get();
     }
 
     public function getOwnLocation()

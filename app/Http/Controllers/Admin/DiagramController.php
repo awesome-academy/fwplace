@@ -205,7 +205,7 @@ class DiagramController extends Controller
 
     public function list()
     {
-        $workspaces = $this->workspace->get();
+        $workspaces = $this->workspace->with('locations')->get();
 
         return view('test.workspace.index', [
             'workspaces' => $workspaces,
@@ -245,11 +245,12 @@ class DiagramController extends Controller
         return response()->json($data);
     }
 
-    public function imageMap()
+    public function imageMap(Request $request, $id)
     {
-        $workspaces = $this->workspace->get()->pluck('name', 'id')->toArray();
+        $workspace = $this->workspace->findOrFail($id);
+        $diagram = $this->designDiagramRepository->where('workspace_id', $id)->first();
 
-        return view('test.workspace.image_map', compact('workspaces'));
+        return view('test.workspace.image_map', compact('workspace', 'diagram'));
     }
 
     public function saveDesignDiagram(DesignDiagramRequests $request)
@@ -427,6 +428,7 @@ class DiagramController extends Controller
             $newArray['name'] =  $key;
             $newArray['color'] =  $val->color;
             $newArray['workspace_id'] =  $workspaceId;
+            $newArray['usable'] = $val->usable;
             array_push($keys, $newArray);
         }
 

@@ -8,7 +8,7 @@ $(document).ready(function() {
     });
 
     $('.options.without-diagram').click(function() {
-        let id = $('#select_workspace').val();
+        let id = $('#workspace_id').val();
         $('.image-map-section').addClass('d-none');
         $.ajax({
             url: route('design_without_diagram', [id]),
@@ -22,7 +22,7 @@ $(document).ready(function() {
     $('.options')
         .first()
         .click(function() {
-            let id = $('#select_workspace').val();
+            let id = $('#workspace_id').val();
             $('#diagram-img').removeClass('d-none');
             $('.image-map-section').addClass('d-none');
             $.ajax({

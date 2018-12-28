@@ -8,30 +8,30 @@
 @section('module')
     <div class="mr-auto">
         <h3 class="m-subheader__title m-subheader__title--separator">{{ __('Design Diagram') }}</h3>
+        <h3 class="m-subheader__title">{{ $workspace->name }}</h3>
     </div>
 @endsection
 
 @section('content')
 
 <div class="ml-5">
-    <div class="form-group row">
-        {!! Form::label('select_workspace', __('Select Workspace'), ['class' => 'col-md-3']) !!}
-        <div class="col-md-5">
-            {!! Form::select('select_workspace', ['0' => __('Choose...')] + $workspaces, null, [
-                'id' => 'select_workspace',
-                'class' => 'form-control col-md-5'
-            ]) !!}
-        </div>
-    </div>
-
-    <div class="form-group d-none options-section">
+    <div class="form-group options-section">
         <button class="options btn btn-primary mr-5">{{ __('Design With Diagram') }}</button>
         <button class="options without-diagram btn btn-primary">{{ __('Design Without Diagram') }}</button>
     </div>
-    <div class="design with-diagram d-none">
+    <div class="design with-diagram">
         <button class="btn btn-primary" id="diagram-edit">{{ __('Edit') }}</button>
         <div id="diagram-img" class="position-relative">
-            
+            <div class="col-lg-12 text-center">
+                {!! Html::image($workspace->photo, null, ['usemap' => '#image-map', 'id' => 'workspace_img']) !!}
+            </div>
+            @if($diagram->diagramContent)
+                {!! $diagram->diagramContent !!}
+            @else
+                <div class="text-center">
+                    <span class="text-danger">{{ __('This workspace don\'t have this kind of diagram') }}</span>
+                </div>;
+            @endif
         </div>
         <div class="image-map-section d-none">
             {!! Form::open(['url' => route('save_design_diagram'), 'files' => true, 'method' => 'POST']) !!}
@@ -44,12 +44,7 @@
                                 <span class="divider">&nbsp; &nbsp; &nbsp; -- OR -- &nbsp; &nbsp; &nbsp;</span>
                                 {!! Form::button(__('Load Image from Website'), ['class' => 'btn btn-success btn-lg', 'data-toggle' => 'modal', 'data-target' => '#image-mapper-load']) !!}
                             </div>
-                            {{--  {!! Form::text('name', '', ['class' => 'col-lg-8 col-lg-offset-2 form-control input-sm ', 'placeholder' => __('Enter Name Diagram'), 'id' => 'title-diagram']) !!}
-                            <div class="clearfix"> </div>
-                            <div class="col-lg-8 col-lg-offset-2">
-                                <small class="text-danger" >{{$errors->first('name') }}</small>
-                            </div>  --}}
-                            {!! Form::hidden('workspace_id', null, ['id' => 'workspace_id']) !!}
+                            {!! Form::hidden('workspace_id', $workspace->id, ['id' => 'workspace_id']) !!}
                         </div>
                     </div>
                 </div>
@@ -173,5 +168,5 @@
     <script src="{{ asset('js/design.js') }}"></script>
     {{ Html::script(asset('js/jquery-ui.js')) }}
     <script src="{{ asset('js/design_without_diagram.js') }}"></script>
-
+    <script src="{{ asset('js/showName.js') }}"></script>
 @endsection

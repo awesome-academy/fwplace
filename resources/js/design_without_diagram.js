@@ -1,6 +1,6 @@
 $(document).ready(function() {
     function created() {
-        let id = $('#select_workspace').val();
+        let id = $('#workspace_id').val();
 
         $.ajax({
             url: route('api.get_design_without_diagram', [id]),
@@ -20,31 +20,61 @@ $(document).ready(function() {
                         );
                         $(cell).css('background-color', color);
                         $(cell).attr('data-name', keys[i]);
-                        $(cell).append(
-                            `<a href="${route('generate', [
-                                diagram[keys[i]].id
-                            ])}"></a>`
-                        );
+                        $(cell).attr('data-usable', data[i].usable);
+                        if (data[i].usable == 1) {
+                            $(cell).append(
+                                `<a href="${route('generate', [
+                                    diagram[keys[i]].id
+                                ])}"></a>`
+                            );
+                        }
                     }
 
-                    appendAreaList(color, keys[i]);
+                    appendAreaList(color, keys[i], data[i].usable);
                 }
             }
         });
     }
 
-    function appendAreaList(color, name) {
-        $('.area-section').append(
-            `<li class="area-list" data-name="${name}">
-                <a href="javascript:void(0)"><div class="area-color" style="background-color: ${color}"></div></a>
+    function checkDuplicateName(name) {
+        let list = $('.area-list');
+        for (let i = 0; i < list.length; i++) {
+            if ($(list[i]).attr('data-name') == name) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    function appendAreaList(color, name, usable) {
+        usable = usable || 1;
+        if (!checkDuplicateName(name)) {
+            $('.area-section').append(
+                `<li class="area-list" data-name="${name}" data-usable="${usable}">
+                <a href="javascript:void(0)" class="color"><div class="area-color" style="background-color: ${color}"></div></a>
                 <label>${name}</label>
                 <a href="javascript:void(0)" class="remove-area">X</a>
             </li>`
-        );
+            );
+        } else {
+            let element = $(`.area-list[data-name="${name}"]`)
+                .children('.color')
+                .children('.area-color');
+            $(`td[data-name="${name}"]`).css({
+                'background-color': color
+            });
+            $(`td[data-name="${name}"]`).attr('data-usable', usable);
+            $(element).css({
+                'background-color': color
+            });
+        }
         $('.cell-selected').css({
             'background-color': color
         });
+
         $('.cell-selected').attr('data-name', name);
+        $('.cell-selected').attr('data-usable', usable);
         $('.cell-selected').attr('class', 'seat-cell area-selected');
     }
 
@@ -157,7 +187,7 @@ $(document).ready(function() {
             color = '#5caf8d';
             name = 'freespace';
         }
-        appendAreaList(color, name);
+        appendAreaList(color, name, 2);
     });
 
     function removeArea(name, areaList) {
@@ -206,7 +236,8 @@ $(document).ready(function() {
 
         appendAreaList(
             $('input[type=color][name=color]').val(),
-            $('input[type=text][name=name]').val()
+            $('input[type=text][name=name]').val(),
+            $('#usable').is(':checked') ? 2 : 1
         );
     });
 
@@ -226,6 +257,7 @@ $(document).ready(function() {
             let cell = {};
             cell['row'] = $(this).attr('row');
             cell['column'] = $(this).attr('column');
+            cell['usable'] = $(this).attr('data-usable');
             data.push(cell);
         });
 
@@ -233,6 +265,9 @@ $(document).ready(function() {
             .first()
             .css('background-color');
         result['data'] = data;
+        result['usable'] = $(elements)
+            .first()
+            .attr('data-usable');
 
         return result;
     }
@@ -246,7 +281,7 @@ $(document).ready(function() {
                 $(`.area-selected[data-name='${arrayName[i]}']`)
             );
         }
-        let id = $('#select_workspace').val();
+        let id = $('#workspace_id').val();
         let row = $('#row').val();
         let column = $('#column').val();
         $.ajaxSetup({
@@ -254,7 +289,6 @@ $(document).ready(function() {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        console.log(sendData);
         $.ajax({
             url: route('save_design_without_diagram'),
             method: 'POST',
@@ -286,13 +320,14 @@ $(document).ready(function() {
             $('.design-section').hasClass('editting') &&
             $('.cell-selected').length > 0
         ) {
-            let name = $(this)
-                .parents('li')
-                .attr('data-name');
+            let element = $(this).parents('li');
+            let name = $(element).attr('data-name');
+            let usable = $(element).attr('data-usable');
             let color = $(this).attr('style');
 
             $('.cell-selected').each(function() {
                 $(this).attr('data-name', name);
+                $(this).attr('data-usable', usable);
                 $(this).attr('style', color);
                 $(this).attr('class', 'seat-cell area-selected');
             });

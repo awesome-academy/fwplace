@@ -87,7 +87,7 @@ Route::group(['prefix' => 'workspace', 'middleware' => ['checkLogin']], function
     Route::post('save-ajax', 'Admin\DiagramController@saveAjaxLocation')->name('save_location_color');
     Route::post('save-info-location', 'Admin\DiagramController@saveInfoLocation')->name('save_info_location');
     Route::post('edit-info-location', 'Admin\DiagramController@editInfoLocation')->name('edit_info_location');
-    Route::get('image-map', 'Admin\DiagramController@imageMap')->name('image_map');
+    Route::get('image-map/{id}', 'Admin\DiagramController@imageMap')->name('image_map');
     Route::post('save-design-diagram', 'Admin\DiagramController@saveDesignDiagram')->name('save_design_diagram');
     Route::get('list-diagram', 'Admin\DiagramController@listDiagram')->name('list_diagram');
     Route::get('diagram-detail/{id}', 'Admin\DiagramController@diagramDetail')->name('diagram_detail');

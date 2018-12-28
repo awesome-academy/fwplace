@@ -657,38 +657,11 @@
                           });
             });
 
-            $('#select_workspace').change(function() {
-                let id = $(this).val();
-                if (id == 0) {
-                    $('.options-section').addClass('d-none');
-
-                    return;
-                }
-                $('#workspace_id').val(id);
-                let workspace = null;
-                $.ajax({
-                    url: route('api.workspaces.show', [id]),
-                    method: 'get',
-                    success: function(result) {
-                        workspace = result.data;
-                        $('.options-section').removeClass('d-none');
-                        $('.design')
-                            .first()
-                            .removeClass('d-none');
-                        $('.design')
-                            .last()
-                            .addClass('d-none');
-                        $('.options').removeClass('btn-warning');
-                        $('.options')
-                            .first()
-                            .trigger('click');
-
-                        var b = a('#image-mapper-dialog');
-                        a('#image-map').imageMapper('update', {
-                            src: workspace.image,
-                            file: ''
-                        });
-                    }
+            a(document).on('click', '#diagram-edit', function() {
+                var b = a('#image-mapper-dialog');
+                a('#image-map').imageMapper('update', {
+                    src: $('#workspace_img').attr('src'),
+                    file: ''
                 });
             });
         });

@@ -13,6 +13,7 @@ class Location extends Model
         'image',
         'workspace_id',
         'color',
+        'usable',
     ];
 
     public function workspace()
