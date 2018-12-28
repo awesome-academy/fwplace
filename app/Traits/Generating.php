@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use Carbon\Carbon;
+use App\Models\Seat;
 
 trait Generating
 {
@@ -29,6 +30,27 @@ trait Generating
             foreach ($rowList as $key => $row) {
                 $counting++;
                 $renderSeat[$column][] = $column . $row;
+            }
+        }
+
+        return $renderSeat;
+    }
+
+    public function groupSeatsByRow($seats, $location)
+    {
+        $disableSeats = Seat::where('usable', config('site.disable_seat'))->pluck('id');
+        $row = $location->seat_per_row;
+        $column = $location->seat_per_column;
+
+        $renderSeat = collect();
+        foreach ($seats as $key => $value) {
+            $group = substr($key, 0, 1);
+            $temp = collect();
+            $temp->put($key, $value);
+            if (!isset($renderSeat[$group])) {
+                $renderSeat->put($group, $temp);
+            } else {
+                $renderSeat[$group]->put($key, $value);
             }
         }
 

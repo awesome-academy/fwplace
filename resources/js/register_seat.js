@@ -4,15 +4,13 @@ $(document).ready(function() {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    let id = parseInt(window.location.pathname.split('/').pop());
+    let location_id = parseInt(window.location.pathname.split('/').pop());
     $.ajax({
-        url: route('seats.show', [id]),
+        url: route('seats.show', [location_id]),
         method: 'get',
         success: function(result) {
-            console.log(result);
             for (i in result) {
                 users = result[i].users;
-                console.log(users);
                 let append = '';
                 for (j in users) {
                     let schedules = users[j].schedules;

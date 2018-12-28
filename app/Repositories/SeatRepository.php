@@ -39,9 +39,11 @@ class SeatRepository extends EloquentRepository
         }
     }
 
-    public function getAvailableSeats($schedule, $shift = null)
+    public function getAvailableSeats($schedule, $id, $shift = null)
     {
-        return $this->model->whereNotIn('id', function ($query) use ($schedule) {
+        $this->makeModel();
+
+        return $this->model->whereNotIn('id', function ($query) use ($schedule, $id) {
             $query->from(DB::raw('work_schedules, schedule_seat'))
                 ->select('seat_id')
                 ->where(DB::raw('`work_schedules`.`id`'), DB::raw('schedule_seat.work_schedule_id'))
@@ -59,10 +61,16 @@ class SeatRepository extends EloquentRepository
                         $query->where('seat_id', $schedule->seat_id);
                     }
                 })
+                ->where('work_schedules.location_id', $id)
                 ->whereNotNull('seat_id')
-                ->where('user_id', '!=', $schedule->user_id)
-                ->get();
+                ->where('user_id', '!=', $schedule->user_id);
         })
+        ->where('seats.location_id', $id)
+        ->where(function ($query) {
+            $query->where('seats.usable', '=', config('site.disable_seat'))
+                ->orWhere('seats.usable');
+        })
+        ->orderBy('name')
         ->get()
         ->pluck('name', 'id');
     }

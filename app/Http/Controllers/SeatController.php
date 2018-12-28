@@ -122,6 +122,7 @@ class SeatController extends Controller
                 where work_schedules.id = schedule_seat.work_schedule_id
                 and schedule_seat.seat_id = seats.id
                 and seats.location_id = ' . $id . '
+                and (seats.usable != ' . config('site.disable_seat') . ' or seats.usable is null)
             ) as Schedules
         '), 'users.id', DB::raw('Schedules.user_id'))
             ->whereBetween('Schedules.date', [$firstDay, $lastDay])

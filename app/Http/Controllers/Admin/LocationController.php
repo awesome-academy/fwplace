@@ -2,21 +2,26 @@
 
 namespace App\Http\Controllers\Admin;
 
+use DB;
+use Storage;
+use App\Models\Seat;
+use App\Traits\Generating;
+use App\Models\ScheduleSeat;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use App\Http\Controllers\Controller;
 use App\Repositories\LocationRepository;
-use App\Repositories\WorkspaceRepository;
-use Illuminate\Validation\Rule;
-use Storage;
 use App\Http\Requests\LocationAddRequest;
+use App\Repositories\WorkspaceRepository;
 use App\Http\Requests\LocationUpdateRequest;
-use DB;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class LocationController extends Controller
 {
     protected $location;
     protected $workspace;
+
+    use Generating;
 
     public function __construct(LocationRepository $locationRepository, WorkspaceRepository $workspaceRepository)
     {
@@ -114,6 +119,77 @@ class LocationController extends Controller
         alert()->success(__('Edit Location'), __('Successfully!!!'));
 
         return redirect()->route('schedule.workplace.view', ['id' => $request->workspace_id]);
+    }
+
+    public function updateRowColumn(Request $request, $id)
+    {
+        $this->validate($request, [
+            'row' => 'required|numeric|min:1',
+            'column' => 'required|numeric|min:1',
+        ]);
+
+        DB::beginTransaction();
+        
+        try {
+            $location = $this->location->findOrFail($id);
+            $location->seat_per_row = $request->row;
+            $location->seat_per_column = $request->column;
+            $location->save();
+
+            $renderSeats = $this->renderSeat($location);
+        
+            $seats =  [];
+
+            foreach ($renderSeats as $row) {
+                foreach ($row as $seat) {
+                    $seats = array_merge($seats, [$seat]);
+                }
+            }
+
+            ScheduleSeat::whereIn('id', function ($query) use ($seats) {
+                $query->select('id')
+                    ->from('seats')
+                    ->whereNotIn('name', $seats);
+            })->delete();
+
+            Seat::whereNotIn('name', $seats)->where('location_id', $location->id)->delete();
+
+            foreach ($renderSeats as $row) {
+                foreach ($row as $seat) {
+                    Seat::updateOrCreate(
+                        [
+                            'name' => $seat,
+                            'location_id' => $location->id,
+                        ],
+                        [
+                            'name' => $seat,
+                            'location_id' => $location->id,
+                        ]
+                    );
+                }
+            }
+
+            if ($request->has('seats')) {
+                $seats = json_decode(json_encode($request->seats));
+
+                foreach ($seats as $seat) {
+                    Seat::where([
+                        'name' => $seat->name,
+                        'location_id' => $location->id,
+                    ])->update([
+                        'usable' => $seat->usable,
+                    ]);
+                }
+            }
+
+            DB::commit();
+
+            return redirect()->back();
+        } catch (\Exception $exception) {
+            DB::beginTransaction();
+            
+            return response()->json($exception->getMessage(), 500);
+        }
     }
 
     /**

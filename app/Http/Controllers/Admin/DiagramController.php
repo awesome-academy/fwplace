@@ -84,6 +84,7 @@ class DiagramController extends Controller
                                     $query->orderBy('schedule_seat.shift');
                                 },
                             ])
+                            ->where('location_id', $id)
                             ->whereBetween('date', [$firstDay, $lastDay])
                             ->get();
 
@@ -94,11 +95,13 @@ class DiagramController extends Controller
                     $schedule->morningSeats = $this->seat
                                                 ->getAvailableSeats(
                                                     $schedule,
+                                                    $id,
                                                     config('site.shift.afternoon')
                                                 );
                     $schedule->afternoonSeats = $this->seat
                                                 ->getAvailableSeats(
                                                     $schedule,
+                                                    $id,
                                                     config('site.shift.morning')
                                                 );
                     break;
@@ -106,6 +109,7 @@ class DiagramController extends Controller
                     $schedule->morningSeats = $this->seat
                                                 ->getAvailableSeats(
                                                     $schedule,
+                                                    $id,
                                                     config('site.shift.afternoon')
                                                 );
                     break;
@@ -113,6 +117,7 @@ class DiagramController extends Controller
                     $schedule->afternoonSeats = $this->seat
                                                 ->getAvailableSeats(
                                                     $schedule,
+                                                    $id,
                                                     config('site.shift.morning')
                                                 );
                     break;
@@ -125,35 +130,16 @@ class DiagramController extends Controller
     public function generateDiagram(Request $request, $id)
     {
         $location = $this->locationRepository->findOrFail($id);
-        $renderSeat = $this->renderSeat($location);
+        $renderSeat = $this->seat->where('location_id', $id)->get()->pluck('usable', 'name');
 
-        if (Entrust::can(['php-manager']) &&
-            Entrust::can(['ruby-manager']) &&
-            Entrust::can(['ios-manager']) &&
-            Entrust::can(['android-manager']) &&
-            Entrust::can(['qa-manager']) &&
-            Entrust::can(['design-manager'])
-        ) {
-            $listUser = $this->userRepository->pluck('name', 'id');
-        } elseif (Entrust::can(['php-manager'])) {
-            $listUser = $this->userRepository->getList('program_id', 1)->pluck('name', 'id');
-        } elseif (Entrust::can(['ruby-manager'])) {
-            $listUser = $this->userRepository->getList('program_id', 2)->pluck('name', 'id');
-        } elseif (Entrust::can(['ios-manager'])) {
-            $listUser = $this->userRepository->getList('program_id', 3)->pluck('name', 'id');
-        } elseif (Entrust::can(['android-manager'])) {
-            $listUser = $this->userRepository->getList('program_id', 4)->pluck('name', 'id');
-        } elseif (Entrust::can(['qa-manager'])) {
-            $listUser = $this->userRepository->getList('program_id', 5)->pluck('name', 'id');
-        } elseif (Entrust::can(['design-manager'])) {
-            $listUser = $this->userRepository->getList('program_id', 6)->pluck('name', 'id');
-        }
+        $renderSeat = $this->groupSeatsByRow($renderSeat, $location);
 
         $dates = $this->getAvailableSeatsByDate($request, $id);
 
         return view('test.workspace.generate', compact(
             'renderSeat',
-            'dates'
+            'dates',
+            'location'
         ));
     }
 
