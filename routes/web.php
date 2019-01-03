@@ -102,7 +102,13 @@ Route::group(['prefix' => 'workspace', 'middleware' => ['checkLogin']], function
         ->name('save_design_without_diagram');
     Route::get('design-diagram-image/{id}', 'Admin\DiagramController@designDiagramImage')
         ->name('design_diagram_image');
+    Route::get('user-report', function () {
+        return view('report');
+    })->name('report.user');
 });
 
 Route::resource('seats', 'SeatController');
 Route::get('seats/available/{id}', 'SeatController@getAvailableSeats')->name('seats.available_seats');
+
+Route::get('test', 'ReportController@test');
+
