@@ -37,7 +37,7 @@ Route::group([
 //     Route::resource('/subjects', 'SubjectController');
 //     Route::resource('/reviews', 'ReviewController');
 //     Route::put('/reviews', 'ReviewController@update');
-//     Route::resource('/reports', 'ReportController');
+    Route::resource('/reports', 'ReportController');
 //     Route::get('/reports/batch/{id}', 'ReportController@getReportsGroupBySubject');
 //     Route::get('/reports/trainee/{id}', 'ReportController@getReportsByTrainee');
 //     Route::get('/reports/by/{subject_id}/', 'ReportController@getReportsBySubject');
