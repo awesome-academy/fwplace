@@ -9,7 +9,6 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 import VueRouter from 'vue-router';
-import router from './routers';
 import { store } from './store/store';
 import axios from 'axios';
 import VueInternationalization from 'vue-i18n';
@@ -49,39 +48,11 @@ Vue.mixin({
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (!store.getters.loggedIn) {
-            next({
-                name: 'login'
-            });
-        } else {
-            next();
-        }
-    } else if (to.matched.some(record => record.meta.requiresVisitor)) {
-        if (store.getters.loggedIn) {
-            next({
-                name: 'index'
-            });
-        } else {
-            next();
-        }
-    } else {
-        next();
-    }
-});
 
 if (localStorage.getItem('access_token')) {
     window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('access_token')
 }
 
-Vue.component('master', require('./components/Welcome.vue'));
-Vue.component('vue-app', require('./components/App.vue'));
-Vue.component('vue-footer', require('./components/layouts/Footer.vue'));
-Vue.component('vue-header', require('./components/layouts/Header.vue'));
-Vue.component('left-aside', require('./components/layouts/LeftAside.vue'));
-Vue.component('vue-master', require('./components/layouts/Master.vue'));
-Vue.component('pagination', require('./components/Pagination.vue'));
 Vue.component('report', require('./components/layouts/reports/Report2Component'));
 
 const i18n = new VueInternationalization({
@@ -93,6 +64,5 @@ const i18n = new VueInternationalization({
 const app = new Vue({
     el: '#app',
     i18n,
-    router: router,
     store: store
 });

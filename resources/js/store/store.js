@@ -1,26 +1,16 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import axios from 'axios';
-import workspace from './modules/workspace/index';
-import team from './modules/teams/index';
-import type from './modules/types/index';
 import subject from './modules/subject/index';
 import reports from './modules/reports/index';
-import trainee from './modules/trainees/index';
-import batch from './modules/batch/index';
 
 Vue.use(Vuex);
 axios.defaults.baseURL = '/api';
 
 export const store = new Vuex.Store({
     modules: {
-        workspace: workspace,
-        team: team,
-        type: type,
         reports: reports,
-        trainee: trainee,
         subject: subject,
-        batch: batch
     },
 
     state: {

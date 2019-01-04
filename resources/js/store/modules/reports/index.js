@@ -1,13 +1,11 @@
 import actions from './actions'
-import mutations from './mutations'
 
 const state = {
-    status: 'sdfsdf hunre'
+    status: ''
 }
 
 export default {
     namespaced: true,
     state,
-    mutations,
     actions,
 }
