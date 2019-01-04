@@ -141,7 +141,7 @@ export default {
             this.report[property] = edittor.$el.innerHTML;
             this.oldElement.innerHTML = edittor.$el.innerHTML;
             element.replaceWith(this.oldElement);
-            axios.post('/reports', this.report);
+            axios.patch('/reports/' + this.report.id, this.report);
         },
         inputReport(event, property) {
             let element = event;

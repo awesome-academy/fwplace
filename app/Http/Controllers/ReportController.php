@@ -143,11 +143,14 @@ class ReportController extends Controller
     public function update(Request $request, $id)
     {
         $report = Report::findOrFail($id);
-        if (Auth::user()->cannot('update', $report)) {
+        $user = Auth::user();
+        if (! Auth::user()->id == $report->user_id) {
             return response()->json(['message' => config('api.denied')], 403);
         }
 
-        return $this->reportRepository->update($request->all(), $id);
+        $this->reportRepository->update($request->all(), $id);
+
+        return response()->json(['success' => config('api.update')]);
     }
 
     /**
@@ -159,5 +162,10 @@ class ReportController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function userShowReport()
+    {
+        return view('report');
     }
 }
