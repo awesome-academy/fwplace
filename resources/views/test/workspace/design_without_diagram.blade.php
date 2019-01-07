@@ -17,14 +17,22 @@
             <button class="btn btn-success default-areas freespace">{{ __('Freespace') }}</button>
             <div class="form-group row mt-2">
                 {!! Form::label('name', __('Area Name'), ['class' => 'col-form-label']) !!}
-                <div class="col-md-6">
+                <div class="col-md-3">
                     {!! Form::text('name', null, ['class' => 'form-control']) !!}
                 </div>
-                {!! Form::label('color', __('Choose Color'), ['class' => 'col-form-label']) !!}
-                <div class="col-md-4">
-                    {!! Form::input('color', 'color', null) !!}
-                    <button class="btn btn-primary" id="newArea">{{ __('Create New Area') }}</button>
+
+                <div class="custom-control custom-checkbox col-sm-2">
+                    <div class="mt-3">
+                        {!! Form::label('usable', __('Is Disable'), ['class' => 'control-label']) !!}
+                        {!! Form::checkbox('usable', 1, 0) !!}
+                    </div>
                 </div>
+                
+                {!! Form::label('color', __('Choose Color'), ['class' => 'col-form-label']) !!}
+                <div class="col-md-1">
+                    {!! Form::input('color', 'color', null) !!}
+                </div>
+                <button class="btn btn-primary" id="newArea">{{ __('Create New Area') }}</button>
             </div>
         </div>
 
@@ -49,6 +57,5 @@
                 @endfor
             </tbody>
         </table>
-
     </div>
 </div>
