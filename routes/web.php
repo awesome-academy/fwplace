@@ -75,17 +75,18 @@ Route::group(['middleware' => 'checkLogin'], function () {
     Route::get('schedule/users/{id}', 'Admin\WorkingScheduleController@viewByUser')->name('user.schedule');
     Route::get('schedule/users/{id}/get', 'Admin\WorkingScheduleController@getDataUser');
     Route::get('/register/trainer/{programId}', 'UserController@selectTrainer');
+    Route::resource('seats', 'SeatController');
+    Route::get('seats/available/{id}', 'SeatController@getAvailableSeats')->name('seats.available_seats');
 });
+
 Route::get('/register', 'UserController@index');
 Route::post('/register', 'UserController@store');
 Route::get('/register/trainer', 'UserController@selectTrainer')->name('get_trainer_by_program');
 
 Route::group(['prefix' => 'workspace', 'middleware' => ['checkLogin']], function () {
-    Route::post('save', 'Admin\DiagramController@saveWorkspace')->name('test.save');
     Route::get('edit-locations/{id}', 'Admin\DiagramController@generateDiagram')->name('generate');
     Route::post('getColorLocation/{id}', 'Admin\DiagramController@getLocationColors');
     Route::post('add-locations/{id}', 'Admin\DiagramController@saveLocation')->name('save_location');
-    Route::get('list', 'Admin\DiagramController@list')->name('list_workspace');
     Route::get('detail/{id}', 'Admin\DiagramController@detail')->name('detail_workspace');
     Route::post('save-ajax', 'Admin\DiagramController@saveAjaxLocation')->name('save_location_color');
     Route::post('save-info-location', 'Admin\DiagramController@saveInfoLocation')->name('save_info_location');
@@ -107,8 +108,5 @@ Route::group(['prefix' => 'workspace', 'middleware' => ['checkLogin']], function
         ->name('design_diagram_image');
     Route::get('user-report', 'ReportController@userShowReport')->name('report.user');
 });
-
-Route::resource('seats', 'SeatController');
-Route::get('seats/available/{id}', 'SeatController@getAvailableSeats')->name('seats.available_seats');
 
 Route::get('test', 'ReportController@test');

@@ -170,7 +170,7 @@
     "Edit program": "Chỉnh sửa ngôn ngữ",
     "Not workspace": "Văn phòng không tồn tại",
     "Not program": "Không thuộc ngôn ngữ nào",
-    "Workspace List": "Danh sách địa điểm làm việc",
+    "Workspace List": "Danh sách văn phòng",
     "Choose program": "-- Ngôn ngữ lập trình --",
     "Choose workspace": "-- Văn phòng --",
     "Choose position": "-- Chức danh --",
@@ -182,5 +182,6 @@
     "Friday": "Thứ Sáu",
     "Saturday": "Thứ Bảy",
     "Sunday": "Chủ Nhật",
-    "You don't have work schedule in this location": "Bạn không có lịch làm việc tại khu vực này"
+    "You don't have work schedule in this location": "Bạn không có lịch làm việc tại khu vực này",
+    "Thumbnail": "Ảnh"
 }

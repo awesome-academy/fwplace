@@ -25,7 +25,7 @@
             <div class="col-lg-12 text-center">
                 {!! Html::image($workspace->photo, null, ['usemap' => '#image-map', 'id' => 'workspace_img']) !!}
             </div>
-            @if($diagram->diagramContent)
+            @if(isset($diagram) && $diagram->diagramContent)
                 {!! $diagram->diagramContent !!}
             @else
                 <div class="text-center">

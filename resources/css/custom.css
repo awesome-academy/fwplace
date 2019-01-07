@@ -163,3 +163,7 @@ img.workspace_image {
 tr td {
     border: 1px solid black;
 }
+
+.thumbnail {
+    width: 300px;
+}

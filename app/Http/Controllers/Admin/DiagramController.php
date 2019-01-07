@@ -61,18 +61,6 @@ class DiagramController extends Controller
         $this->workingScheduleRepository = $workingScheduleRepository;
     }
 
-    public function saveWorkspace(Request $request)
-    {
-        $data = $request->all();
-        if ($request->image) {
-            $request->image->store(config('site.workspace.image'));
-            $data['image'] = $request->image->hashName();
-        }
-        $workspace = $this->workspace->create($data);
-
-        return redirect()->route('generate', ['id' => $workspace->id]);
-    }
-
     public function getAvailableSeatsByDate(Request $request, $id)
     {
         $user = Auth::user();
@@ -201,15 +189,6 @@ class DiagramController extends Controller
         $data = $this->locationRepository->findOrFail($request->id);
 
         return response()->json($data);
-    }
-
-    public function list()
-    {
-        $workspaces = $this->workspace->with('locations')->get();
-
-        return view('test.workspace.index', [
-            'workspaces' => $workspaces,
-        ]);
     }
 
     public function detail($id)
