@@ -13,6 +13,12 @@ class UserRepository extends EloquentRepository
         return User::class;
     }
 
+    public function create(array $attr)
+    {
+        $user = $this->model->create($attr);
+        $user->roles()->sync($attr['role']);
+    }
+
     public function getListName($name)
     {
         return $this->model->where('name', 'like', '%' . $name . '%');

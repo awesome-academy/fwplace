@@ -40,11 +40,11 @@
                             <div class="form-group m-form__group">
                                 {!! Form::password('password', ['class' => 'form-control m-input', 'placeholder' => __('Enter Password')]) !!}
                             </div>
-                            <div class="form-group mt-4">
-                                {!! Form::select('program_id', [__('Programs')] + $programs, null, ['class' => 'form-control m-input', 'id' => 'select_program', 'url' => route('get_trainer_by_program')]) !!}
+                            <div class="form-group m-form__group">
+                                {!! Form::password('password_confirm', ['class' => 'form-control m-input', 'placeholder' => __('Enter Password Confirm')]) !!}
                             </div>
                             <div class="form-group mt-4">
-                                {!! Form::select('trainer_id', [__('Trainer')], null, ['class' => 'form-control m-input', 'id' => 'select_trainer']) !!}
+                                {!! Form::select('program_id', [__('Programs')] + $programs, null, ['class' => 'form-control m-input', 'id' => 'select_program', 'url' => route('get_trainer_by_program')]) !!}
                             </div>
                             <div class="form-group mt-4">
                                 {!! Form::select('position_id', [__('Positions')] + $positions, null, ['class' => 'form-control m-input']) !!}

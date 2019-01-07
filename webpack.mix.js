@@ -64,5 +64,6 @@ mix.js('resources/js/setLang.js', 'public/js/setLang.js');
 mix.js('resources/js/showName.js', 'public/js/showName.js');
 mix.js('resources/js/register_seat.js', 'public/js/register_seat.js');
 mix.js('resources/js/edit_seat.js', 'public/js/edit_seat.js');
+mix.copy('resources/js/active_user.js', 'public/js/active_user.js');
 
 mix.version();

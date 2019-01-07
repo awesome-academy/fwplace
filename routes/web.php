@@ -24,6 +24,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['che
 
     Route::post('/users/update-role-user', 'UserController@updateRoleUser')->name('users.update_role_user');
     Route::resource('users', 'UserController');
+    Route::get('register-users')->name('register.user');
 
     Route::get('/positions/get-positions', 'PositionController@getPositions')->name('positions.get_positions');
     Route::resource('positions', 'PositionController');
@@ -58,6 +59,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['che
         Route::get('location/{id}/analystic', 'SittingCalendarController@getAnalysticData')->name('location.get_data');
         Route::get('location/{id}/detail/{date}', 'SittingCalendarController@detailLocation')->name('location.detail_location');
     });
+
+    Route::post('active-user/{id}', 'ActiveUserController@activeUser');
 });
 
 Auth::routes();
@@ -109,4 +112,3 @@ Route::resource('seats', 'SeatController');
 Route::get('seats/available/{id}', 'SeatController@getAvailableSeats')->name('seats.available_seats');
 
 Route::get('test', 'ReportController@test');
-
