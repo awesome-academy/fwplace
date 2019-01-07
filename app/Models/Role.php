@@ -41,4 +41,9 @@ class Role extends EntrustRole
     {
         return $this->belongsToMany('App\Models\Permission', 'permission_role', 'role_id', 'permission_id');
     }
+
+    public function scopeGetIdRoleTrainee($query)
+    {
+        return $this->select('id')->where('name', 'like', 'trainee')->first();
+    }
 }

@@ -84,6 +84,7 @@
                                         <th>{{ __('Workspace') }}</th>
                                         <th>{{ __('Type') }}</th>
                                         <th>{{ __('Role') }}</th>
+                                        <th>{{ __('Active') }}</th>
                                         <th>{{ __('Action') }}</th>
                                         <th></th>
                                     </tr>
@@ -95,7 +96,7 @@
                                         @foreach($users as $key => $user)
                                             @if (Auth::user()->role == config('site.permission.admin') || $user->role != config('site.permission.admin'))
 
-                                                <tr role="row" class="odd">
+                                                <tr role="row" class="odd" id="user-{{ $user->id }}">
                                                     <td class="sorting_1" tabindex="0">
                                                         <div class="m-card-user m-card-user--sm">
                                                             <div class="m-card-user__pic">
@@ -151,6 +152,10 @@
                                                     </td>
 
                                                     <td>
+                                                        {!! Form::button('<i class="flaticon-user-add"></i>', ['type' => 'button', 'class' => 'btn btn-success m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill', 'data-toggle' => 'm-tooltip', 'data-placement' => 'top', 'data-original-title' => __('Active User'), 'id' => "active-user", 'data-id' => $user->id, 'onclick' => "activeUser($user->id)"]) !!}
+                                                    </td>
+
+                                                    <td>
                                                         @if (Entrust::can(['edit-users']))
                                                             <a href="{{ route('users.edit', $user->id) }}" class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" data-toggle="m-tooltip" data-placement="top" data-original-title="{{ __('Edit') }}">
                                                                 <i class="flaticon-edit-1"></i>
@@ -182,5 +187,6 @@
 @endsection
 
 @section('js')
+    <script type="text/javascript" src="{{ asset('js/active_user.js') }}"></script>
     <script src="{{ asset('bower_components/lib_fwplace/js/sweet-alert.min.js') }}"></script>
 @endsection

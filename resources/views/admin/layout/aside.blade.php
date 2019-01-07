@@ -43,7 +43,6 @@
                     </a>
                 </li>
             @endif
-
             @if (Entrust::can(['view-users']))
                 <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
                     <a href="javascript:;" class="m-menu__link m-menu__toggle">
@@ -75,6 +74,17 @@
                                     </i>
                                     <span class="m-menu__link-text color-manager">
                                         @lang('Employee Disable')
+                                    </span>
+                                </a>
+                            </li>
+
+                            <li class="m-menu__item" aria-haspopup="true">
+                                <a href="{{ route('users.index') }}" class="m-menu__link ">
+                                    <i class="m-menu__link-bullet m-menu__link-bullet--dot">
+                                        <span></span>
+                                    </i>
+                                    <span class="m-menu__link-text color-manager">
+                                        @lang('Register Employee')
                                     </span>
                                 </a>
                             </li>
@@ -232,3 +242,4 @@
         </ul>
     </div>
 </div>
+            {{-- {{ dd(Auth::user()) }} --}}

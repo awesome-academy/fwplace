@@ -10,4 +10,14 @@ class RoleRepository extends EloquentRepository
     {
         return Role::class;
     }
+
+    public function pluckRole()
+    {
+        return $this->model->pluck('display_name', 'id');
+    }
+
+    public function getIdTrainee()
+    {
+        return $this->model->select('id')->where('name', 'like', 'trainee')->first();
+    }
 }

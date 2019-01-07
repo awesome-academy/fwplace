@@ -38,7 +38,6 @@
             </a>
         </li>
     </ul>
-
 @endsection
 
 @section('content')
@@ -60,7 +59,6 @@
             </table>
         </div>
     </div>
-
     {!! Form::hidden('processing_lang', __('Processing'), ['id' => 'processing_lang']) !!}
     {!! Form::hidden('add_success_lang', __('Add success'), ['id' => 'add_success_lang']) !!}
     {!! Form::hidden('delete_success_lang', __('Delete success'), ['id' => 'delete_success_lang']) !!}

@@ -8,6 +8,7 @@ use App\Repositories\PositionRepository;
 use App\Repositories\ProgramRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\WorkspaceRepository;
+use App\Repositories\RoleRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -23,17 +24,20 @@ class UserController extends Controller
     protected $programRepository;
     protected $positionRepository;
     protected $workspaceRepository;
+    protected $roleRepository;
 
     public function __construct(
         UserRepository $userRepository,
         ProgramRepository $programRepository,
         PositionRepository $positionRepository,
-        WorkspaceRepository $workspaceRepository
+        WorkspaceRepository $workspaceRepository,
+        RoleRepository $roleRepository
     ) {
         $this->userRepository = $userRepository;
         $this->programRepository = $programRepository;
         $this->positionRepository = $positionRepository;
         $this->workspaceRepository = $workspaceRepository;
+        $this->roleRepository = $roleRepository;
     }
 
     public function index()
@@ -41,8 +45,9 @@ class UserController extends Controller
         $programs = $this->programRepository->pluckProgram()->toArray();
         $positions = $this->positionRepository->getListAllowRegister()->toArray();
         $workspaces = $this->workspaceRepository->pluckWorkspace()->toArray();
+        $roles = $this->roleRepository->pluckRole()->toArray();
 
-        return view('auth.register', compact('programs', 'positions', 'workspaces'));
+        return view('auth.register', compact('programs', 'positions', 'workspaces', 'roles'));
     }
 
     /**
@@ -66,7 +71,8 @@ class UserController extends Controller
         $data = $request->all();
         $data['password'] = bcrypt($request->password);
         $data['status'] = 0;
-        $this->userRepository->create($data);
+        $data['role'] = $this->roleRepository->getIdTrainee()->id;
+        $user = $this->userRepository->create($data);
         Alert::success(trans('Register Member Successfully'), trans('Please Wait Active'));
 
         return redirect('/login');
