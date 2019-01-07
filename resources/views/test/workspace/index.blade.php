@@ -2,6 +2,10 @@
 
 @section('title', __('Workspace'))
 
+@section('css')
+    <script src="{{ asset('js/show_modal.js') }}"></script>
+@endsection
+
 @section('module')
 
     <h3 class="m-subheader__title m-subheader__title--separator">{{ __('Workspace List') }}</h3>
@@ -38,11 +42,12 @@
                             <tr>
                                 <th>#</th>
                                 <th>@lang('Workspace')</th>
+                                <th class="thumbnail">@lang('Thumbnail')</th>
                                 <th>@lang('Location')</th>
                                 <th>@lang('Total Seat')</th>
                                 @if (Entrust::can(['add-workspaces']))
                                     <th>
-                                        <a class="btn m-btn--pill m-btn--air btn-secondary" data-toggle="modal" data-target="#m_modal_4" data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Add Workspace')">
+                                        <a class="btn m-btn--pill m-btn--air btn-secondary" id="add-workspace" data-toggle="modal" data-target="#m_modal_4" data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Add Workspace')">
                                             <i class="flaticon-add"></i>
                                         </a>
                                     </th>
@@ -63,30 +68,49 @@
                                         <div>
                                             <div class="m-card-user__details">
                                                 <h3 class="m-card-user__name">
-                                                    <a href="{{ route('generate', ['id' => $item->id]) }}">{{ $item->name }}</a>
+                                                    <a href="{{ route('image_map', ['id' => $item->id]) }}">{{ $item->name }}</a>
                                                 </h3>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
+                                        <img src="{{ $item->photo }}" alt="">
+                                    </td>
+                                    @php
+                                        $total_seat = 0;
+                                    @endphp
+                                    <td>
                                         @foreach($item->locations as $location)
-                                            <p>{{ $location->name }} : {{ $location->total_seat }} @lang('seat')</p>
+                                            @if($location->usable == config('site.default.usable'))
+                                                <p>{{ $location->name }} : {{ $location->total_seat }} @lang('seat')</p>
+                                                @php
+                                                    $total_seat += $location->total_seat;
+                                                @endphp
+                                            @endif
                                         @endforeach
                                     </td>
                                     <td>
-                                        <h5>{{ $item->total_seat }}</h5>
+                                        <h5>{{ $total_seat }}</h5>
                                     </td>
                                     <td>
                                         @if (Entrust::hasRole('admin'))
-                                            <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}" data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
-                                                <i class="flaticon-edit-1"></i>
+                                            <a href="{{ route('image_map', ['id' => $item->id]) }}"
+                                                class="btn btn-primary m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill"
+                                                data-toggle="m-tooltip"
+                                                data-original-title="{{ __('Design Diagram') }}"
+                                            >
+                                                <i class="flaticon-edit"></i>
                                             </a>
-                                        @elseif (Auth::user()->program_id == $programIndex)
-                                            <a class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" href="{{ route('generate', ['id' => $item->id]) }}" data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Edit Workspace')">
+                                            
+                                            <a class="edit-workspace btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" 
+                                                data-toggle="modal" 
+                                                data-target="#m_modal_4"
+                                                onclick="showModal({{ $item->id }}, '{{ $item->name }}', '{{ $item->photo }}')"
+                                            >
                                                 <i class="flaticon-edit-1"></i>
                                             </a>
                                         @endif
-
+                                        
                                         @php
                                             $programIndex++;
                                         @endphp
@@ -125,7 +149,7 @@
                 <div class="modal-body">
                     <div class="col-lg-12">
                         <div class="m-portlet m-portlet--tab">
-                            {!! Form::open(['url' => route('test.save'), 'files' => true, 'method' => 'POST']) !!}
+                            {!! Form::open(['url' => route('workspaces.store'), 'files' => true, 'method' => 'POST']) !!}
                                 <div class="m-portlet__body">
                                     <div class="form-group m-form__group m--margin-top-10">
                                         <div class="alert m-alert m-alert--default text-center" role="alert">
@@ -136,15 +160,11 @@
                                     <div class="m-portlet__body">
                                         <div class="form-group m-form__group">
                                             {!! Form::label(__('Name')) !!}
-                                            {!! Form::text('name', request('name'), ['class' => 'form-control m-input m-input--air m-input--pill', 'placeholder' => __('Name')]) !!}
-                                        </div>
-                                          <div class="form-group m-form__group">
-                                            {!! Form::label(__('seat_per_column')) !!}
-                                            {!! Form::number('seat_per_column', request('seat_per_column'), ['class' => 'form-control m-input m-input--air m-input--pill', 'placeholder' => __('seat_per_column')]) !!}
-                                        </div>
-                                         <div class="form-group m-form__group">
-                                            {!! Form::label(__('Workspace')) !!}
-                                            {!! Form::number('seat_per_row', request('seat_per_row'), ['class' => 'form-control m-input m-input--air m-input--pill', 'placeholder' => __('seat_per_row')]) !!}
+                                            {!! Form::text('name', request('name'), [
+                                                'id' => 'workspace-name',
+                                                'class' => 'form-control m-input m-input--air m-input--pill',
+                                                'placeholder' => __('Name')
+                                            ]) !!}
                                         </div>
                                         <div class="form-group m-form__group row">
                                             {!! Form::label(__('Image Office')) !!}
@@ -162,15 +182,20 @@
                                         </div>
                                     </div>
                                 </div>
+                                {!! Form::hidden('id', '', ['id' => 'workspace-id']) !!}
                             {!! Form::close() !!}
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{ __('Close') }}</button>
                 </div>
             </div>
         </div>
     </div>
 
+@endsection
+
+@section('js')
+    <script src="{{ asset('js/edit_workspace.js') }}"></script>
 @endsection

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use App\Models\Workspace;
-use App\Repositories\WorkspaceRepository;
-use Illuminate\Http\Request;
 use Storage;
+use App\Models\Workspace;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Repositories\WorkspaceRepository;
 
 class WorkspaceController extends Controller
 {
@@ -25,9 +26,23 @@ class WorkspaceController extends Controller
      */
     public function index()
     {
-        $workspaces = $this->workspace->getWorkspaces();
+        $workspaces = $this->workspace->with([
+            'locations' => function ($query) {
+                $seats = DB::table('seats')
+                    ->select(DB::raw('location_id, count(*) as total_seat'))
+                    ->where(DB::raw('seats.usable'), '!=', config('site.default.unusable'))
+                    ->orWhere('seats.usable')
+                    ->groupBy('location_id');
 
-        return view('admin.workspace.list', compact('workspaces'));
+                $query->joinSub($seats, 'Total', function ($join) {
+                    $join->on('locations.id', 'Total.location_id');
+                });
+            },
+        ])->get();
+
+        return view('test.workspace.index', [
+            'workspaces' => $workspaces,
+        ]);
     }
 
     /**
@@ -48,6 +63,10 @@ class WorkspaceController extends Controller
      */
     public function store(Request $request)
     {
+        if (isset($request->id)) {
+            return $this->update($request, $request->id);
+        }
+
         $this->validate(
             $request,
             [
@@ -56,11 +75,12 @@ class WorkspaceController extends Controller
             ]
         );
         $data = $request->all();
-        if ($request->hasFile('image')) {
+        if ($request->image) {
             $request->image->store(config('site.workspace.image'));
             $data['image'] = $request->image->hashName();
         }
-        $save = $this->workspace->create($data);
+        $workspace = $this->workspace->create($data);
+
         alert()->success(__('Add Workspace'), __('Successfully!!!'));
 
         return redirect()->route('workspaces.index');
@@ -123,6 +143,6 @@ class WorkspaceController extends Controller
             alert()->error(__('Delete Workspace'), __('This workspace having employees.'));
         }
 
-        return redirect()->route('list_workspace');
+        return redirect()->route('workspaces.index');
     }
 }

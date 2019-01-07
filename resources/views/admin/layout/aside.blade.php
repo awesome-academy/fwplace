@@ -134,7 +134,15 @@
                 'edit-workspaces',
                 'delete-workspaces'
             ]))
-                <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+            <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+                <a href="{{ route('workspaces.index') }}" class="m-menu__link ">
+                    <i class="m-menu__link-icon flaticon-interface-9"></i>
+                    <span class="m-menu__link-text color-manager">
+                        @lang('Workspace List')
+                    </span>
+                </a>
+            </li>
+                {{-- <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
                     <a href="javascript:;" class="m-menu__link m-menu__toggle">
                         <i class="m-menu__link-icon flaticon-interface-9"></i>
                         <span class="m-menu__link-text color-manager">
@@ -160,7 +168,7 @@
                                 </li>
 
                                 <li class="m-menu__item" aria-haspopup="true">
-                                    <a href="{{ route('list_workspace') }}" class="m-menu__link ">
+                                    <a href="{{ route('workspaces.index') }}" class="m-menu__link ">
                                         <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                             <span></span>
                                         </i>
@@ -172,7 +180,7 @@
                             @endif
                         </ul>
                     </div>
-                </li>
+                </li> --}}
             @endif
 
             @if (Entrust::can(['view-roles', 'view-permissions']))
