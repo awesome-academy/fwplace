@@ -10,31 +10,26 @@ class Batch extends Model
 
     public function workspace()
     {
-        return $this->belongsTo('App\Workspace');
+        return $this->belongsTo('App\Models\Workspace');
     }
 
-    public function team()
+    public function program()
     {
-        return $this->belongsTo('App\Team');
+        return $this->belongsTo('App\Models\Program');
     }
 
-    public function type()
+    public function position()
     {
-        return $this->belongsTo('App\Type');
+        return $this->belongsTo('App\Models\Position');
     }
 
     public function subjects()
     {
-        return $this->belongsToMany('App\Subject');
-    }
-
-    public function months()
-    {
-        return $this->hasMany('App\Month');
+        return $this->belongsToMany('App\Models\Subject');
     }
 
     public function users()
     {
-        return $this->hasMany('App\User');
+        return $this->hasMany('App\Models\User');
     }
 }

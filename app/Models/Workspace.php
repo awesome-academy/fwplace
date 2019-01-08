@@ -36,6 +36,11 @@ class Workspace extends Model
         return $this->hasManyThrough('App\Models\WorkSchedule', 'App\Models\User');
     }
 
+    public function batches()
+    {
+        return $this->belongsTo('App\Batch');
+    }
+
     public function delete()
     {
         if ($this->users()->count() > 0) {
