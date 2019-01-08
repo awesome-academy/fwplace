@@ -24,7 +24,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['che
 
     Route::post('/users/update-role-user', 'UserController@updateRoleUser')->name('users.update_role_user');
     Route::resource('users', 'UserController');
-    Route::get('register-users')->name('register.user');
+    // Route::get('register-users')->name('register.user');
 
     Route::get('/positions/get-positions', 'PositionController@getPositions')->name('positions.get_positions');
     Route::resource('positions', 'PositionController');
@@ -77,6 +77,7 @@ Route::group(['middleware' => 'checkLogin'], function () {
     Route::get('/register/trainer/{programId}', 'UserController@selectTrainer');
     Route::resource('seats', 'SeatController');
     Route::get('seats/available/{id}', 'SeatController@getAvailableSeats')->name('seats.available_seats');
+    Route::get('show-diagram/{id}', 'Admin\DiagramController@showDiagram')->name('show_diagram');
 });
 
 Route::get('/register', 'UserController@index');
@@ -84,7 +85,7 @@ Route::post('/register', 'UserController@store');
 Route::get('/register/trainer', 'UserController@selectTrainer')->name('get_trainer_by_program');
 
 Route::group(['prefix' => 'workspace', 'middleware' => ['checkLogin']], function () {
-    Route::get('edit-locations/{id}', 'Admin\DiagramController@generateDiagram')->name('generate');
+    Route::get('generate/{id}', 'Admin\DiagramController@generateDiagram')->name('generate');
     Route::post('getColorLocation/{id}', 'Admin\DiagramController@getLocationColors');
     Route::post('add-locations/{id}', 'Admin\DiagramController@saveLocation')->name('save_location');
     Route::get('detail/{id}', 'Admin\DiagramController@detail')->name('detail_workspace');

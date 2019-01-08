@@ -67,5 +67,6 @@ mix.js('resources/js/edit_seat.js', 'public/js/edit_seat.js');
 mix.copy('resources/js/active_user.js', 'public/js/active_user.js');
 mix.js('resources/js/edit_workspace.js', 'public/js/edit_workspace.js');
 mix.copy('resources/js/show_modal.js', 'public/js/show_modal.js');
+mix.js('resources/js/showDiagram.js', 'public/js/showDiagram.js');
 
 mix.version();

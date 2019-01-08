@@ -45,7 +45,7 @@
     <div class="area-section mt-2">
     </div>
 
-    <div class="design-section">
+    <div class="design-section d-flex justify-content-center">
         <table>
             <tbody>
                 @for($i = 0; $i < $workspace->seat_per_row; $i++)
