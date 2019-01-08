@@ -498,4 +498,16 @@ class DiagramController extends Controller
 
         return view('test.workspace.diagram_image', compact('diagramDetail', 'workspace'));
     }
+
+    public function showDiagram(Request $request, $id)
+    {
+        $workspace = $this->workspace->findOrFail($id);
+        $diagram = $this->designDiagramRepository->where('workspace_id', $id)->first();
+
+        if ($diagram->diagramContent) {
+            return view('diagrams.diagram', compact('workspace', 'diagram'));
+        }
+
+        return view('diagrams.design_diagram', compact('workspace'));
+    }
 }

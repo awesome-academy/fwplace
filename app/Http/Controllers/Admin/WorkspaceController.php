@@ -40,7 +40,7 @@ class WorkspaceController extends Controller
             },
         ])->get();
 
-        return view('test.workspace.index', [
+        return view('admin.workspace.index', [
             'workspaces' => $workspaces,
         ]);
     }

@@ -167,3 +167,7 @@ tr td {
 .thumbnail {
     width: 300px;
 }
+
+.b-table tr td{
+    border: none;
+}

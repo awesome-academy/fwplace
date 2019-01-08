@@ -41,12 +41,12 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>@lang('Workspace')</th>
-                                <th class="thumbnail">@lang('Thumbnail')</th>
-                                <th>@lang('Location')</th>
-                                <th>@lang('Total Seat')</th>
+                                <th class="text-center">@lang('Workspace')</th>
+                                <th class="thumbnail text-center">@lang('Thumbnail')</th>
+                                <th class="text-center">@lang('Location')</th>
+                                <th class="text-center">@lang('Total Seat')</th>
                                 @if (Entrust::can(['add-workspaces']))
-                                    <th>
+                                    <th class="text-center">
                                         <a class="btn m-btn--pill m-btn--air btn-secondary" id="add-workspace" data-toggle="modal" data-target="#m_modal_4" data-toggle="m-tooltip" data-placement="left" data-original-title="@lang('Add Workspace')">
                                             <i class="flaticon-add"></i>
                                         </a>
@@ -79,20 +79,29 @@
                                     @php
                                         $total_seat = 0;
                                     @endphp
-                                    <td>
-                                        @foreach($item->locations as $location)
-                                            @if($location->usable == config('site.default.usable'))
-                                                <p>{{ $location->name }} : {{ $location->total_seat }} @lang('seat')</p>
-                                                @php
-                                                    $total_seat += $location->total_seat;
-                                                @endphp
-                                            @endif
-                                        @endforeach
+                                    <td class="p-0">
+                                        <table class="w-100 b-table">
+                                            @foreach($item->locations as $location)
+                                                @if($location->usable == config('site.default.usable'))
+                                                    <tr>
+                                                        <td class="w-50">
+                                                            <a href="{{ route('generate', ['id' => $location->id]) }}">{{ $location->name }} : {{ $location->total_seat }} @lang('seat')</a>
+                                                        </td>
+                                                        <td>
+                                                            <a href="{{ route('schedule.by.location', ['id' => $location->id]) }}" class="btn btn-primary">{{ __('Schedule') }}</a>
+                                                        </td>
+                                                        @php
+                                                            $total_seat += $location->total_seat;
+                                                        @endphp
+                                                    </tr>
+                                                @endif
+                                            @endforeach
+                                        </table>
                                     </td>
                                     <td>
                                         <h5>{{ $total_seat }}</h5>
                                     </td>
-                                    <td>
+                                    <td class="text-center">
                                         @if (Entrust::hasRole('admin'))
                                             <a href="{{ route('image_map', ['id' => $item->id]) }}"
                                                 class="btn btn-primary m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill"
@@ -108,6 +117,14 @@
                                                 onclick="showModal({{ $item->id }}, '{{ $item->name }}', '{{ $item->photo }}')"
                                             >
                                                 <i class="flaticon-edit-1"></i>
+                                            </a>
+                                        @else
+                                            <a href="{{ route('show_diagram', ['id' => $item->id]) }}"
+                                                class="btn btn-primary m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill"
+                                                data-toggle="m-tooltip"
+                                                data-original-title="{{ __('Show Diagram') }}"
+                                            >
+                                                <i class="flaticon-edit"></i>
                                             </a>
                                         @endif
                                         

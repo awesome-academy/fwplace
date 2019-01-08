@@ -1,6 +1,6 @@
 @extends('admin.layout.master')
 
-@section('title', __('Add Workspace'))
+@section('title', __('Design Diagram'))
 @section('css')
     <link rel="stylesheet" href="bower_components/lib_image_map/cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="css/image_map.css">
