@@ -8,6 +8,10 @@ function activeUser(id) {
         url: window.location.origin + '/admin/active-user/' + id,
         method: 'post',
     }).done(function (result) {
+        swal({
+            type: 'success',
+            title: result.message,
+        });
         $('#user-' + id).hide();
     })
 }

@@ -12,4 +12,9 @@ class Program extends Model
     {
         return $this->hasMany('App\Models\User', 'program_id');
     }
+
+    public function batches()
+    {
+        return $this->belongsTo('App\Batch');
+    }
 }

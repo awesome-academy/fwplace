@@ -200,7 +200,7 @@ abstract class EloquentRepository implements RepositoryInterface
 
     public function all()
     {
-        $this->newQuery()->loadWhere();
+        // $this->newQuery()->loadWhere();
 
         return $this->model->all();
     }

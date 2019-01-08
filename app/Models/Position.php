@@ -16,4 +16,9 @@ class Position extends Model
     {
         return $this->hasMany('App\Models\User', 'position_id');
     }
+
+    public function batches()
+    {
+        return $this->belongsTo('App\Batch');
+    }
 }

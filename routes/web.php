@@ -33,6 +33,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['che
     Route::resource('programs', 'ProgramController');
 
     Route::resource('workspaces', 'WorkspaceController');
+    Route::resource('batches', 'BatchController');
 
     Route::resource('locations', 'LocationController');
     Route::put('locations/{id}/update-row-column', 'LocationController@updateRowColumn')
