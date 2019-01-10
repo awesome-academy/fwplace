@@ -118,4 +118,9 @@ class UserRepository extends EloquentRepository
         return $this->model->where('role', '=', config('site.permission.trainer'))
             ->where('program_id', '=', $programId)->pluck('name', 'id')->toArray();
     }
+
+    public function deleteBatchId($id)
+    {
+        return $this->model->where('batch_id', $id)->update(['batch_id' => null]);
+    }
 }

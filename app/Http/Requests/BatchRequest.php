@@ -28,7 +28,7 @@ class BatchRequest extends FormRequest
             'stop_day' => 'required',
             'workspace_id' => 'required',
             'position_id' => 'required',
-            'location_id' => 'required',
+            'program_id' => 'required',
         ];
     }
 }

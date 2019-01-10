@@ -6,7 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Batch extends Model
 {
-    protected $guarded = ['id'];
+    protected $fillable = [
+        'stop_day',
+        'start_day',
+        'position_id',
+        'program_id',
+        'workspace_id',
+        'batch',
+    ];
 
     public function workspace()
     {

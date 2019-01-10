@@ -38,6 +38,7 @@
         <div class="col-xl-12">
             <div class="m-portlet m-portlet--tab">
                 <div class="m-portlet__body">
+                    {{ link_to_route('batches.create', $title = __('Add'), $parameters = [], $attributes = ['class' => 'btn btn-success mb-2']) }}
                     <div class="m-section">
                         <div class="m-section__content">
                             <table class="table m-table m-table--head-bg-primary">
@@ -73,8 +74,14 @@
                                                     <td>{{ $batch->workspace->name . ' - ' . $batch->program->name . ' - ' . $batch->position->name . ' - ' . $batch->batch }}</td>
 
                                                     <td>
-                                                        {!! link_to_route('batches.edit', "<i class='flaticon-edit-1'></i>", $parameters = ['id' => $batch->id], $attributes = [
-                                                            "class" => "btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill", "data-toggle" => "m-tooltip", "data-placement" => "top", "data-original-title" => __('Edit')]) !!}
+                                                        <a href="{{ route('batches.edit', ['id' => $batch->id]) }}" class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" data-toggle="m-tooltip" data-placement="top" data-original-title="{{ __('Edit') }}"><i class='flaticon-edit-1'></i></a>
+                                                        {{ Form::open(['route' => ['batches.destroy', 'id' => $batch->id ], 'method' => 'DELETE']) }}
+                                                            {!! Form::button('<i class="flaticon-cancel"></i>', [
+                                                                'class' => 'delete btn btn-danger m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill',
+                                                                'type' => 'submit',
+                                                                'message' => __('Delete this item?')
+                                                            ]) !!}
+                                                        {{ Form::close() }}
                                                     </td>
                                                 </tr>
 
