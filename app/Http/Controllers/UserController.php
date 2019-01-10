@@ -180,4 +180,13 @@ class UserController extends Controller
 
         return json_encode($trainers);
     }
+
+    public function selectbatch(Request $request)
+    {
+        $batches = $this->batchRepository->with(['position', 'program', 'workspace'])
+            ->where('workspace_id', '=', $request->workspace_id)->where('position_id', '=', $request->position_id)
+            ->where('program_id', '=', $request->program_id)->get();
+
+        return $batches;
+    }
 }

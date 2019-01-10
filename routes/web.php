@@ -89,6 +89,7 @@ Route::group(['middleware' => 'checkLogin'], function () {
 
 Route::get('/register', 'UserController@index');
 Route::post('/register', 'UserController@store');
+Route::post('/getBatches', 'UserController@selectbatch');
 Route::get('/register/trainer', 'UserController@selectTrainer')->name('get_trainer_by_program');
 
 Route::group(['prefix' => 'workspace', 'middleware' => ['checkLogin']], function () {

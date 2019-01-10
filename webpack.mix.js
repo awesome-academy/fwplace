@@ -77,6 +77,7 @@ mix.js('resources/js/jqueryJs/showName.js', 'public/js/showName.js');
 mix.js('resources/js/jqueryJs/register_seat.js', 'public/js/register_seat.js');
 mix.js('resources/js/jqueryJs/edit_seat.js', 'public/js/edit_seat.js');
 mix.copy('resources/js/jqueryJs/active_user.js', 'public/js/active_user.js');
+mix.copy('resources/js/jqueryJs/get_batches.js', 'public/js/get_batches.js');
 mix.js(
     'resources/js/jqueryJs/edit_workspace.js',
     'public/js/edit_workspace.js'

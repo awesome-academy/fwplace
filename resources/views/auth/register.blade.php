@@ -6,6 +6,7 @@
     <meta name="description" content="Latest updates and statistic charts">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no">
     <script src="{{ asset('js/webfont.js') }}"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     @include('admin.assets.css')
 
@@ -44,16 +45,16 @@
                                 {!! Form::password('password_confirm', ['class' => 'form-control m-input', 'placeholder' => __('Enter Password Confirm')]) !!}
                             </div>
                             <div class="form-group mt-4">
-                                {!! Form::select('program_id', [__('Programs')] + $programs, null, ['class' => 'form-control m-input', 'id' => 'select_program', 'url' => route('get_trainer_by_program')]) !!}
+                                {!! Form::select('program_id', [__('Programs')] + $programs, null, ['class' => 'form-control m-input', 'id' => 'select_program', 'onchange' => 'getBatch()', 'url' => route('get_trainer_by_program')]) !!}
                             </div>
                             <div class="form-group mt-4">
-                                {!! Form::select('position_id', [__('Positions')] + $positions, null, ['class' => 'form-control m-input']) !!}
+                                {!! Form::select('position_id', [__('Positions')] + $positions, null, ['class' => 'form-control m-input', 'id' => 'position', 'onchange' => 'getBatch()']) !!}
                             </div>
                             <div class="form-group mt-4">
-                                {!! Form::select('workspace_id', [__('Workspaces')] + $workspaces, null, ['class' => 'form-control m-input']) !!}
+                                {!! Form::select('workspace_id', [__('Workspaces')] + $workspaces, null, ['class' => 'form-control m-input', 'id' => 'workspace_id', 'onchange' => 'getBatch()']) !!}
                             </div>
                             <div class="form-group mt-4">
-                                {!! Form::select('batch_id', [__('Batches')] + $batches, null, ['class' => 'form-control m-input']) !!}
+                                {!! Form::select('batch_id', [__('Batches')], null, ['class' => 'form-control m-input', 'id' => 'batch']) !!}
                             </div>
                             <div class="m-login__form-action">
                                 {!! Form::submit(__('auth.register'), ['class' => 'btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air  m-login__btn m-login__btn--primary']) !!}
@@ -69,9 +70,8 @@
     @include('admin.assets.js')
     @include('sweetalert::alert')
 
-    @section('js')
-        <script src="{{ asset('js/all.js') }}"></script>
-    @endsection
+    <script src="{{ asset('js/all.js') }}"></script>
+    <script src="{{ asset('js/get_batches.js') }}"></script>
 
 </body>
 </html>
