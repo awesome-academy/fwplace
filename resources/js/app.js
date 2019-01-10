@@ -59,9 +59,10 @@ Vue.component(
     require('./components/layouts/reports/Report2Component')
 );
 Vue.component('subject', require('./components/subjects/Subject'));
+Vue.component('review', require('./components/reviews/Review'));
 
 const i18n = new VueInternationalization({
-    locale: localStorage.getItem('language'),
+    locale: document.documentElement.lang,
     messages: Locale,
     silentTranslationWarn: true
 });

@@ -67,7 +67,8 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['che
 
     Route::post('active-user/{id}', 'ActiveUserController@activeUser');
 
-    Route::resource('subjects', 'SubjectController');
+    Route::get('subjects', 'SubjectController@index')->name('subjects.index');
+    Route::get('reviews', 'ReviewController@index')->name('reviews.index');
 });
 
 Auth::routes();

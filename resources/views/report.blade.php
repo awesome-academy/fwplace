@@ -6,7 +6,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('bower_components/metro-asset/vendors/custom/datatables/datatables.bundle.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('bower_components/lib_fwplace/css/toastr.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('bower_components/lib_fwplace/css/sweet-alert.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ mix('css/datatable.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ mix('css/master.css') }}">
 @endsection
 
 @section('module')

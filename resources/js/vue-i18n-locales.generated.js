@@ -158,6 +158,7 @@ export default {
         "Workspace": "Văn phòng",
         "Name": "Tên",
         "Start day": "Ngày Bắt Đầu",
-        "Stop day": "Ngày kết thúc"
+        "Stop day": "Ngày kết thúc",
+        "day": "ngày"
     }
 }
