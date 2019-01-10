@@ -15,11 +15,14 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['che
     Route::get('/', 'DashboardController@index')->name('admin.index');
 
     Route::get('/roles/get-roles', 'RoleController@getRoles')->name('roles.get_roles');
-    Route::post('/roles/update-permission-role', 'RoleController@updatePermissionRole')->name('roles.update_permission_role');
-    Route::get('/roles/get-permission-role/{role_id}', 'RoleController@getPermissionRole')->name('roles.get_permission_role');
+    Route::post('/roles/update-permission-role', 'RoleController@updatePermissionRole')
+        ->name('roles.update_permission_role');
+    Route::get('/roles/get-permission-role/{role_id}', 'RoleController@getPermissionRole')
+        ->name('roles.get_permission_role');
     Route::resource('roles', 'RoleController');
 
-    Route::get('/permissions/get-permissions', 'PermissionController@getPermissions')->name('permissions.get_permissions');
+    Route::get('/permissions/get-permissions', 'PermissionController@getPermissions')
+        ->name('permissions.get_permissions');
     Route::resource('permissions', 'PermissionController');
 
     Route::post('/users/update-role-user', 'UserController@updateRoleUser')->name('users.update_role_user');
@@ -58,10 +61,13 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['che
         Route::get('/workplace/{id}', 'SittingCalendarController@locationList')->name('location.list');
         Route::get('location/{id}', 'SittingCalendarController@locationAnalystic')->name('location.view');
         Route::get('location/{id}/analystic', 'SittingCalendarController@getAnalysticData')->name('location.get_data');
-        Route::get('location/{id}/detail/{date}', 'SittingCalendarController@detailLocation')->name('location.detail_location');
+        Route::get('location/{id}/detail/{date}', 'SittingCalendarController@detailLocation')
+            ->name('location.detail_location');
     });
 
     Route::post('active-user/{id}', 'ActiveUserController@activeUser');
+
+    Route::resource('subjects', 'SubjectController');
 });
 
 Auth::routes();

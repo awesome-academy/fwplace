@@ -55,5 +55,10 @@ class RolesTableSeeder extends Seeder
             'name' => 'trainee',
             'display_name' => 'Trainee',
         ]);
+
+        Role::create([
+            'name' => 'trainer',
+            'display_name' => 'Trainer',
+        ]);
     }
 }

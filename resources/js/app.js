@@ -14,16 +14,16 @@ import axios from 'axios';
 import VueInternationalization from 'vue-i18n';
 import Locale from './vue-i18n-locales.generated.js';
 // import ClassicEditor from '@ckeditor/ckeditor5-build-classic'
-import BalloonEditor from '@ckeditor/ckeditor5-build-balloon'
+import BalloonEditor from '@ckeditor/ckeditor5-build-balloon';
 import VueCkeditor from 'vue-ckeditor5';
 // import Reports from './components/Reports.vue'
 const options = {
     editors: {
         classic: BalloonEditor,
-        balloon: BalloonEditor,
+        balloon: BalloonEditor
     },
     name: 'ckeditor'
-}
+};
 
 Vue.use(VueCkeditor.plugin, options);
 Vue.use(VueRouter);
@@ -50,10 +50,15 @@ Vue.mixin({
  */
 
 if (localStorage.getItem('access_token')) {
-    window.axios.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('access_token')
+    window.axios.defaults.headers.common['Authorization'] =
+        'Bearer ' + localStorage.getItem('access_token');
 }
 
-Vue.component('report', require('./components/layouts/reports/Report2Component'));
+Vue.component(
+    'report',
+    require('./components/layouts/reports/Report2Component')
+);
+Vue.component('subject', require('./components/subjects/Subject'));
 
 const i18n = new VueInternationalization({
     locale: localStorage.getItem('language'),
