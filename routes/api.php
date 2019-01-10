@@ -34,7 +34,7 @@ Route::group([
 //     Route::resource('/teams', 'TeamController');
 //     Route::resource('/types', 'TypeController');
 //     Route::resource('/batches', 'BatchController');
-//     Route::resource('/subjects', 'SubjectController');
+    Route::resource('/subjects', 'Api\SubjectApi');
 //     Route::resource('/reviews', 'ReviewController');
 //     Route::put('/reviews', 'ReviewController@update');
     Route::resource('/reports', 'ReportController');

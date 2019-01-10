@@ -10,7 +10,7 @@ axios.defaults.baseURL = '/api';
 export const store = new Vuex.Store({
     modules: {
         reports: reports,
-        subject: subject,
+        subject: subject
     },
 
     state: {

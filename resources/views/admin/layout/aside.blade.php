@@ -93,28 +93,6 @@
                 </li>
             @endif
 
-            {{--  @if (Entrust::can(['seat-statistical']))
-                <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                    <a href="{{ route('calendar.workplace.list') }}" class="m-menu__link m-menu__toggle">
-                        <i class="m-menu__link-icon flaticon-interface-9"></i>
-                        <span class="m-menu__link-text color-manager">
-                            @lang('Seat Statistical')
-                        </span>
-                    </a>
-                </li>
-            @endif
-
-            @if (Entrust::can(['work-schedules']))
-                <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                    <a href="{{ route('schedule.workplace.list') }}" class="m-menu__link m-menu__toggle">
-                        <i class="m-menu__link-icon flaticon-interface-9"></i>
-                        <span class="m-menu__link-text color-manager">
-                            @lang('Work Schedule')
-                        </span>
-                    </a>
-                </li>
-            @endif  --}}
-
             @if (Entrust::can(['register-work-schedules']))
                 <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
                     <a href="{{ route('register.index') }}" class="m-menu__link m-menu__toggle">
@@ -205,6 +183,20 @@
                     <i class="m-menu__link-icon flaticon-interface-9"></i>
                     <span class="m-menu__link-text color-manager">
                         @lang('Batch')
+                    </span>
+                </a>
+            </li>
+            @endif
+
+            @if(Entrust::hasRole([
+                'admin',
+                'trainer'
+            ]))
+            <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+                <a href="{{ route('subjects.index') }}" class="m-menu__link m-menu__toggle">
+                    <i class="m-menu__link-icon flaticon-interface-9"></i>
+                    <span class="m-menu__link-text color-manager">
+                        @lang('Subjects')
                     </span>
                 </a>
             </li>
