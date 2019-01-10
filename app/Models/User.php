@@ -36,6 +36,7 @@ class User extends Authenticatable
         'role',
         'seat_id',
         'trainer_id',
+        'batch_id',
     ];
 
     /**

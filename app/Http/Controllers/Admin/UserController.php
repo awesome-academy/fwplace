@@ -9,6 +9,7 @@ use App\Repositories\ProgramRepository;
 use App\Repositories\UserRepository;
 use App\Repositories\RoleRepository;
 use App\Repositories\WorkspaceRepository;
+use App\Repositories\BatchRepository;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -21,19 +22,22 @@ class UserController extends Controller
     protected $positionRepository;
     protected $workspaceRepository;
     protected $roleRepository;
+    protected $batchRepository;
 
     public function __construct(
         UserRepository $userRepository,
         ProgramRepository $programRepository,
         PositionRepository $positionRepository,
         WorkspaceRepository $workspaceRepository,
-        RoleRepository $roleRepository
+        RoleRepository $roleRepository,
+        BatchRepository $batchRepository
     ) {
         $this->userRepository = $userRepository;
         $this->programRepository = $programRepository;
         $this->positionRepository = $positionRepository;
         $this->workspaceRepository = $workspaceRepository;
         $this->roleRepository = $roleRepository;
+        $this->batchRepository = $batchRepository;
 
         $this->middleware('checkLogin');
         $this->middleware('permission:view-users')->only('index');
@@ -159,9 +163,10 @@ class UserController extends Controller
         $programs = $this->programRepository->listprogramArray();
         $positions = $this->positionRepository->listpositionArray();
         $workspaces = $this->workspaceRepository->listWorkspaceArray();
+        $batches = $this->batchRepository->listBatchesArray();
         $user = $this->userRepository->findOrFail($id);
 
-        return view('admin.user.edit', compact('positions', 'programs', 'workspaces', 'user'));
+        return view('admin.user.edit', compact('positions', 'programs', 'workspaces', 'user', 'batches'));
     }
 
     /**
@@ -181,6 +186,7 @@ class UserController extends Controller
             $data['avatar'] = $request->avatar->hashName();
         }
         $this->userRepository->update($data, $id);
+
         alert()->success(__('Edit Employee'), __('Successfully!!!'));
 
         return redirect('admin/users');

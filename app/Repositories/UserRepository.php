@@ -17,6 +17,8 @@ class UserRepository extends EloquentRepository
     {
         $user = $this->model->create($attr);
         $user->roles()->sync($attr['role']);
+
+        return $user;
     }
 
     public function getListName($name)
