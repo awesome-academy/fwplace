@@ -10,8 +10,12 @@ use App\Repositories\UserRepository;
 use App\Repositories\WorkspaceRepository;
 use App\Repositories\RoleRepository;
 use Illuminate\Http\Request;
+use App\Repositories\BatchRepository;
+use App\Repositories\ReportRepository;
 use Illuminate\Support\Facades\Storage;
 use RealRashid\SweetAlert\Facades\Alert;
+use App\Models\Report;
+use DB;
 
 class UserController extends Controller
 {
@@ -25,19 +29,25 @@ class UserController extends Controller
     protected $positionRepository;
     protected $workspaceRepository;
     protected $roleRepository;
+    protected $batchRepository;
+    protected $reportRepository;
 
     public function __construct(
         UserRepository $userRepository,
         ProgramRepository $programRepository,
         PositionRepository $positionRepository,
         WorkspaceRepository $workspaceRepository,
-        RoleRepository $roleRepository
+        RoleRepository $roleRepository,
+        BatchRepository $batchRepository,
+        ReportRepository $reportRepository
     ) {
         $this->userRepository = $userRepository;
         $this->programRepository = $programRepository;
         $this->positionRepository = $positionRepository;
         $this->workspaceRepository = $workspaceRepository;
         $this->roleRepository = $roleRepository;
+        $this->batchRepository = $batchRepository;
+        $this->reportRepository = $reportRepository;
     }
 
     public function index()
@@ -46,8 +56,9 @@ class UserController extends Controller
         $positions = $this->positionRepository->getListAllowRegister()->toArray();
         $workspaces = $this->workspaceRepository->pluckWorkspace()->toArray();
         $roles = $this->roleRepository->pluckRole()->toArray();
+        $batches = $this->batchRepository->listBatchesArray();
 
-        return view('auth.register', compact('programs', 'positions', 'workspaces', 'roles'));
+        return view('auth.register', compact('programs', 'positions', 'workspaces', 'roles', 'batches'));
     }
 
     /**
@@ -68,12 +79,33 @@ class UserController extends Controller
      */
     public function store(UserFormRequest $request)
     {
-        $data = $request->all();
-        $data['password'] = bcrypt($request->password);
-        $data['status'] = 0;
-        $data['role'] = $this->roleRepository->getIdTrainee()->id;
-        $user = $this->userRepository->create($data);
-        Alert::success(trans('Register Member Successfully'), trans('Please Wait Active'));
+        DB::Transaction(function () use ($request) {
+            $data = $request->all();
+            $data['password'] = bcrypt($request->password);
+            $data['status'] = 0;
+            $data['role'] = $this->roleRepository->getIdTrainee()->id;
+            $user = $this->userRepository->create($data);
+
+            if ($data['batch_id'] != '') {
+                $batch = $this->batchRepository->findOrFail($data['batch_id']);
+                $subjects = $batch->subjects;
+                foreach ($subjects as $subject) {
+                    for ($i = 1; $i <= $subject->day; $i++) {
+                        Report::create([
+                            'user_id' => $user->id,
+                            'subject_id' => $subject->id,
+                            'day' => $i,
+                            'content' => ' ',
+                            'link' => ' ',
+                            'test_link' => ' ',
+                            'lesson' => ' ',
+                            'status' => ' ',
+                        ]);
+                    }
+                }
+            }
+            Alert::success(trans('Register Member Successfully'), trans('Please Wait Active'));
+        });
 
         return redirect('/login');
     }

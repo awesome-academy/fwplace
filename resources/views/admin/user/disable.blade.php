@@ -150,7 +150,6 @@
                                                             @endforeach
                                                         @endif
                                                     </td>
-
                                                     <td>
                                                         {!! Form::button('<i class="flaticon-user-add"></i>', ['type' => 'button', 'class' => 'btn btn-success m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill', 'data-toggle' => 'm-tooltip', 'data-placement' => 'top', 'data-original-title' => __('Active User'), 'id' => "active-user", 'data-id' => $user->id, 'onclick' => "activeUser($user->id)"]) !!}
                                                     </td>

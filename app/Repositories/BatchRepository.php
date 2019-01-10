@@ -10,4 +10,17 @@ class BatchRepository extends EloquentRepository
     {
         return \App\Models\Batch::class;
     }
+
+    public function listBatchesArray()
+    {
+        $array = [];
+        $results = $this->model->all();
+        foreach ($results as $result) {
+            $array[$result->id] =
+                $result->batch . '-' . $result->workspace->name . '-' .
+                $result->program->name . '-' . $result->position->name;
+        }
+
+        return $array;
+    }
 }

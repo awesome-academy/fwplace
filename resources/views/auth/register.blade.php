@@ -52,6 +52,9 @@
                             <div class="form-group mt-4">
                                 {!! Form::select('workspace_id', [__('Workspaces')] + $workspaces, null, ['class' => 'form-control m-input']) !!}
                             </div>
+                            <div class="form-group mt-4">
+                                {!! Form::select('batch_id', [__('Batches')] + $batches, null, ['class' => 'form-control m-input']) !!}
+                            </div>
                             <div class="m-login__form-action">
                                 {!! Form::submit(__('auth.register'), ['class' => 'btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air  m-login__btn m-login__btn--primary']) !!}
                                 <a href="{{ url('/') }}" class="ml-4 btn btn-focus m-btn m-btn--pill m-btn--custom m-btn--air  m-login__btn m-login__btn--primary">@lang('Cancel')</a>
