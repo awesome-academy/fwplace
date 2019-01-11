@@ -112,7 +112,9 @@ class UserController extends Controller
             $data['avatar'] = $request->avatar->hashName();
         }
         $data['password'] = bcrypt($request->password);
-        $this->userRepository->create($data);
+        $data['status'] = 1;
+        $data['role'] = $this->roleRepository->getIdAdmin()->id;
+        $user = $this->userRepository->create($data);
         Alert::success(trans('Add new User'), trans('Successfully'));
 
         return redirect('admin/users');
@@ -262,5 +264,15 @@ class UserController extends Controller
                 'message' => 'added',
             ], 200);
         }
+    }
+
+    public function registerUser()
+    {
+        $programs = $this->programRepository->pluckProgram()->toArray();
+        $positions = $this->positionRepository->getListAllowRegister()->toArray();
+        $workspaces = $this->workspaceRepository->pluckWorkspace()->toArray();
+        $roles = $this->roleRepository->pluckRole()->toArray();
+
+        return view('admin.user.register', compact('programs', 'positions', 'workspaces', 'roles'));
     }
 }
