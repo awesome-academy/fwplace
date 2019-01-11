@@ -29,14 +29,24 @@ class ReportRepository extends EloquentRepository
     {
         $this->makeModel();
 
-        return $this->model
-            ->select('reports.*', 'reviews.id as review_id', DB::raw('COALESCE(reviews.content, \'\') as review'))
-            ->leftJoin('reviews', 'reports.id', 'reviews.report_id')
-            ->where('reports.user_id', $userID)
-            ->where('subject_id', $subjectID)
+        $reports = $this->model
             ->orderBy('subject_id', 'asc')
             ->orderBy('day', 'asc')
-            ->get()->toArray();
+            ->get();
+        
+        foreach ($reports as $report) {
+            $report->reviews = DB::table('reviews')
+            ->select(
+                'reviews.*',
+                'users.name',
+                DB::raw('COALESCE(reviews.content, \'\') as review')
+            )
+            ->where('reviews.report_id', $report->id)
+            ->join('users', 'users.id', 'reviews.user_id')
+            ->get();
+        }
+
+        return $reports;
     }
 
     public function getReportsBySubject($search)

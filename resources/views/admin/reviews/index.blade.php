@@ -7,9 +7,9 @@
 @endsection
 
 @section('content')
-<div id="app">
-    <review></review>
-</div>
+    <div id="app">
+        <review></review>
+    </div>
 @endsection
 
 @section('js')

@@ -24,7 +24,7 @@ Route::group([
 ], function () {
 //     Route::post('signup', 'AuthController@signup');
 //     Route::get('logout', 'AuthController@logout');
-//     Route::get('current-user', 'AuthController@currentUser');
+    Route::get('current-user', 'UserController@currentUser');
 //     Route::patch('update-role-user/{id}', 'UserController@updateRole');
 //     Route::get('/profile', 'UserController@profile');
 //     Route::patch('/profile', 'UserController@update');
@@ -36,7 +36,7 @@ Route::group([
     Route::resource('/batches', 'Api\BatchApi');
     Route::resource('/subjects', 'Api\SubjectApi');
     Route::resource('/reviews', 'Api\ReviewApi');
-    Route::put('/reviews', 'ReviewController@update');
+    Route::patch('/reviews', 'Api\ReviewApi@update');
     Route::resource('/reports', 'ReportController');
     Route::get('/reports/batch/{id}', 'ReportController@getReportsGroupBySubject');
     Route::get('/reports/trainee/{id}', 'ReportController@getReportsByTrainee');
