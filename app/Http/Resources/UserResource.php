@@ -4,6 +4,7 @@ namespace App\Http\Resources;
 
 use App\Models\Role;
 use App\Models\Batch;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource

@@ -18,6 +18,7 @@ class ReviewResource extends JsonResource
             'content' => $this->content,
             'report_id' => $this->report_id,
             'user_id' => $this->user_id,
+            'name' => User::findOrFail($this->user_id)->name,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

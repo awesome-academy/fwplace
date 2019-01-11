@@ -53,7 +53,28 @@
                                 <span v-html="subjects[x].reports[n - 1].status"></span>
                             </td>
                             <td>
-                                <ckeditor class="edittor" type="balloon" @blur="submitReview(x, n)" @focus="focus(x, n)" v-model="subjects[x].reports[n - 1].review"></ckeditor>
+                                <div v-for="(review, k) in subjects[x].reports[n - 1].reviews" :key="k">
+                                    <template v-if="subjects[x].reports[n - 1].reviews[k].user_id == user.id">
+                                        <div class="border border-warning mt-5">
+                                            <ckeditor class="edittor" type="balloon" @blur="submitReview(x, n, k)" @focus="focus(x, n, k)" v-model="subjects[x].reports[n - 1].reviews[k].content"></ckeditor>                                    
+                                        </div>
+                                    </template>
+                                    <template v-else>
+                                        <div class="position-relative">
+                                            <div v-html="subjects[x].reports[n - 1].reviews[k].content" class="border border-primary">
+                                            </div>
+                                            <label class="position-absolute r-0 bg-primary text-light">{{ subjects[x].reports[n - 1].reviews[k].name }}</label>
+                                        </div>
+                                        <div class="border border-warning mt-5" v-if="k == lastIndex(subjects[x].reports[n - 1].reviews)">
+                                            <ckeditor class="edittor" type="balloon" @blur="submitReview(x, n, $event)" @focus="focus(x, n)"></ckeditor>                                    
+                                        </div>
+                                    </template>
+                                </div>
+                                <template v-if="subjects[x].reports[n - 1].reviews.length === 0">
+                                    <div class="border border-warning">
+                                        <ckeditor class="edittor" type="balloon" @blur="submitReview(x, n, $event)" @focus="focus(x, n)"></ckeditor>                                    
+                                    </div>
+                                </template>
                             </td>
                         </template>
                     </tr>
@@ -82,16 +103,15 @@ export default {
             subjects: [''],
             reports: [''],
             review: {
-                id: '',
                 report_id: '',
                 content: ''
             },
-            reviewLength: 0,
             editting: false,
             loading: true
         };
     },
     created() {
+        this.getUser();
         this.getBatches();
     },
     watch: {
@@ -104,19 +124,40 @@ export default {
         }
     },
     methods: {
-        submitReview(x, n) {
-            if (
-                this.review.content === this.subjects[x].reports[n - 1].review
-            ) {
-                return;
-            }
-            this.review.content = this.subjects[x].reports[n - 1].review;
-            axios.put('/reviews', this.review);
+        lastIndex(object) {
+            return Object.keys(object).length - 1;
         },
-        focus(x, n) {
+        getUser() {
+            axios.get('/current-user').then(res => {
+                this.user = res.data.data;
+            });
+        },
+        submitReview(x, n, k) {
+            if (!isNaN(k)) {
+                if (
+                    this.review.content ===
+                    this.subjects[x].reports[n - 1].reviews[k].content
+                ) {
+                    return;
+                }
+                this.review.content = this.subjects[x].reports[n - 1].reviews[
+                    k
+                ].content;
+            } else {
+                this.review.content = k.sourceElement.innerText;
+            }
+
+            axios.patch('/reviews', this.review);
+        },
+        focus(x, n, k) {
             let report = this.subjects[x].reports[n - 1];
-            this.review.content = report.review;
-            this.review.id = report.review_id;
+            if (k !== undefined) {
+                this.review.content = report.reviews[k].content;
+                this.review.id = report.reviews[k].id;
+            } else {
+                this.review.content = '';
+                this.review.id = null;
+            }
             this.review.report_id = report.id;
         },
         getTrainees(id) {

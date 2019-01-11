@@ -2,20 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\UserFormRequest;
-use App\Repositories\PositionRepository;
-use App\Repositories\ProgramRepository;
-use App\Repositories\UserRepository;
-use App\Repositories\WorkspaceRepository;
-use App\Repositories\RoleRepository;
-use Illuminate\Http\Request;
-use App\Repositories\BatchRepository;
-use App\Repositories\ReportRepository;
-use Illuminate\Support\Facades\Storage;
-use RealRashid\SweetAlert\Facades\Alert;
-use App\Models\Report;
 use DB;
+use App\Models\Report;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
+use App\Repositories\RoleRepository;
+use App\Repositories\UserRepository;
+use Illuminate\Support\Facades\Auth;
+use App\Repositories\BatchRepository;
+use App\Http\Requests\UserFormRequest;
+use App\Repositories\ReportRepository;
+use App\Repositories\ProgramRepository;
+use Illuminate\Support\Facades\Storage;
+use App\Repositories\PositionRepository;
+use RealRashid\SweetAlert\Facades\Alert;
+use App\Repositories\WorkspaceRepository;
 
 class UserController extends Controller
 {
@@ -188,5 +190,10 @@ class UserController extends Controller
             ->where('program_id', '=', $request->program_id)->get();
 
         return $batches;
+    }
+
+    public function currentUser(Request $request)
+    {
+        return new UserResource(Auth::user());
     }
 }

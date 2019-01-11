@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use Auth;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Auth;
-use App\Review;
-use App\Http\Policies\Review\ReviewPolicy;
 use App\Http\Resources\ReviewResource;
+use App\Http\Policies\Review\ReviewPolicy;
 use App\Repositories\Reviews\ReviewRepositoryInterface;
 
 class ReviewApi extends Controller
@@ -39,21 +39,18 @@ class ReviewApi extends Controller
             'content' => 'required|string',
         ]);
 
-        $id = $request->id;
+        $data = $request->only('content', 'report_id');
 
-        if ($id == null) {
-            $this->authorize('create', Review::class);
-            Review::create($request->only(
-                'content',
-                'report_id'
-            ));
+        $data = array_merge($data, ['user_id' => Auth::user()->id]);
+
+        if (!$request->has('id') || $request->id == null) {
+            // $this->authorize('create', Review::class);
+            Review::create($data);
         } else {
+            $id = $request->id;
             $review = Review::findOrFail($id);
-            $this->authorize('update', $review);
-            $review = $this->review->update($request->only(
-                'content',
-                'report_id'
-            ), $id);
+            // $this->authorize('update', $review);
+            $review = $this->review->update($data, $id);
         }
 
         return response()->json([
@@ -64,7 +61,7 @@ class ReviewApi extends Controller
     public function destroy($id)
     {
         $review = $this->review->find($id);
-        $this->authorize('delete', $review);
+        // $this->authorize('delete', $review);
         $this->review->delete($id);
 
         return response()->json([
