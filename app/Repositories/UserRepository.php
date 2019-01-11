@@ -7,10 +7,25 @@ use Illuminate\Support\Facades\DB;
 
 class UserRepository extends EloquentRepository
 {
-
     public function model()
     {
         return User::class;
+    }
+
+    public function getAllTrainee($id)
+    {
+        $result = $this->model
+                    ->whereIn(
+                        'role',
+                        DB::table('roles')
+                        ->select('id')
+                        ->where('name', '=', config('api.trainee'))
+                    );
+        if (func_num_args() > 0) {
+            $result = $result->where('batch_id', $id);
+        }
+
+        return $result->get();
     }
 
     public function create(array $attr)

@@ -23,4 +23,11 @@ class BatchRepository extends EloquentRepository
 
         return $array;
     }
+
+    public function getAll()
+    {
+        $batches = $this->model->with(['program', 'position', 'workspace', 'subjects'])->orderBy('id', 'DESC')->get();
+
+        return $batches;
+    }
 }

@@ -200,6 +200,15 @@
                     </span>
                 </a>
             </li>
+
+            <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+                <a href="{{ route('reviews.index') }}" class="m-menu__link m-menu__toggle">
+                    <i class="m-menu__link-icon flaticon-interface-9"></i>
+                    <span class="m-menu__link-text color-manager">
+                        @lang('Review')
+                    </span>
+                </a>
+            </li>
             @endif
         </ul>
     </div>

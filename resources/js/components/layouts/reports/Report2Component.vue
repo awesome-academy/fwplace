@@ -106,7 +106,7 @@ export default {
             editting: false,
             oldElement: '',
             oldParent: '',
-            content: '',
+            content: ''
         };
     },
 
@@ -127,9 +127,7 @@ export default {
 
         newReport() {
             return {
-                id: null,
-                subject_id: null,
-                day: null
+                id: null
             };
         },
         editReport(event) {
@@ -138,10 +136,16 @@ export default {
             let id = edittor.$el.getAttribute('data-id');
             let property = edittor.$el.getAttribute('data-property');
             this.report.id = id;
-            this.report[property] = edittor.$el.innerHTML;
+            let value = edittor.$el.innerHTML;
+            if (property === 'link' || property === 'test_link') {
+                value = edittor.$el.innerText;
+                edittor.$el.innerHTML = value;
+            }
+            this.report[property] = value;
             this.oldElement.innerHTML = edittor.$el.innerHTML;
             element.replaceWith(this.oldElement);
             axios.patch('/reports/' + this.report.id, this.report);
+            this.report = this.newReport();
         },
         inputReport(event, property) {
             let element = event;
