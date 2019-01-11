@@ -40,22 +40,30 @@
                                 </thead>
                                 {!! Form::open(['url' => route('workschedule'), 'method' => 'post' , 'id' => 'add_form' , 'enctype' => 'multipart/form-data']) !!}
                                 <tbody>
-                                    @foreach($dates as $day)
+                                    @foreach ($dates as $day)
                                     <tr
-                                    @isset($day['weekend'])
+                                    @if (isset($day['weekend']) || isset($day['old_day']))
                                         class="bg-secondary text-dark"
-                                    @endisset
+                                    @endif
                                     >
                                         <th scope="row">{{ $day['format'] }}</th>
                                         <td>{{ $day['day'] }}</td>
                                         <td>
-                                            @if(!isset($day['weekend']))
-                                            {!! Form::select('shift[' . $day['date']  .  ']', [config('site.shift.off') => __('Off'), config('site.shift.all') => __('All day'), config('site.shift.morning') => __('Morning'), config('site.shift.afternoon') => __('Afternoon') ], $data[$day['date']] ?? null, ['class' => 'form-control tar', 'id' => 'sl_shift']) !!}
+                                            @if (!isset($day['weekend']))
+                                                @if (!isset($day['old_day']))
+                                                {!! Form::select('shift[' . $day['date'] . ']', [config('site.shift.off') => __('Off'), config('site.shift.all') => __('All day'), config('site.shift.morning') => __('Morning'), config('site.shift.afternoon') => __('Afternoon') ], $data[$day['date']] ?? null, ['class' => 'form-control tar', 'id' => 'sl_shift']) !!}
+                                                @else
+                                                {!! Form::select('shift[' . $day['date'] . ']', [config('site.shift.off') => __('Off'), config('site.shift.all') => __('All day'), config('site.shift.morning') => __('Morning'), config('site.shift.afternoon') => __('Afternoon') ], $data[$day['date']] ?? null, ['class' => 'form-control', 'id' => 'sl_shift', 'disabled' => true]) !!}
+                                                @endif
                                             @endif
                                         </td>
                                         <td>
-                                            @if(!isset($day['weekend']))
-                                            {!! Form::select('location[' . $day['date']  .  ']', [config('site.default_location') => __('--Choose--')] + $locations, $dataLocation[$day['date']] ?? null, ['class' => 'form-control target', 'id' => 'sl_location']) !!}
+                                            @if (!isset($day['weekend']))
+                                                @if (!isset($day['old_day']))
+                                                {!! Form::select('location[' . $day['date'] . ']', [config('site.default_location') => __('--Choose--')] + $locations, $dataLocation[$day['date']] ?? null, ['class' => 'form-control target', 'id' => 'sl_location']) !!}
+                                                @else
+                                                {!! Form::select('location[' . $day['date'] . ']', [config('site.default_location') => __('--Choose--')] + $locations, $dataLocation[$day['date']] ?? null, ['class' => 'form-control', 'id' => 'sl_location', 'disabled' => true]) !!}
+                                                @endif
                                             @endif
                                         </td>
                                     </tr>
