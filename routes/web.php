@@ -45,8 +45,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['che
     Route::resource('userdisables', 'UserDisableController');
 
     Route::group(['prefix' => 'schedule', 'as' => 'schedule.'], function () {
-        Route::get('/', 'WorkingScheduleController@chooseWorkplace')->name('workplace.list');
-        Route::get('/{id}', 'WorkingScheduleController@viewByWorkplace')->name('workplace.view');
+        Route::get('/', 'WorkingScheduleController@index')->name('index');
         Route::get('/{id}/get', 'WorkingScheduleController@getData')->name('workplace.get_data');
         Route::get('/{id}/one', 'WorkingScheduleController@getOneDate')->name('workplace.get_one_date');
         Route::get('location/{id}', 'WorkingScheduleController@viewByLocation')->name('location.month');

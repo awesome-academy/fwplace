@@ -154,3 +154,68 @@
 .r-0 {
     right: 0;
 }
+
+@mixin minWidth($param) {
+    min-width: $param * 50px;
+}
+
+.col-min-1 {
+    @include minWidth(1);
+}
+
+.col-min-2 {
+    @include minWidth(2);
+}
+
+.col-min-3 {
+    @include minWidth(3);
+}
+
+.col-min-4 {
+    @include minWidth(4);
+}
+
+.col-min-5 {
+    @include minWidth(5);
+}
+
+.col-min-6 {
+    @include minWidth(6);
+}
+
+.right-schedule {
+    max-height: 600px;
+    overflow: scroll;
+}
+
+.left-schedule {
+    max-height: 587px;
+    overflow: hidden;
+}
+
+.right-table {
+    width: 1000px;
+}
+
+.word-break-all {
+    word-break: break-all;
+}
+
+.overflow-auto {
+    overflow: auto;
+}
+
+.table-wrapper {
+    overflow-x:scroll;
+    overflow-y:visible;
+    margin-left: 250px;
+}
+
+.schedule {
+    position: relative;
+}
+
+.table-row th {
+    font-weight: normal;
+    border: 1px solid black;
+}

@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Repositories\UserRepository;
-use App\Repositories\WorkingScheduleRepository;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Repositories\LocationRepository;
-use App\Repositories\WorkspaceRepository;
+use App\Repositories\UserRepository;
 use App\Repositories\ProgramRepository;
-use Carbon\Carbon;
+use App\Repositories\LocationRepository;
+use App\Repositories\PositionRepository;
+use App\Repositories\WorkspaceRepository;
+use App\Repositories\WorkingScheduleRepository;
 
 class WorkingScheduleController extends Controller
 {
@@ -18,26 +19,38 @@ class WorkingScheduleController extends Controller
     protected $userRepository;
     protected $program;
     protected $workschedule;
+    protected $position;
 
     public function __construct(
         LocationRepository $locationRepository,
         WorkspaceRepository $workspaceRepository,
         UserRepository $userRepository,
         ProgramRepository $programRepository,
-        WorkingScheduleRepository $workingScheduleRepository
+        WorkingScheduleRepository $workingScheduleRepository,
+        PositionRepository $positionRepository
     ) {
         $this->location = $locationRepository;
         $this->workspace = $workspaceRepository;
         $this->userRepository = $userRepository;
         $this->program = $programRepository;
         $this->workschedule = $workingScheduleRepository;
+        $this->position = $positionRepository;
         $this->middleware('checkLogin');
         $this->middleware('permission:work-schedules')->only([
             'viewByWorkplace',
             'getData',
-            'chooseWorkplace',
             'getOneDate',
         ]);
+    }
+
+    public function index(Request $request)
+    {
+        $users = $this->workschedule->getByMonth($request);
+        $positions = $this->position->pluck('name', 'id');
+        $programs = $this->program->pluck('name', 'id');
+        $workspaces = $this->workspace->pluck('name', 'id');
+
+        return view('admin.work_schedules.index', compact('users', 'positions', 'programs', 'workspaces'));
     }
 
     public function viewByWorkplace($workspaceId)
@@ -68,13 +81,6 @@ class WorkingScheduleController extends Controller
         $data = $this->workspace->getData($workspaceId, $filter);
 
         return $data;
-    }
-
-    public function chooseWorkplace()
-    {
-        $workspaces = $this->workspace->getWorkspaces();
-
-        return view('admin.work_schedules.choose_workspace', compact('workspaces'));
     }
 
     public function viewByUser($userId)
