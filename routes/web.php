@@ -53,6 +53,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['che
         Route::get('users/{id}/get', 'WorkingScheduleController@getDataUser');
         Route::get('/view-by-location/{id}', 'WorkingScheduleController@getScheduleByLocation')->name('by.location');
         Route::get('view-by-location/{id}/get-schedule', 'WorkingScheduleController@getScheduleData')->name('get.data');
+        Route::get('/export', 'ExportController@export')->name('export');
     });
 
     Route::group(['prefix' => 'calendar', 'as' => 'calendar.'], function () {

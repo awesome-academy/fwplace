@@ -6,8 +6,8 @@
 <div class="bg-light p-3">
     <h3 class="text-center font-weight-bold">{{ __('Work Schedule Of Month ') . Date('m') . '-' . Date('Y') }}</h3>
     <div class="schedule-filter">
-        {!! Form::open(['method' => 'get', 'url' => route('schedule.index')]) !!}
-        <div class="col-md-4 d-inline-block">
+        {!! Form::open(['method' => 'get', 'url' => route('schedule.index'), 'id' => 'form-filter']) !!}
+        <div class="col-md-3 d-inline-block">
             <div class="form-group row">
                 <label for="program" class="col-form-label">{{ __('Program') }}</label>
                 <div class="col-md-7">
@@ -31,8 +31,9 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-1 d-inline-block">
-            <button class="btn btn-success" type="submit">{{ __('Fill') }}</button>
+        <div class="col-md-2 d-inline-block">
+            <button class="btn btn-success" type="button" id="submit-filter">{{ __('Fill') }}</button>
+            <button class="btn btn-primary" type="button" id="export">{{ __('Export') }}</button>
         </div>
         {!! Form::close() !!}
     </div>
