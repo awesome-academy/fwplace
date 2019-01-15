@@ -20,4 +20,9 @@ class RoleRepository extends EloquentRepository
     {
         return $this->model->select('id')->where('name', 'like', 'trainee')->first();
     }
+
+    public function getIdAdmin()
+    {
+        return $this->model->select('id')->where('name', 'like', 'Admin')->first();
+    }
 }

@@ -27,7 +27,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['che
 
     Route::post('/users/update-role-user', 'UserController@updateRoleUser')->name('users.update_role_user');
     Route::resource('users', 'UserController');
-    // Route::get('register-users')->name('register.user');
+    Route::get('register-users', 'UserController@registerUser')->name('register.user');
 
     Route::get('/positions/get-positions', 'PositionController@getPositions')->name('positions.get_positions');
     Route::resource('positions', 'PositionController');

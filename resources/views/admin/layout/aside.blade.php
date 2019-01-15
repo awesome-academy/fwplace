@@ -79,7 +79,7 @@
                             </li>
 
                             <li class="m-menu__item" aria-haspopup="true">
-                                <a href="{{ route('users.index') }}" class="m-menu__link ">
+                                <a href="{{ route('register.user') }}" class="m-menu__link ">
                                     <i class="m-menu__link-bullet m-menu__link-bullet--dot">
                                         <span></span>
                                     </i>
