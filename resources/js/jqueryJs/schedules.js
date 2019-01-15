@@ -26,4 +26,14 @@ $(document).ready(function() {
     $('.right-schedule').scroll(function(event) {
         $('.left-schedule').scrollTop($(this).scrollTop());
     });
+
+    $('#submit-filter').click(function() {
+        $('#form-filter').attr('action', route('schedule.index'));
+        $('#form-filter').submit();
+    });
+
+    $('#export').click(function() {
+        $('#form-filter').attr('action', route('schedule.export'));
+        $('#form-filter').submit();
+    });
 });

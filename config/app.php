@@ -168,7 +168,7 @@ return [
         // Tightenco\Ziggy\ZiggyServiceProvider::class
         App\Providers\BroadcastServiceProvider::class,
         Mariuzzo\LaravelJsLocalization\LaravelJsLocalizationServiceProvider::class,
-
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ],
 
 /*
@@ -223,7 +223,7 @@ return [
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Datatables' => Yajra\Datatables\Facades\Datatables::class,
         'Entrust' => Zizaco\Entrust\EntrustFacade::class,
-
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ],
 
 ];
