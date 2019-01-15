@@ -24,15 +24,15 @@ return [
     ],
     'isAdmin' => 'Admin',
     'status' => [
-        0 => 'Skip',
-        1 => 'Morning',
-        2 => 'Afternoon',
-        3 => 'Fulltime',
+        0 => 'Dayoff',
+        1 => 'Fulltime',
+        2 => 'Morning',
+        3 => 'Afternoon',
         'short' => [
             0 => 'X',
-            1 => 'M',
-            2 => 'A',
-            3 => 'W',
+            1 => 'W',
+            2 => 'M',
+            3 => 'A',
         ]
     ],
     'vendors' => '/assets/vendors/base/',
