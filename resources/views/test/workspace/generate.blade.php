@@ -32,12 +32,13 @@
     @endif
     <div class="workspace">
         <div class="all_seat">
-            <table >
+            <table>
                 @if (count($renderSeat) > 0 && Entrust::can('add-location'))
                     <div class="mb-2">
                         <button class="btn btn-primary btn-seat" id="disable-seat">{{ __('Disable Seat') }}</button>
                         <button class="btn btn-primary btn-seat" id="enable-seat">{{ __('Enable Seat') }}</button>
-                        <button class="btn btn-success" id="cancel">{{ __('Cancel') }}</button>
+                        <button class="btn btn-primary btn-seat" id="clear-seat">{{ __('Clear Seat') }}</button>
+                        <button class="btn btn-danger" id="cancel">{{ __('Cancel') }}</button>
                     </div>
                 @endif
 
@@ -98,24 +99,28 @@
                                         <tr>
                                             <th scope="row" class="work-day">{{ $day->date }}</th>
                                             <td>{{ $day->weekDay }}</td>
-                                                <td>
-                                                    @if($day->shift === config('site.shift.morning') || $day->shift === config('site.shift.all'))
-                                                        {!! Form::select('morning[' . $day->id . ']', $day->morningSeats, $day->seats && count($day->seats) > 0 ? $day->seats[0]->id : null, [
-                                                                'class' => 'form-control morning',
-                                                                'data-date' => $day->date,
-                                                                'data-shift' => config('site.shift.morning'),
-                                                            ]) !!}
-                                                    @endif
-                                                </td>
-                                                <td>
-                                                    @if($day->shift === config('site.shift.afternoon') || $day->shift === config('site.shift.all'))
-                                                        {!! Form::select('afternoon[' . $day->id . ']', $day->afternoonSeats, $day->seats && count($day->seats) > 1 ? $day->seats[1]->id : null, [
-                                                                'class' => 'form-control afternoon',
-                                                                'data-date' => $day->date,
-                                                                'data-shift' => config('site.shift.afternoon'),
-                                                            ]) !!}
-                                                    @endif
-                                                </td>
+                                            @if($day->shift !== config('site.shift.off'))
+                                            <td>
+                                                @if($day->shift === config('site.shift.morning') || $day->shift === config('site.shift.all'))
+                                                    {!! Form::select('morning[' . $day->id . ']', $day->morningSeats, $day->seats && count($day->seats) > 0 ? $day->seats[0]->id : null, [
+                                                            'class' => 'form-control morning',
+                                                            'data-date' => $day->date,
+                                                            'data-shift' => config('site.shift.morning'),
+                                                        ]) !!}
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if($day->shift === config('site.shift.afternoon') || $day->shift === config('site.shift.all'))
+                                                    {!! Form::select('afternoon[' . $day->id . ']', $day->afternoonSeats, $day->seats && count($day->seats) > 1 ? $day->seats[1]->id : null, [
+                                                            'class' => 'form-control afternoon',
+                                                            'data-date' => $day->date,
+                                                            'data-shift' => config('site.shift.afternoon'),
+                                                        ]) !!}
+                                                @endif
+                                            </td>
+                                            @else
+                                                <td colspan="2" class="bg-danger-light text-center text-dark">{{ __('Dayoff') }}</td>
+                                            @endif
                                         </tr>
                                         @if(Carbon\Carbon::parse($day->date)->format('l') === config('site.last_work_day_of_week'))
                                             <tr>

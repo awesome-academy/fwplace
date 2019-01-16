@@ -15,6 +15,7 @@ use App\Http\Requests\LocationAddRequest;
 use App\Repositories\WorkspaceRepository;
 use App\Http\Requests\LocationUpdateRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use App\Models\WorkSchedule;
 
 class LocationController extends Controller
 {
@@ -179,6 +180,22 @@ class LocationController extends Controller
                     ])->update([
                         'usable' => $seat->usable,
                     ]);
+                }
+            }
+
+            if ($request->has('clearUsers')) {
+                $clearUsers = json_decode(json_encode($request->clearUsers));
+                $firstDay = date('Y') . '-' . date('m') . '-01';
+                $lastDay = date('Y') . '-' . date('m') . '-' . date('t');
+                foreach ($clearUsers as $user) {
+                    $schedules = WorkSchedule::where('user_id', $user->user_id)
+                                    ->whereBetween('date', [$firstDay, $lastDay])
+                                    ->get()
+                                    ->pluck('id');
+
+                    ScheduleSeat::where('seat_id', $user->seat_id)
+                        ->whereIn('work_schedule_id', $schedules)
+                        ->delete();
                 }
             }
 
