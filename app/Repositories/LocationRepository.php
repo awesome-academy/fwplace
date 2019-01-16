@@ -5,6 +5,7 @@ namespace App\Repositories;
 use DB;
 use Carbon\CarbonPeriod;
 use App\Models\User;
+use App\Models\Workspace;
 
 class LocationRepository extends EloquentRepository
 {
@@ -254,5 +255,24 @@ class LocationRepository extends EloquentRepository
             ->where('workspace_id', $workspaceId)
             ->get()
             ->pluck('id');
+    }
+
+    public function getUsableLocation()
+    {
+        return $this->model
+            ->whereNull('usable')
+            ->orWhere('usable', config('site.default.usable'))
+            ->get();
+    }
+
+    public function getLocationToDisplay()
+    {
+        $locations = $this->getUsableLocation();
+
+        foreach ($locations as $location) {
+            $location->name = $location->name . '-' . Workspace::findOrFail($location->workspace_id)->name;
+        }
+
+        return $locations->pluck('name', 'id')->toArray();
     }
 }

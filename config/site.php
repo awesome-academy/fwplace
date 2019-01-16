@@ -88,6 +88,5 @@ return [
         'usable' => 1,
         'unusable' => 2,
     ],
-    'last_work_day_of_week' => 'Friday',
     'disable_seat' => 2
 ];

@@ -84,13 +84,13 @@ class DiagramController extends Controller
                                                 ->getAvailableSeats(
                                                     $schedule,
                                                     $id,
-                                                    config('site.shift.afternoon')
+                                                    config('site.shift.morning')
                                                 );
                     $schedule->afternoonSeats = $this->seat
                                                 ->getAvailableSeats(
                                                     $schedule,
                                                     $id,
-                                                    config('site.shift.morning')
+                                                    config('site.shift.afternoon')
                                                 );
                     break;
                 case config('site.shift.morning'):
@@ -98,7 +98,7 @@ class DiagramController extends Controller
                                                 ->getAvailableSeats(
                                                     $schedule,
                                                     $id,
-                                                    config('site.shift.afternoon')
+                                                    config('site.shift.morning')
                                                 );
                     break;
                 case config('site.shift.afternoon'):
@@ -106,7 +106,7 @@ class DiagramController extends Controller
                                                 ->getAvailableSeats(
                                                     $schedule,
                                                     $id,
-                                                    config('site.shift.morning')
+                                                    config('site.shift.afternoon')
                                                 );
                     break;
             }

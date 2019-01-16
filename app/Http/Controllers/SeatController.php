@@ -126,6 +126,7 @@ class SeatController extends Controller
             ) as Schedules
         '), 'users.id', DB::raw('Schedules.user_id'))
             ->whereBetween('Schedules.date', [$firstDay, $lastDay])
+            ->orderBy('Schedules.date')
             ->get();
 
         $result = $this->collectUsers($users);

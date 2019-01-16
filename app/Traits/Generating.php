@@ -22,14 +22,17 @@ trait Generating
             }
         }
 
-        $columnList = array_slice($columnName, 0, $seatPerRow); // Lấy danh sách tên các hàng
-        $rowList = range(1, $seatPerColumn); // Lấy danh sách tên các cột
+        $rowList = array_slice($columnName, 0, $seatPerRow); // Lấy danh sách tên các hàng
+        $columnList = range(1, $seatPerColumn); // Lấy danh sách tên các cột
         $renderSeat = [];
         $counting = 0; // Đếm số ghế được tạo ra
-        foreach ($columnList as $column) {
-            foreach ($rowList as $key => $row) {
+        foreach ($rowList as $key => $row) {
+            foreach ($columnList as $column) {
                 $counting++;
-                $renderSeat[$column][] = $column . $row;
+                if (is_numeric($column) && $column < 10) {
+                    $column = '0' . $column;
+                }
+                $renderSeat[$row][] = $row . $column;
             }
         }
 

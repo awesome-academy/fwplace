@@ -42,7 +42,8 @@ class WorkScheduleController extends Controller
             }
         }
 
-        $locations = $this->locationRepository->getByWorkspace(Auth::user()->workspace_id);
+        $locations = $this->locationRepository->getLocationToDisplay();
+
         $data = $this->workingSchedule->getUserSchedule(Auth::user()->id);
         $dataLocation = $this->workingSchedule->getLocation(Auth::user()->id);
 
@@ -52,18 +53,7 @@ class WorkScheduleController extends Controller
     public function registerWork(Request $request)
     {
         $data = $request->all();
-        foreach ($data['shift'] as $key => $value) {
-            $request->user()->workSchedules()->updateOrCreate(
-                [
-                    'date' => $key,
-                ],
-                [
-                    'location_id' => $data['location'][$key],
-                    'shift' => $value,
-                ]
-            );
-        }
-
-        return redirect()->back();
+        
+        return $this->workingSchedule->updateSchedules($data);
     }
 }
