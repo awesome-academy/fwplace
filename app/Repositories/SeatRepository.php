@@ -52,7 +52,7 @@ class SeatRepository extends EloquentRepository
                     $query->where('work_schedules.shift', config('site.shift.all'));
                     if (func_num_args() === 2) {
                         $query->orWhere('work_schedules.shift', $shift);
-                    } else {
+                    } elseif ($schedule->shift != config('site.shift.all')) {
                         $query->orWhere('work_schedules.shift', $schedule->shift);
                     }
                 })
@@ -67,7 +67,7 @@ class SeatRepository extends EloquentRepository
         })
         ->where('seats.location_id', $id)
         ->where(function ($query) {
-            $query->where('seats.usable', '=', config('site.disable_seat'))
+            $query->where('seats.usable', '=', config('site.default.usable'))
                 ->orWhere('seats.usable');
         })
         ->orderBy('name')

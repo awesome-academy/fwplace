@@ -22,8 +22,11 @@ $(document).ready(function() {
                             Lang.get('messages.shift.' + schedules[k].shift) +
                             '\n';
                     }
-                    append += `<div class="seat-avatar">
-                        <img data-toggle="tooltip" src="${
+                    append += `<div class="seat-avatar" 
+                        data-user_id="${users[j].id}"
+                        data-seat_id="${result[i].id}"
+                    >
+                        <img class="seat-user-img" data-toggle="tooltip" src="${
                             users[j].avatar
                         }" title="${title}">
                     </div>`;
