@@ -40,24 +40,38 @@
                                 </thead>
                                 {!! Form::open(['url' => route('workschedule'), 'method' => 'post' , 'id' => 'add_form' , 'enctype' => 'multipart/form-data']) !!}
                                 <tbody>
+                                    @php
+                                        $today = Date('d-m-Y H:i:s');
+                                        $shifts = [
+                                            config('site.shift.off') => __('Off'),
+                                            config('site.shift.all') => __('All day'),
+                                            config('site.shift.morning') => __('Morning'),
+                                            config('site.shift.afternoon') => __('Afternoon'),
+                                        ];
+                                    @endphp
                                     @foreach($dates as $day)
                                     <tr
-                                    @isset($day['weekend'])
-                                        class="bg-secondary text-dark"
-                                    @endisset
+                                        @isset($day['weekend'])
+                                            class="bg-secondary text-dark"
+                                        @endisset
                                     >
                                         <th scope="row">{{ $day['format'] }}</th>
                                         <td>{{ $day['day'] }}</td>
-                                        <td>
-                                            @if(!isset($day['weekend']))
-                                            {!! Form::select('shift[' . $day['date']  .  ']', [config('site.shift.off') => __('Off'), config('site.shift.all') => __('All day'), config('site.shift.morning') => __('Morning'), config('site.shift.afternoon') => __('Afternoon') ], $data[$day['date']] ?? null, ['class' => 'form-control tar', 'id' => 'sl_shift']) !!}
-                                            @endif
-                                        </td>
-                                        <td>
-                                            @if(!isset($day['weekend']))
-                                            {!! Form::select('location[' . $day['date']  .  ']', [config('site.default_location') => __('--Choose--')] + $locations, $dataLocation[$day['date']] ?? null, ['class' => 'form-control target', 'id' => 'sl_location']) !!}
-                                            @endif
-                                        </td>
+                                        @if($day['format'] >= $today)
+                                            <td>
+                                                @if(!isset($day['weekend']))
+                                                    {!! Form::select('shift[' . $day['date']  .  ']', $shifts, $data[$day['date']] ?? null, ['class' => 'form-control tar', 'id' => 'sl_shift']) !!}
+                                                @endif
+                                            </td>
+                                            <td>
+                                                @if(!isset($day['weekend']))
+                                                    {!! Form::select('location[' . $day['date']  .  ']', [config('site.default_location') => __('--Choose--')] + $locations, $dataLocation[$day['date']] ?? null, ['class' => 'form-control target', 'id' => 'sl_location']) !!}
+                                                @endif
+                                            </td>
+                                        @else
+                                            <td class="text-center">{{ isset($data[$day['date']]) ? $shifts[$data[$day['date']]] : '' }}</td>
+                                            <td class="text-center">{{ isset($dataLocation[$day['date']]) ? $locations[$dataLocation[$day['date']]] : '' }}</td>
+                                        @endif
                                     </tr>
                                     @endforeach
                                 </tbody>

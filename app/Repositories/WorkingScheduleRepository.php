@@ -3,6 +3,10 @@
 namespace App\Repositories;
 
 use App\Models\User;
+use App\Models\ScheduleSeat;
+use App\Models\WorkSchedule;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class WorkingScheduleRepository extends EloquentRepository
 {
@@ -70,5 +74,41 @@ class WorkingScheduleRepository extends EloquentRepository
         }
 
         return $users;
+    }
+
+    public function updateSchedules($data)
+    {
+        DB::beginTransaction();
+        try {
+            foreach ($data['shift'] as $key => $value) {
+                Auth::user()->workSchedules()->updateOrCreate(
+                    [
+                        'date' => $key,
+                    ],
+                    [
+                        'location_id' => $data['location'][$key],
+                        'shift' => $value,
+                    ]
+                );
+            }
+
+            $schedule = DB::table('work_schedules')
+                ->select('work_schedules.id')
+                ->join('schedule_seat', 'schedule_seat.work_schedule_id', 'work_schedules.id')
+                ->join('seats', 'schedule_seat.seat_id', 'seats.id')
+                ->where('seats.location_id', '!=', DB::raw('work_schedules.location_id'))
+                ->get()
+                ->pluck('id');
+            
+            $scheduleSeats = ScheduleSeat::whereIn('work_schedule_id', $schedule)->delete();
+
+            DB::commit();
+
+            return redirect()->back();
+        } catch (\Exception $exception) {
+            DB::rollback();
+            
+            return $exception;
+        }
     }
 }

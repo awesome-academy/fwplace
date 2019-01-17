@@ -138,7 +138,6 @@ class LocationController extends Controller
             $location->save();
 
             $renderSeats = $this->renderSeat($location);
-        
             $seats =  [];
 
             foreach ($renderSeats as $row) {

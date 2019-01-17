@@ -9,7 +9,7 @@
 @section('content')
 <div class="m-portlet pl-5 py-5">
     @if(Entrust::can(['add-location']))
-        <div class="location">
+        <div class="location p-2">
             <div class="form-horizontal col-md-9">
                 {!! Form::label('row', __('Row'), ['class' => 'col-form-label']) !!}
                 
@@ -30,17 +30,17 @@
             </div>
         </div>
     @endif
+    @if (count($renderSeat) > 0 && Entrust::can('add-location'))
+        <div class="mb-2 pl-4 pt-2">
+            <button class="btn btn-primary btn-seat" id="disable-seat">{{ __('Disable Seat') }}</button>
+            <button class="btn btn-primary btn-seat" id="enable-seat">{{ __('Enable Seat') }}</button>
+            <button class="btn btn-primary btn-seat" id="clear-seat">{{ __('Clear Seat') }}</button>
+            <button class="btn btn-danger" id="cancel">{{ __('Cancel') }}</button>
+        </div>
+    @endif
     <div class="workspace">
         <div class="all_seat">
             <table>
-                @if (count($renderSeat) > 0 && Entrust::can('add-location'))
-                    <div class="mb-2">
-                        <button class="btn btn-primary btn-seat" id="disable-seat">{{ __('Disable Seat') }}</button>
-                        <button class="btn btn-primary btn-seat" id="enable-seat">{{ __('Enable Seat') }}</button>
-                        <button class="btn btn-primary btn-seat" id="clear-seat">{{ __('Clear Seat') }}</button>
-                        <button class="btn btn-danger" id="cancel">{{ __('Cancel') }}</button>
-                    </div>
-                @endif
 
                 @forelse($renderSeat as $row)
                     <tr class="row">
@@ -95,7 +95,16 @@
                                 </thead>
                                 {!! Form::open(['url' => route('seats.store'), 'method' => 'post' , 'id' => 'add_form' ]) !!}
                                 <tbody>
+                                    @php
+                                        $beforeDate = 0;    
+                                    @endphp
                                     @forelse($dates as $day)
+                                        @if(Date('N', strtotime($day->date)) < $beforeDate)
+                                            <tr>
+                                                <th class="bg-secondary"></th>
+                                                <td colspan="3" class="bg-secondary"></td>
+                                            </tr>
+                                        @endif
                                         <tr>
                                             <th scope="row" class="work-day">{{ $day->date }}</th>
                                             <td>{{ $day->weekDay }}</td>
@@ -122,12 +131,9 @@
                                                 <td colspan="2" class="bg-danger-light text-center text-dark">{{ __('Dayoff') }}</td>
                                             @endif
                                         </tr>
-                                        @if(Carbon\Carbon::parse($day->date)->format('l') === config('site.last_work_day_of_week'))
-                                            <tr>
-                                                <th class="bg-secondary"></th>
-                                                <td colspan="3" class="bg-secondary"></td>
-                                            </tr>
-                                        @endif
+                                        @php
+                                            $beforeDate = Date('N', strtotime($day->date));
+                                        @endphp
                                     @empty
                                         <tr>
                                             <td colspan="4" class="text-center text-danger">{{ __('You don\'t have work schedule in this location') }}</td>
@@ -136,7 +142,7 @@
                                 </tbody>
                             </table>
                             <div class="m-form m-form--fit m-form--label-align-right">
-                                {!! Form::submit(__('Save') . '!', ['class' => 'btn m-btn--pill    btn-primary btn-lg m-btn m-btn--custom']) !!}
+                                {!! Form::submit(__('Save') . '!', ['class' => 'btn m-btn--pill btn-primary btn-lg m-btn m-btn--custom']) !!}
                             </div>
                             {!! Form::close() !!}
                         </div>

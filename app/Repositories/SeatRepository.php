@@ -39,22 +39,17 @@ class SeatRepository extends EloquentRepository
         }
     }
 
-    public function getAvailableSeats($schedule, $id, $shift = null)
+    public function getAvailableSeats($schedule, $id, $shift)
     {
         $this->makeModel();
 
-        return $this->model->whereNotIn('id', function ($query) use ($schedule, $id) {
+        return $this->model->whereNotIn('id', function ($query) use ($schedule, $id, $shift) {
             $query->from(DB::raw('work_schedules, schedule_seat'))
                 ->select('seat_id')
                 ->where(DB::raw('`work_schedules`.`id`'), DB::raw('schedule_seat.work_schedule_id'))
                 ->where('date', Carbon::parse($schedule->date)->format('Y-m-d'))
-                ->where(function ($query) use ($schedule) {
-                    $query->where('work_schedules.shift', config('site.shift.all'));
-                    if (func_num_args() === 2) {
-                        $query->orWhere('work_schedules.shift', $shift);
-                    } elseif ($schedule->shift != config('site.shift.all')) {
-                        $query->orWhere('work_schedules.shift', $schedule->shift);
-                    }
+                ->where(function ($query) use ($schedule, $shift) {
+                    $query->where('schedule_seat.shift', $shift);
                 })
                 ->where(function ($query) {
                     if (!empty($schedule->seat_id)) {
