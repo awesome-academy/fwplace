@@ -30,4 +30,14 @@ class BatchRepository extends EloquentRepository
 
         return $batches;
     }
+
+    public function lastestBatch($data)
+    {
+        $this->makeModel();
+
+        return $this->model->where('position_id', $data['position_id'])
+                ->where('workspace_id', $data['workspace_id'])
+                ->where('program_id', $data['program_id'])
+                ->first();
+    }
 }

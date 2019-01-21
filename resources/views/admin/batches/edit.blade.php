@@ -1,8 +1,8 @@
 @extends('admin.layout.master')
-@section('title', __('Employee'))
+@section('title', __('Batches'))
 @section('module')
     <div class="mr-auto">
-        <h3 class="m-subheader__title m-subheader__title--separator">{{ __('Employee') }}</h3>
+        <h3 class="m-subheader__title m-subheader__title--separator">{{ __('Batches') }}</h3>
         <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
             <li class="m-nav__item m-nav__item--home">
                 <a href="{{ url('admin') }}" class="m-nav__link m-nav__link--icon">
@@ -12,12 +12,12 @@
             <li class="m-nav__separator">-</li>
             <li class="m-nav__item">
                 <a href="{{ url('admin/batchs') }}" class="m-nav__link">
-                    <span class="m-nav__link-text">{{ __('Employee') }}</span>
+                    <span class="m-nav__link-text">{{ __('Batches') }}</span>
                 </a>
             </li>
             <li class="m-nav__separator">-</li>
             <li class="m-nav__item">
-                <span class="m-nav__link-text">{{ __('Edit Employee') }}</span>
+                <span class="m-nav__link-text">{{ __('Edit Batch') }}</span>
             </li>
         </ul>
     </div>
@@ -33,7 +33,7 @@
                 </div>
             </div>
         </div>
-        {{ Form::open(['route' => ['batches.update', 'id' => $batch->id], 'method' => 'PUT', 'files' => true, 'enctype' => 'multipart/form-data']) }}
+        {{ Form::open(['route' => ['batches.update', 'id' => $batch->id], 'method' => 'PUT']) }}
         {!! Form::hidden('id', $batch->id) !!}
         <div class="m-portlet__body">
             <div class="form-group m-form__group row">
@@ -41,29 +41,42 @@
                     {!! Form::label(__('Start day')) !!}
                     {!! Form::date('start_day', $batch->start_day, ['class' => 'form-control m-input', 'placeholder' => __('Enter Start day')]) !!}
                     {!! $errors->first('name', '<p class="text-danger">:message</p>') !!}
-                    <span class="m-form__help">{{ __('Please enter Start day') }}</span>
+                    @if($errors->has('start_day'))
+                        <span class="m-form__help text-danger">{{ __('Please enter Start day') }}</span>
+                    @endif
                 </div>
                 <div class="col-lg-6">
                     {!! Form::label(__('Stop day')) !!}
                     {!! Form::date('stop_day', $batch->start_day, ['class' => 'form-control m-input', 'placeholder' => __('Enter Stop day')]) !!}
                     {!! $errors->first('email', '<p class="text-danger">:message</p>') !!}
-                    <span class="m-form__help">{{ __('Please enter Stop day') }}</span>
+                    @if($errors->has('stop_day'))
+                        <span class="m-form__help text-danger">{{ __('Please enter Stop day') }}</span>
+                    @endif
                 </div>
             </div>
             <div class="form-group m-form__group row">
                 <div class="col-lg-6">
-                    {!! Form::label(__('Batch')) !!}
+                    {!! Form::label(__('Subjects')) !!}
                     <div class="m-input-icon m-input-icon--right">
-                        {{ Form::number('batch', $batch->batch, ['class' => 'form-control m-input']) }}
+                        {{ Form::select('subjects[]', $subjects, $batch->subjects, [
+                                'id' => 'select_subject',
+                                'class' => 'form-control m-input',
+                                'multiple' => 'multiple',
+                            ]
+                        ) }}
                     </div>
-                    <span class="m-form__help">{{ trans('Please select Status') }}</span>
+                    @if($errors->has('subjects'))
+                        <span class="m-form__help text-danger">{{ trans('Please select subject') }}</span>
+                    @endif
                 </div>
                 <div class="col-lg-6">
                     {!! Form::label(__('Program')) !!}
                     <div class="m-input-icon m-input-icon--right">
                         {!! Form::select('program_id', $programs, $batch->program->id, ['class' => 'form-control m-input']) !!}
                     </div>
-                    <span class="m-form__help">{{ __('Please select Program') }}</span>
+                    @if($errors->has('program_id'))
+                        <span class="m-form__help text-danger">{{ __('Please select Program') }}</span>
+                    @endif
                 </div>
             </div>
             <div class="form-group m-form__group row">
@@ -72,14 +85,18 @@
                     <div class="m-input-icon m-input-icon--right">
                         {!! Form::select('position_id', $positions, $batch->position->id, ['class' => 'form-control m-input']) !!}
                     </div>
-                    <span class="m-form__help">{{ __('Please select Position') }}</span>
+                    @if($errors->has('position_id'))
+                        <span class="m-form__help text-danger">{{ __('Please select Position') }}</span>
+                    @endif
                 </div>
                 <div class="col-lg-6">
                     {!! Form::label(__('Workspace')) !!}
                     <div class="m-input-icon m-input-icon--right">
                         {!! Form::select('workspace_id', $workspaces, $batch->workspace->id, ['class' => 'form-control m-input']) !!}
                     </div>
-                    <span class="m-form__help">{{ __('Please select Workspace') }}</span>
+                    @if($errors->has('workspace_id'))
+                        <span class="m-form__help text-danger">{{ __('Please select Workspace') }}</span>
+                    @endif
                 </div>
             </div>
         </div>
@@ -88,14 +105,15 @@
                 <div class="row">
                     <div class="col-lg-6">
                         {!! Form::submit(__('Save'), ['class' => 'btn btn-primary']) !!}
-                        <a href="{{ url('admin/batches') }}" class="btn btn-secondary">{{ __('Cancel') }}</a>
-                    </div>
-                    <div class="col-lg-6 m--align-right">
-                        {!! Form::reset(__('Reset'), ['class' => 'btn btn-danger']) !!}
+                        <a href="{{ route('batches.index') }}" class="btn btn-secondary">{{ __('Cancel') }}</a>
                     </div>
                 </div>
             </div>
         </div>
         {!! Form::close() !!}
     </div>
+@endsection
+
+@section('js')
+    <script src="{{ asset('js/select_subject.js') }}"></script>
 @endsection

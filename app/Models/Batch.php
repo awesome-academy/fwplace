@@ -39,4 +39,12 @@ class Batch extends Model
     {
         return $this->hasMany('App\Models\User');
     }
+
+    public function getName()
+    {
+        return $this->workspace->name . ' - '
+            . $this->program->name . ' - '
+            . $this->position->name . ' - '
+            . $this->batch;
+    }
 }
