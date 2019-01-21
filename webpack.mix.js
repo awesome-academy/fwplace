@@ -91,5 +91,9 @@ mix.js(
     'resources/js/jqueryJs/show_design_without_diagram.js',
     'public/js/show_design_without_diagram.js'
 );
+mix.js(
+    'resources/js/jqueryJs/select_subject.js',
+    'public/js/select_subject.js'
+);
 
 mix.version();

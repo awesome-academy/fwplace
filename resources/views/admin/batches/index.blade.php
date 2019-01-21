@@ -45,13 +45,13 @@
                                 <thead>
                                     <tr>
                                         <th>{{ __('Batch') }}</th>
+                                        <th>{{ __('Batch Name') }}</th>
+                                        <th>{{ __('Subjects') }}</th>
                                         <th>{{ __('Start day') }}</th>
                                         <th>{{ __('Stop day') }}</th>
                                         <th>{{ __('Workspace') }}</th>
                                         <th>{{ __('Program') }}</th>
                                         <th>{{ __('Position') }}</th>
-                                        <th>{{ __('Created Date') }}</th>
-                                        <th>{{ __('Batch Name') }}</th>
                                         <th>{{ __('Action') }}</th>
                                         <th></th>
                                     </tr>
@@ -65,13 +65,17 @@
 
                                                 <tr role="row" class="odd" >
                                                     <td>{{ $batch->batch }}</td>
+                                                    <td>{{ $batch->getName() }}</td>
+                                                    <td>
+                                                        @foreach($batch->subjects as $subject)
+                                                            <span class="bg-secondary">{{ $subject->name }}</span>
+                                                        @endforeach
+                                                    </td>
                                                     <td>{{ $batch->start_day }}</td>
                                                     <td>{{ $batch->stop_day }}</td>
                                                     <td>{{ $batch->workspace->name }}</td>
                                                     <td>{{ $batch->program->name }}</td>
                                                     <td>{{ $batch->position->name }}</td>
-                                                    <td>{{ date('d-m-Y', strtotime($batch->created_at)) }}</td>
-                                                    <td>{{ $batch->workspace->name . ' - ' . $batch->program->name . ' - ' . $batch->position->name . ' - ' . $batch->batch }}</td>
 
                                                     <td>
                                                         <a href="{{ route('batches.edit', ['id' => $batch->id]) }}" class="btn btn-warning m-btn m-btn--icon m-btn--icon-only m-btn--custom m-btn--pill" data-toggle="m-tooltip" data-placement="top" data-original-title="{{ __('Edit') }}"><i class='flaticon-edit-1'></i></a>

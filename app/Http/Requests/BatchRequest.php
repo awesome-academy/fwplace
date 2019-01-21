@@ -26,9 +26,10 @@ class BatchRequest extends FormRequest
         return [
             'start_day' => 'required',
             'stop_day' => 'required',
-            'workspace_id' => 'required',
-            'position_id' => 'required',
-            'program_id' => 'required',
+            'workspace_id' => 'required|numeric',
+            'position_id' => 'required|numeric',
+            'program_id' => 'required|numeric',
+            'subjects' => 'required',
         ];
     }
 }
