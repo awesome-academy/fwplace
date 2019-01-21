@@ -7,31 +7,25 @@ $(document).ready(function() {
         $('.design:eq(' + index + ')').removeClass('d-none');
     });
 
-    $('.options.without-diagram').click(function() {
+    function showDiagram() {
         let id = $('#workspace_id').val();
+        $('#diagram-img').removeClass('d-none');
         $('.image-map-section').addClass('d-none');
         $.ajax({
-            url: route('design_without_diagram', [id]),
+            url: route('design_diagram_image', [id]),
             method: 'get',
             success: function(result) {
-                $('.design.without-diagram').html(result);
+                $('#diagram-img').html(result);
             }
         });
-    });
+    }
+
+    showDiagram();
 
     $('.options')
         .first()
         .click(function() {
-            let id = $('#workspace_id').val();
-            $('#diagram-img').removeClass('d-none');
-            $('.image-map-section').addClass('d-none');
-            $.ajax({
-                url: route('design_diagram_image', [id]),
-                method: 'get',
-                success: function(result) {
-                    $('#diagram-img').html(result);
-                }
-            });
+            showDiagram();
         });
 
     $('#diagram-edit').click(function() {

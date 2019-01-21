@@ -9,7 +9,10 @@
             <option v-for="trainee in trainees" :value="trainee.id">{{ trainee.name }}</option>
         </select>
         <div class="report-section">
-            <table class="table table-editable table-striped- table-bordered table-hover table-checkable" id="m_table_1">
+            <table
+                class="table table-editable table-striped- table-bordered table-hover table-checkable"
+                id="m_table_1"
+            >
                 <thead>
                     <tr>
                         <th>{{ $t('Subject') }}</th>
@@ -23,7 +26,8 @@
                     <tr v-for="(n,index) in subject.day" :key="n">
                         <template v-if="subjects[x].reports[n - 1].day == n">
                             <td>
-                                <h3>{{ subject.name }}</h3> ({{ subject.day }} {{ $t('day') }})
+                                <h3>{{ subject.name }}</h3>
+                                ({{ subject.day }} {{ $t('day') }})
                                 <hr>
                                 <div>Day: {{ n }}</div>
                                 <div class="form-group">
@@ -34,16 +38,27 @@
                                 <div class="form-group">
                                     <label>{{ $t('Content') }}</label>
                                     <div>
-                                        <span class="ml-2" v-html="subjects[x].reports[n - 1].content"></span>
+                                        <span
+                                            class="ml-2"
+                                            v-html="subjects[x].reports[n - 1].content"
+                                        ></span>
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <label>{{ $t('Link') }}</label>
-                                    <a target="_blank" v-if="subjects[x].reports[n - 1].day == n" v-bind:href="subjects[x].reports[n - 1].link">{{ subjects[x].reports[n - 1].link }}</a>
+                                    <a
+                                        target="_blank"
+                                        v-if="subjects[x].reports[n - 1].day == n"
+                                        v-bind:href="subjects[x].reports[n - 1].link"
+                                    >{{ subjects[x].reports[n - 1].link }}</a>
                                 </div>
                                 <div class="form-group">
                                     <label>{{ $t('Test') }}</label>
-                                    <a target="_blank" v-if="subjects[x].reports[n - 1].day == n" v-bind:href="subjects[x].reports[n - 1].test_link">{{ subjects[x].reports[n - 1].test_link }}</a>
+                                    <a
+                                        target="_blank"
+                                        v-if="subjects[x].reports[n - 1].day == n"
+                                        v-bind:href="subjects[x].reports[n - 1].test_link"
+                                    >{{ subjects[x].reports[n - 1].test_link }}</a>
                                 </div>
                             </td>
                             <td>
@@ -52,27 +67,55 @@
                             <td>
                                 <span v-html="subjects[x].reports[n - 1].status"></span>
                             </td>
-                            <td>
-                                <div v-for="(review, k) in subjects[x].reports[n - 1].reviews" :key="k">
-                                    <template v-if="subjects[x].reports[n - 1].reviews[k].user_id == user.id">
-                                        <div class="border border-warning mt-5">
-                                            <ckeditor class="edittor" type="balloon" @blur="submitReview(x, n, k)" @focus="focus(x, n, k)" v-model="subjects[x].reports[n - 1].reviews[k].content"></ckeditor>                                    
+                            <td class="p-0">
+                                <div
+                                    v-for="(review, k) in subjects[x].reports[n - 1].reviews"
+                                    :key="k"
+                                >
+                                    <template
+                                        v-if="subjects[x].reports[n - 1].reviews[k].user_id == user.id"
+                                    >
+                                        <div class="border border-warning mb-5">
+                                            <ckeditor
+                                                class="edittor"
+                                                type="balloon"
+                                                @blur="submitReview(x, n, k)"
+                                                @focus="focus(x, n, k)"
+                                                v-model="subjects[x].reports[n - 1].reviews[k].content"
+                                            ></ckeditor>
                                         </div>
                                     </template>
                                     <template v-else>
                                         <div class="position-relative">
-                                            <div v-html="subjects[x].reports[n - 1].reviews[k].content" class="border border-primary">
-                                            </div>
-                                            <label class="position-absolute r-0 bg-primary text-light">{{ subjects[x].reports[n - 1].reviews[k].name }}</label>
+                                            <div
+                                                v-html="subjects[x].reports[n - 1].reviews[k].content"
+                                                class="border border-primary"
+                                            ></div>
+                                            <label
+                                                class="position-absolute r-0 bg-primary text-light"
+                                            >{{ subjects[x].reports[n - 1].reviews[k].name }}</label>
                                         </div>
-                                        <div class="border border-warning mt-5" v-if="k == lastIndex(subjects[x].reports[n - 1].reviews)">
-                                            <ckeditor class="edittor" type="balloon" @blur="submitReview(x, n, $event)" @focus="focus(x, n)"></ckeditor>                                    
+                                        <div
+                                            class="border border-warning mb-5"
+                                            v-if="k == lastIndex(subjects[x].reports[n - 1].reviews)"
+                                        >
+                                            <ckeditor
+                                                class="edittor"
+                                                type="balloon"
+                                                @blur="submitReview(x, n, $event)"
+                                                @focus="focus(x, n)"
+                                            ></ckeditor>
                                         </div>
                                     </template>
                                 </div>
                                 <template v-if="subjects[x].reports[n - 1].reviews.length === 0">
                                     <div class="border border-warning">
-                                        <ckeditor class="edittor" type="balloon" @blur="submitReview(x, n, $event)" @focus="focus(x, n)"></ckeditor>                                    
+                                        <ckeditor
+                                            class="edittor"
+                                            type="balloon"
+                                            @blur="submitReview(x, n, $event)"
+                                            @focus="focus(x, n)"
+                                        ></ckeditor>
                                     </div>
                                 </template>
                             </td>
@@ -80,6 +123,9 @@
                     </tr>
                 </tbody>
             </table>
+            <div class="position-fixed overflow-x-scroll" id="scroll">
+                <div class="scroll"></div>
+            </div>
         </div>
         <div class="loading" v-show="loading === true">
             <br>
@@ -172,6 +218,7 @@ export default {
             axios(`/reports/trainee/${this.trainee_selected}`).then(res => {
                 this.subjects = res.data;
                 this.loading = false;
+                this.resizeScroll();
             });
         },
         getBatches() {
@@ -186,6 +233,42 @@ export default {
 
         backEndDateFormat: function(date) {
             return moment(date, 'DD/MM/YYYY').format('YYYY-MM-DD');
+        },
+        resizeScroll() {
+            $(document).ready(function() {
+                function isElementScrollingOut(element) {
+                    var pageTop = $(window).scrollTop();
+                    var pageBottom = pageTop + $(window).height();
+                    var elementTop = $(element).offset().top;
+                    var elementBottom = elementTop + $(element).height();
+
+                    if (elementBottom <= pageBottom) {
+                        return pageBottom - elementBottom;
+                    } else {
+                        return false;
+                    }
+                }
+
+                function scrolling() {
+                    var diff = isElementScrollingOut($('.report-section')[0]);
+                    if (diff) {
+                        $('#scroll').css('bottom', diff);
+                    } else {
+                        $('#scroll').css('bottom', 0);
+                    }
+                }
+
+                function resize() {
+                    let element = $('#scroll');
+                    scrolling();
+                    $(element).css('width', $('.report-section').innerWidth());
+                    $(element)
+                        .children('div')
+                        .css('width', $('.report-section')[0].scrollWidth);
+                }
+
+                resize();
+            });
         }
     }
 };

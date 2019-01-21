@@ -8,7 +8,6 @@ $(document).ready(function() {
             success: function(result) {
                 let diagram = result;
                 let keys = Object.keys(diagram);
-
                 for (let i = 0; i < keys.length; i++) {
                     let color = diagram[keys[i]].color;
                     let data = diagram[keys[i]].data;
@@ -79,6 +78,17 @@ $(document).ready(function() {
     }
 
     $(document).on('click', '.options.without-diagram', function() {
+        let id = $('#workspace_id').val();
+        $('.image-map-section').addClass('d-none');
+        $.ajax({
+            async: false,
+            url: route('design_without_diagram', [id]),
+            method: 'get',
+            success: function(result) {
+                $('.design.without-diagram').html(result);
+            }
+        });
+
         created();
     });
 

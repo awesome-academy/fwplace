@@ -35,7 +35,7 @@ td {
 }
 
 .report-section {
-    overflow-x: scroll;
+    overflow-x: hidden;
     background: #fff;
 }
 
@@ -47,7 +47,7 @@ td {
 
 .report-section-mini {
     width: 100%;
-    overflow-x: scroll;
+    overflow-x: hidden;
     /* overflow-y: scroll; */
 }
 

@@ -86,5 +86,10 @@ mix.copy('resources/js/jqueryJs/show_modal.js', 'public/js/show_modal.js');
 mix.js('resources/js/jqueryJs/showDiagram.js', 'public/js/showDiagram.js');
 mix.styles('resources/css/master.css', 'public/css/master.css');
 mix.js('resources/js/jqueryJs/schedules.js', 'public/js/schedules.js');
+mix.js('resources/js/jqueryJs/review.js', 'public/js/review.js');
+mix.js(
+    'resources/js/jqueryJs/show_design_without_diagram.js',
+    'public/js/show_design_without_diagram.js'
+);
 
 mix.version();
