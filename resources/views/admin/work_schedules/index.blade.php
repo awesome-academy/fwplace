@@ -40,7 +40,7 @@
     @if(count($users) > 0)
     <div class="w-100">
         <div class="float-left w-25 left-schedule">
-            <table>
+            <table class="w-100">
                 <thead>
                     <tr class="left-row">
                         <th class="text-center">{{ __('Num.') }}</th>

@@ -52,14 +52,10 @@
         <i class="la la-arrow-up"></i>
     </div>
 
-
     @include('admin.assets.js')
     <script src="{{ asset('messages.js') }}"></script>
     <script src="{{ asset('js/setLang.js') }}"></script>
     @yield('js')
 
-
 </body>
-<script>
-</script>
 </html>

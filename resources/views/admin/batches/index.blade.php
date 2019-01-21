@@ -1,6 +1,6 @@
 @extends('admin.layout.master')
 
-@section('title', __('Employee Disable'))
+@section('title', __('Batches'))
 
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('bower_components/lib_fwplace/css/sweet-alert.css') }}">
@@ -9,7 +9,7 @@
 
 @section('module')
 
-    <h3 class="m-subheader__title m-subheader__title--separator">{{ __('Employee Disable') }}</h3>
+    <h3 class="m-subheader__title m-subheader__title--separator">{{ __('Batches') }}</h3>
 
     <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
         <li class="m-nav__item m-nav__item--home">
@@ -20,13 +20,13 @@
         <li class="m-nav__separator">-</li>
         <li class="m-nav__item">
             <a class="m-nav__link">
-                <span class="m-nav__link-text">{{ __('Employee') }}</span>
+                <span class="m-nav__link-text">{{ __('Manager') }}</span>
             </a>
         </li>
         <li class="m-nav__separator">-</li>
         <li class="m-nav__item">
             <a class="m-nav__link">
-                <span class="m-nav__link-text">{{ __('Employee Disable') }}</span>
+                <span class="m-nav__link-text">{{ __('Batches') }}</span>
             </a>
         </li>
     </ul>
@@ -44,15 +44,15 @@
                             <table class="table m-table m-table--head-bg-primary">
                                 <thead>
                                     <tr>
-                                        <th>{{ trans('Batch') }}</th>
-                                        <th>{{ trans('Start day') }}</th>
-                                        <th>{{ trans('Stop day') }}</th>
-                                        <th>{{ trans('Workspace') }}</th>
-                                        <th>{{ trans('Program') }}</th>
-                                        <th>{{ trans('Position') }}</th>
-                                        <th>{{ trans('Created_at') }}</th>
-                                        <th>{{ trans('ShortHand') }}</th>
-                                        <th>{{ trans('Action') }}</th>
+                                        <th>{{ __('Batch') }}</th>
+                                        <th>{{ __('Start day') }}</th>
+                                        <th>{{ __('Stop day') }}</th>
+                                        <th>{{ __('Workspace') }}</th>
+                                        <th>{{ __('Program') }}</th>
+                                        <th>{{ __('Position') }}</th>
+                                        <th>{{ __('Created Date') }}</th>
+                                        <th>{{ __('Batch Name') }}</th>
+                                        <th>{{ __('Action') }}</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -70,7 +70,7 @@
                                                     <td>{{ $batch->workspace->name }}</td>
                                                     <td>{{ $batch->program->name }}</td>
                                                     <td>{{ $batch->position->name }}</td>
-                                                    <td>{{ $batch->created_at }}</td>
+                                                    <td>{{ date('d-m-Y', strtotime($batch->created_at)) }}</td>
                                                     <td>{{ $batch->workspace->name . ' - ' . $batch->program->name . ' - ' . $batch->position->name . ' - ' . $batch->batch }}</td>
 
                                                     <td>

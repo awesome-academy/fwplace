@@ -56,7 +56,7 @@
                                         @endisset
                                     >
                                         <th scope="row">{{ $day['format'] }}</th>
-                                        <td>{{ $day['day'] }}</td>
+                                        <td>{{ __($day['day']) }}</td>
                                         @if($day['format'] >= $today)
                                             <td>
                                                 @if(!isset($day['weekend']))

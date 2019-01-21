@@ -34,9 +34,10 @@ class WorkspaceController extends Controller
                     ->orWhere('seats.usable')
                     ->groupBy('location_id');
 
-                $query->joinSub($seats, 'Total', function ($join) {
-                    $join->on('locations.id', 'Total.location_id');
-                });
+                $query->leftJoinSub($seats, 'seats', function ($join) {
+                    $join->on('locations.id', 'seats.location_id');
+                })
+                ->where('locations.usable', config('site.default.usable'));
             },
         ])->get();
 
