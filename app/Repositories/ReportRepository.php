@@ -30,7 +30,8 @@ class ReportRepository extends EloquentRepository
         $this->makeModel();
 
         $reports = $this->model
-            ->orderBy('subject_id', 'asc')
+            ->where('user_id', $userID)
+            ->where('subject_id', $subjectID)
             ->orderBy('day', 'asc')
             ->get();
         

@@ -23,7 +23,7 @@
         @if(Entrust::can('design-diagrams'))
             <button class="btn btn-primary" id="diagram-edit">{{ __('Edit') }}</button>
         @endif
-        <div id="diagram-img" class="position-relative">
+        <div class="position-relative">
             @if(isset($diagram) && $diagram->diagramContent)
                 {!! $diagram->diagramContent !!}
             @else
@@ -31,8 +31,12 @@
                     <span class="text-danger">{{ __('This workspace don\'t have this kind of diagram') }}</span>
                 </div>
             @endif
-            <div class="col-lg-12 text-center">
-                {!! Html::image($workspace->photo, null, ['usemap' => '#image-map', 'id' => 'workspace_img']) !!}
+            <div class="col-lg-12 text-center" id="diagram-img">
+                {!! Html::image($workspace->photo, null, [
+                    'usemap' => '#image-map',
+                    'id' => 'workspace_img',
+                    'class' => 'position-relative'
+                    ]) !!}
             </div>
         </div>
         @if(Entrust::can('design-diagrams'))
@@ -161,7 +165,6 @@
     <div class="design without-diagram d-none">
 
     </div>
-
 </div>
 
 @endsection
@@ -171,6 +174,7 @@
     <script src="{{ asset('js/image_map.js') }}"></script>
     <script src="{{ asset('js/image_mapping.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/design.js') }}"></script>
+    <script src="{{ asset('js/showName.js') }}"></script>
     @if(Entrust::can('design-diagrams'))
         {{ Html::script(asset('js/jquery-ui.js')) }}
         <script src="{{ asset('js/design_without_diagram.js') }}"></script>

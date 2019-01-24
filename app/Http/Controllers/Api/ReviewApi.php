@@ -39,16 +39,19 @@ class ReviewApi extends Controller
             'content' => 'required|string',
         ]);
 
-        $data = $request->only('content', 'report_id');
+        // return $request->all();
+
+        $data = $request->only('report_id');
 
         $data = array_merge($data, ['user_id' => Auth::user()->id]);
 
         if (!$request->has('id') || $request->id == null) {
             // $this->authorize('create', Review::class);
-            Review::create($data);
+            Review::updateOrCreate($data, ['content' => $request->content]);
         } else {
             $id = $request->id;
             $review = Review::findOrFail($id);
+            $data = array_merge($data, ['content' => $request->content]);
             // $this->authorize('update', $review);
             $review = $this->review->update($data, $id);
         }
