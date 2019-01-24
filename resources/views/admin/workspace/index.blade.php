@@ -85,7 +85,7 @@
                                                 @if($location->usable == config('site.default.usable'))
                                                     <tr>
                                                         <td class="w-50">
-                                                            <a href="{{ route('generate', ['id' => $location->id]) }}">{{ $location->name }} : {{ $location->total_seat ?? 0 }} @lang('seat')</a>
+                                                            <a href="{{ route('generate', ['id' => $location->id]) }}">{{ $location->name }} : {{ $location->total_seat ?? 0 }} {{ (($location->total_seat ?? 0) > 1 ) ? __('seats') : __('seat') }}</a>
                                                         </td>
                                                         <td>
                                                             <a href="{{ route('schedule.by.location', ['id' => $location->id]) }}" class="btn btn-primary">{{ __('Schedule') }}</a>

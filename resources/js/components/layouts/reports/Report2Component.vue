@@ -33,7 +33,9 @@
                                 <hr>
                                 <div>Day: {{ n }}</div>
                             </td>
-                            <template v-if="subjects[x].reports[n - 1].day && subjects[x].reports[n - 1].day == n">
+                            <template
+                                v-if="subjects[x].reports[n - 1].day && subjects[x].reports[n - 1].day == n"
+                            >
                                 <td class="p-0 pl-1 pr-1">
                                     <div
                                         class="edittor"
@@ -73,6 +75,11 @@
                                     <div v-html="subjects[x].reports[n - 1].review"></div>
                                 </td>
                             </template>
+                        </tr>
+                    </tbody>
+                    <tbody v-if="subjects.length == 0">
+                        <tr>
+                            <td colspan="7" class="text-center">{{ $t('No Data') }}</td>
                         </tr>
                     </tbody>
                 </table>

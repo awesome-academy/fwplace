@@ -93,7 +93,7 @@
                                 <tbody>
 
                                     @if(isset($users))
-                                        @foreach($users as $key => $user)
+                                        @forelse($users as $key => $user)
                                             @if (Auth::user()->role == config('site.permission.admin') || $user->role != config('site.permission.admin'))
 
                                                 <tr role="row" class="odd" id="user-{{ $user->id }}">
@@ -170,7 +170,11 @@
                                                 </tr>
 
                                             @endif
-                                        @endforeach
+                                        @empty
+                                            <tr>
+                                                <td colspan="10" class="text-center">{{ __('No Data') }}</td>
+                                            </tr>
+                                        @endforelse
                                     @endif
 
                                 </tbody>

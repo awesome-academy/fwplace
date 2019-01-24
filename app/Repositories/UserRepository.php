@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\User;
+use App\Models\Location;
 use Illuminate\Support\Facades\DB;
 
 class UserRepository extends EloquentRepository
@@ -106,11 +107,11 @@ class UserRepository extends EloquentRepository
         }
         $locationByDay = [];
         foreach ($data as $item) {
-            $location = DB::table('locations')->find($item->location_id);
+            $location = Location::find($item->location_id);
             if ($item->shift != 0 && $item->location_id != 0 && $location) {
                 $locationByDay[] = [
                     'start' => $item->start,
-                    'title' => __('Location') . ': ' . $location->name,
+                    'title' => $location->name . '-' . $location->workspace->name,
                     'className' => $color,
                 ];
             }

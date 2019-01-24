@@ -103,17 +103,19 @@ $(document).ready(function() {
             .children('a')
             .remove();
         $('.design-section').addClass('editting');
+        resize();
     }
 
     $(document).on('click', '.generate', function() {
         let row = $('input[name=row]').val();
         let column = $('input[name=column').val();
         let table = document.createElement('table');
+        table.classList.add('m-auto');
         let tbody = document.createElement('tbody');
         tbody.setAttribute('id', 'selectable');
         for (let i = 0; i < row; i++) {
             let tr = document.createElement('tr');
-            tr.classList.add('row');
+            tr.classList.add('d-flex');
             tr.setAttribute('draggable', false);
             for (let j = 0; j < column; j++) {
                 let td = document.createElement('td');
@@ -128,6 +130,7 @@ $(document).ready(function() {
         table.setAttribute('draggable', false);
         table.append(tbody);
         $('.design-section').html(table);
+        resize();
     });
 
     $(document).on('mousedown', '.seat-cell', function(event) {

@@ -22,6 +22,11 @@ $(document).ready(function() {
 
         x = x - $(element)[0].offsetWidth / 2;
         y = y - $(element)[0].offsetHeight / 2;
-        $(element).attr('style', `margin-top: ${y}px; margin-left: ${x}px;`);
+        $(element).attr(
+            'style',
+            `margin-top: ${y}px;
+            margin-left: ${x}px;
+            z-index: 999;`
+        );
     }
 });

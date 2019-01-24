@@ -47,8 +47,8 @@
     <div class="area-section mt-2">
     </div>
 
-    <div class="design-section d-flex justify-content-center">
-        <table>
+    <div class="design-section overflow-scroll scroll-section">
+        <table class="m-auto">
             <tbody>
                 @for($i = 0; $i < $workspace->seat_per_row; $i++)
                     <tr class="row">
@@ -60,4 +60,9 @@
             </tbody>
         </table>
     </div>
+    <div class="position-fixed overflow-x-scroll" id="scroll">
+        <div class="scroll"></div>
+    </div>
 </div>
+
+<script src="{{ asset('js/scrollbar.js') }}"></script>

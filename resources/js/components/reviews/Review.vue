@@ -8,7 +8,7 @@
         <select name="trainees" class="form-select mb-3" v-model="trainee_selected">
             <option v-for="trainee in trainees" :value="trainee.id">{{ trainee.name }}</option>
         </select>
-        <div class="report-section">
+        <div class="report-section scroll-section">
             <table
                 class="table table-editable table-striped- table-bordered table-hover table-checkable"
                 id="m_table_1"
@@ -23,7 +23,7 @@
                     </tr>
                 </thead>
                 <tbody v-for="(subject, x) in subjects" :key="x">
-                    <tr v-for="(n,index) in subject.day" :key="n">
+                    <tr v-for="(n) in subjects[x].day" :key="n">
                         <template v-if="subjects[x].reports[n - 1].day == n">
                             <td>
                                 <h3>{{ subject.name }}</h3>
