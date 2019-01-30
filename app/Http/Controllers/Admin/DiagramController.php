@@ -301,7 +301,7 @@ class DiagramController extends Controller
             DB::commit();
             Alert::success(trans('Add success'), trans('Successfully!!!'));
 
-            return redirect()->route('list_diagram');
+            return redirect()->back();
         } catch (Exception $e) {
             DB::rollback();
 

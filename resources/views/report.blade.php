@@ -1,6 +1,6 @@
 @extends('admin.layout.master')
 
-@section('title', __('Role'))
+@section('title', __('Report'))
 
 @section('css')
     <link rel="stylesheet" type="text/css" href="{{ asset('bower_components/metro-asset/vendors/custom/datatables/datatables.bundle.css') }}">
@@ -11,7 +11,7 @@
 
 @section('module')
 
-    <h3 class="m-subheader__title m-subheader__title--separator">{{ __('Role') }}</h3>
+    <h3 class="m-subheader__title m-subheader__title--separator">{{ __('Report') }}</h3>
 
     <ul class="m-subheader__breadcrumbs m-nav m-nav--inline">
         <li class="m-nav__item m-nav__item--home">
@@ -22,13 +22,13 @@
         <li class="m-nav__separator">-</li>
         <li class="m-nav__item">
             <a class="m-nav__link">
-                <span class="m-nav__link-text">{{ __('System Management') }}</span>
+                <span class="m-nav__link-text">{{ __('Reports Management') }}</span>
             </a>
         </li>
         <li class="m-nav__separator">-</li>
         <li class="m-nav__item">
             <a class="m-nav__link">
-                <span class="m-nav__link-text">{{ __('Role') }}</span>
+                <span class="m-nav__link-text">{{ __('Report') }}</span>
             </a>
         </li>
     </ul>
