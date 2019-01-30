@@ -116,7 +116,7 @@
             @for($i = 0; $i < 4; $i++)
                 <tr>
                     <td>{{ __(config('api.status.' . $i)) }}</td>
-                    <td>{{ config('api.status.short.' . $i) }}</td>
+                    <td class="text-center">{{ config('api.status.short.' . $i) }}</td>
                 </tr>
             @endfor
         </table>

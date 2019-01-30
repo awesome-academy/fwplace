@@ -159,6 +159,7 @@ export default {
         "Name": "Tên",
         "Start day": "Ngày Bắt Đầu",
         "Stop day": "Ngày kết thúc",
-        "day": "ngày"
+        "day": "ngày",
+        "No Data": "Không có dữ liệu"
     }
 }

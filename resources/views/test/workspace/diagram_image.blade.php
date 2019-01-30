@@ -6,7 +6,9 @@
     </div>
 @endif
 <div class="col-lg-12 text-center">
-    {!! Html::image($workspace->photo, null, ['usemap' => '#image-map', 'id' => 'workspace_img']) !!}
+    <div class="position-relative">
+        {!! Html::image($workspace->photo, null, ['usemap' => '#image-map', 'id' => 'workspace_img']) !!}
+    </div>
 </div>
 
 <script src="{{ asset('js/showName.js') }}"></script>
