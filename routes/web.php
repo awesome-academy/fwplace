@@ -20,6 +20,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => ['che
     Route::get('/roles/get-permission-role/{role_id}', 'RoleController@getPermissionRole')
         ->name('roles.get_permission_role');
     Route::resource('roles', 'RoleController');
+    Route::resource('special-days', 'SpecialDayController');
 
     Route::get('/permissions/get-permissions', 'PermissionController@getPermissions')
         ->name('permissions.get_permissions');
@@ -78,6 +79,7 @@ Route::group(['middleware' => 'checkLogin'], function () {
     Route::get('/logout', 'HomeController@logout');
     Route::resource('user', 'UserController')->middleware('checkUser');
     Route::get('/workschedule-register', 'WorkScheduleController@index')->name('register.index');
+    Route::get('getSpecialDay', 'WorkScheduleController@getSpecialDay')->name('get.special_day');
     Route::post('/registerworkschedule', 'WorkScheduleController@registerWork')->name('workschedule');
     Route::get('/workschedule', 'WorkScheduleController@index');
     Route::get('schedule/users/{id}', 'Admin\WorkingScheduleController@viewByUser')->name('user.schedule');

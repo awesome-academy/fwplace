@@ -50,7 +50,12 @@ class WorkingScheduleController extends Controller
         $programs = $this->program->pluck('name', 'id');
         $workspaces = $this->workspace->pluck('name', 'id');
 
-        return view('admin.work_schedules.index', compact('users', 'positions', 'programs', 'workspaces'));
+        return view('admin.work_schedules.index', compact(
+            'users',
+            'positions',
+            'programs',
+            'workspaces'
+        ));
     }
 
     public function viewByWorkplace($workspaceId)
