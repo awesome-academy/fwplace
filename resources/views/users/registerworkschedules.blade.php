@@ -48,30 +48,33 @@
                                             config('site.shift.morning') => __('Morning'),
                                             config('site.shift.afternoon') => __('Afternoon'),
                                         ];
+                                        $test = [];
                                     @endphp
                                     @foreach($dates as $day)
                                     <tr
-                                        @isset($day['weekend'])
+                                        @if(isset($day['weekend']))
                                             class="bg-secondary text-dark"
-                                        @endisset
-                                    >
-                                        <th scope="row">{{ $day['format'] }}</th>
-                                        <td>{{ __($day['day']) }}</td>
-                                        @if($day['format'] >= $today)
-                                            <td>
-                                                @if(!isset($day['weekend']))
-                                                    {!! Form::select('shift[' . $day['date']  .  ']', $shifts, $data[$day['date']] ?? null, ['class' => 'form-control tar', 'id' => 'sl_shift']) !!}
-                                                @endif
-                                            </td>
-                                            <td>
-                                                @if(!isset($day['weekend']))
-                                                    {!! Form::select('location[' . $day['date']  .  ']', [config('site.default_location') => __('--Choose--')] + $locations, $dataLocation[$day['date']] ?? null, ['class' => 'form-control target', 'id' => 'sl_location']) !!}
-                                                @endif
-                                            </td>
-                                        @else
-                                            <td class="text-center">{{ isset($data[$day['date']]) ? $shifts[$data[$day['date']]] : '' }}</td>
-                                            <td class="text-center">{{ isset($dataLocation[$day['date']]) ? $locations[$dataLocation[$day['date']]] : '' }}</td>
                                         @endif
+                                        id="{{ $day['date'] }}"
+                                        onload="getSpecialDay({{ json_encode($day) }})"
+                                    >
+                                            <th scope="row">{{ $day['format'] }}</th>
+                                            <td id="{{ $day['date'] . '2' }}">{{ __($day['day']) }}</td>
+                                            @if($day['format'] >= $today)
+                                                <td>
+                                                    @if(!isset($day['weekend']))
+                                                        {!! Form::select('shift[' . $day['date']  .  ']', $shifts, $data[$day['date']] ?? null, ['class' => 'form-control tar', 'id' => 'sl_shift']) !!}
+                                                    @endif
+                                                </td>
+                                                <td>
+                                                    @if(!isset($day['weekend']))
+                                                        {!! Form::select('location[' . $day['date']  .  ']', [config('site.default_location') => __('--Choose--')] + $locations, $dataLocation[$day['date']] ?? null, ['class' => 'form-control target', 'id' => 'sl_location']) !!}
+                                                    @endif
+                                                </td>
+                                            @else
+                                                <td class="text-center">{{ isset($data[$day['date']]) ? $data[$day['date']] : '' }}</td>
+                                                <td class="text-center">{{ isset($dataLocation[$day['date']]) ? $dataLocation[$day['date']] : '' }}</td>
+                                            @endif
                                     </tr>
                                     @endforeach
                                 </tbody>
@@ -89,5 +92,6 @@
 @endsection
 
 @section('js')
+<script type="text/javascript" src="{{ asset('js/special_day.js') }}"></script>
 <script src="{{ asset('js/register_work_schedules.js') }}"></script>
 @endsection

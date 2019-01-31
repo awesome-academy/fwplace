@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Auth;
 use App\Repositories\WorkingScheduleRepository;
 use App\Repositories\LocationRepository;
+use App\Models\SpecialDay;
 
 class WorkScheduleController extends Controller
 {
@@ -41,13 +42,23 @@ class WorkScheduleController extends Controller
                 ];
             }
         }
-
         $locations = $this->locationRepository->getLocationToDisplay();
-
         $data = $this->workingSchedule->getUserSchedule(Auth::user()->id);
         $dataLocation = $this->workingSchedule->getLocation(Auth::user()->id);
 
-        return view('users.registerworkschedules', compact('dates', 'data', 'locations', 'dataLocation'));
+        return view('users.registerworkschedules', compact(
+            'dates',
+            'data',
+            'locations',
+            'dataLocation',
+            'specialDays',
+            'compensationDays'
+        ));
+    }
+
+    public function getSpecialDay()
+    {
+        return response()->json($specialDays = SpecialDay::get());
     }
 
     public function registerWork(Request $request)

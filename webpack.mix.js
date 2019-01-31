@@ -96,4 +96,8 @@ mix.js(
     'public/js/select_subject.js'
 );
 
+mix.copy('resources/js/jqueryJs/special_day.js',
+    'public/js/special_day.js'
+);
+
 mix.version();
