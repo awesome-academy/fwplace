@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Program;
 use App\Models\Position;
 use App\Models\Workspace;
+use App\Models\SpecialDay;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Excel;
 use App\Exports\ScheduleExport;
@@ -42,7 +43,11 @@ class ExportController extends Controller
         $position = ($request->has('position') && $request->position !== null)
                         ? Position::findOrFail($request->position)->name
                         : '';
+        $specialDays = SpecialDay::get();
 
-        return $this->excel->download(new ScheduleExport($users, $workspace, $position, $program), 'schedules.xls');
+        return $this->excel->download(
+            new ScheduleExport($users, $workspace, $position, $program, $specialDays),
+            'schedules.xls'
+        );
     }
 }

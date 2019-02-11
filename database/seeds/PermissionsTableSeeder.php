@@ -224,6 +224,11 @@ class PermissionsTableSeeder extends Seeder
             'name' => 'design-manager',
             'display_name' => 'Design manager',
         ]);
+
+        Permission::create([
+            'name' => 'review-report',
+            'display_name' => 'Review Report',
+        ]);
         /*-----*/
     }
 }

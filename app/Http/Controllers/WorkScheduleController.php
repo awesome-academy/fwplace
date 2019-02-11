@@ -58,7 +58,9 @@ class WorkScheduleController extends Controller
 
     public function getSpecialDay()
     {
-        return response()->json($specialDays = SpecialDay::get());
+        $specialDays = SpecialDay::get();
+
+        return response()->json($specialDays);
     }
 
     public function registerWork(Request $request)

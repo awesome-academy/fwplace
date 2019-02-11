@@ -62,13 +62,13 @@
                         <td class="word-break-all">{{ $user->workspace->name }}</td>
                         @for($i = 1; $i <= Date('t'); $i++)
                             @php
-                                $date = $i . '-' . Date('m') . '-' . Date('Y');
+                                $date = $i . '-' . Date('n') . '-' . Date('Y');
                             @endphp
                             @if(isset($user->schedules[$i]))
-                                <td style="{{ (Date('N', strtotime($date)) >= 6) ? 'background-color: #f4516c' : '' }}">{{ config('api.status.short.' . $user->schedules[$i]->shift) }}</td>
+                                <td data-date="{{ $date }}" style="text-center {{ (Date('N', strtotime($date)) >= 6) ? 'background-color: #f4516c' : '' }}">{{ config('api.status.short.' . $user->schedules[$i]->shift) }}</td>
                                 @php($count[$user->schedules[$i]->shift]++)
                             @else
-                                <td style="{{ (Date('N', strtotime($date)) >= 6) ? 'background-color: #f4516c' : '' }}"></td>
+                                <td data-date="{{ $date }}" style="{{ (Date('N', strtotime($date)) >= 6) ? 'background-color: #f4516c' : '' }}"></td>
                             @endif
                         @endfor
                         <td class="text-center">{{ $count[1] }}</td>
