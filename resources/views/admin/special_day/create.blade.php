@@ -5,7 +5,9 @@
 @section('module', __('Add Location'))
 
 @section('content')
-<div class="m-portlet">
+<div class="btn btn-success mb-2" id="show-form">{{ __('Create special day') }}</div>
+<div class="btn btn-info mb-2" id="hide-form">{{ __('Hide Form') }}</div>
+<div class="m-portlet" id="special-day-form">
     <div class="p-3">
         @forelse($errors->all() as $error)
             @include('admin.components.alert', ['type' => 'danger', 'message' => $error])
@@ -58,7 +60,7 @@
                     <div class="col-lg-2"></div>
                     <div class="col-lg-6">
                         {!! Form::submit(__('Save'), ['class' => 'btn btn-success']) !!}
-                        {!! Form::button(__('Reset'), ['type' => 'reset', 'class' => 'btn btn-secondary']) !!}
+                        {!! Form::button(__('Cancel'), ['type' => 'reset', 'class' => 'btn btn-secondary']) !!}
                     </div>
                 </div>
             </div>
@@ -67,4 +69,11 @@
 
     <!--end::Form-->
 </div>
+<div id="calendar" class="col-xs-12 calendar"></div>
+@endsection
+
+@section('js')
+<script src="{{ asset('bower_components/bootstrap-year-calendar/js/bootstrap-year-calendar.js') }}"></script>
+<link rel="stylesheet" type="text/css" href="{{ asset('bower_components/bootstrap-year-calendar/css/bootstrap-year-calendar.css') }}">
+<script type="text/javascript" src="{{ asset('js/calendarDateTime.js') }}"></script>
 @endsection

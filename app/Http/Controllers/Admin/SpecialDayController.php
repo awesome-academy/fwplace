@@ -6,9 +6,24 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\SpecialDay;
 use App\Http\Requests\SpecialDayRequest;
+use App\Repositories\SpecialDayRepository;
 
 class SpecialDayController extends Controller
 {
+    protected $specialDay;
+
+    public function __construct(SpecialDayRepository $specialDay)
+    {
+        $this->specialDay = $specialDay;
+    }
+
+    public function index()
+    {
+        $specialDays = response()->json(['data' => $this->specialDay->all()]);
+        
+        return $specialDays;
+    }
+
     public function create()
     {
         return view('admin.special_day.create');
