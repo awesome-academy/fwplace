@@ -100,4 +100,8 @@ mix.copy('resources/js/jqueryJs/special_day.js',
     'public/js/special_day.js'
 );
 
+mix.copy('resources/js/jqueryJs/calendarDateTime.js',
+    'public/js/calendarDateTime.js'
+);
+
 mix.version();
