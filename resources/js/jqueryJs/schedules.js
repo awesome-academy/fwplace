@@ -36,4 +36,42 @@ $(document).ready(function() {
         $('#form-filter').attr('action', route('schedule.export'));
         $('#form-filter').submit();
     });
+
+    function showSpecialDays() {
+        $.ajax({
+            url: 'getSpecialDay',
+            method: 'get',
+            success: function(result) {
+                for (let i = 0; i < result.length; i++) {
+                    let from = new Date(result[i].from);
+                    let to = new Date(result[i].to);
+                    for (
+                        let date = from;
+                        date <= to;
+                        date.setDate(date.getDate() + 1)
+                    ) {
+                        let element = $(
+                            `td[data-date='${[
+                                date.getDate(),
+                                date.getMonth() + 1,
+                                date.getFullYear()
+                            ].join('-')}']`
+                        );
+                        $(element).attr('data-toggle', 'tooltip');
+                        $(element).attr('title', result[i].title);
+                        $(element).removeClass('bg-danger');
+                        if (result[i].is_compensation) {
+                            $(element).addClass('bg-success');
+                        } else {
+                            $(element).addClass('bg-warning');
+                        }
+                    }
+                }
+
+                $('[data-toggle=tooltip]').tooltip();
+            }
+        });
+    }
+
+    showSpecialDays();
 });

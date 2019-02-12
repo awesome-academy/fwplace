@@ -72,7 +72,7 @@
                         {!! $errors->first('avatar', '<p class="text-danger">:message</p>') !!}
                     </div>
                     <div class="text-center py-2">
-                        {!! Html::image(Auth::user()->avatarUser, null, ['class' => 'w-50', 'id' => 'image-display' ]) !!}
+                        {!! Html::image(Auth::user()->avatarUser, null, ['id' => 'image-display' ]) !!}
                     </div>
                 </div>
             </div>

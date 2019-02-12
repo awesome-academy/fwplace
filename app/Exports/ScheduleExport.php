@@ -11,13 +11,15 @@ class ScheduleExport implements FromView
     private $workspace;
     private $position;
     private $program;
+    private $specialDays;
 
-    public function __construct($users, $workspace, $position, $program)
+    public function __construct($users, $workspace, $position, $program, $specialDays)
     {
         $this->users = $users;
         $this->workspace = $workspace;
         $this->position = $position;
         $this->program = $program;
+        $this->specialDays = $specialDays;
     }
 
     public function view(): View
@@ -27,6 +29,7 @@ class ScheduleExport implements FromView
             'program' => $this->program,
             'position' => $this->position,
             'workspace' => $this->workspace,
+            'specialDays' => $this->specialDays,
         ]);
     }
 }

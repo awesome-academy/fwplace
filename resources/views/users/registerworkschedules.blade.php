@@ -72,8 +72,8 @@
                                                     @endif
                                                 </td>
                                             @else
-                                                <td class="text-center">{{ isset($data[$day['date']]) ? $data[$day['date']] : '' }}</td>
-                                                <td class="text-center">{{ isset($dataLocation[$day['date']]) ? $dataLocation[$day['date']] : '' }}</td>
+                                                <td class="text-center">{{ isset($data[$day['date']]) ? $shifts[$data[$day['date']]] : '' }}</td>
+                                                <td class="text-center">{{ isset($dataLocation[$day['date']]) ? $locations[$dataLocation[$day['date']]] : '' }}</td>
                                             @endif
                                     </tr>
                                     @endforeach
