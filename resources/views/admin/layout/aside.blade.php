@@ -22,27 +22,9 @@
                 </h4>
                 <i class="m-menu__section-icon flaticon-more-v3"></i>
             </li>
-            @if (Entrust::can(['view-positions']))
-                <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                    <a href="{{ route('positions.index') }}" class="m-menu__link m-menu__toggle">
-                        <i class="m-menu__link-icon flaticon-interface-9"></i>
-                        <span class="m-menu__link-text color-manager">
-                            @lang('Position')
-                        </span>
-                    </a>
-                </li>
-            @endif
+            
 
-            @if (Entrust::can(['view-programs']))
-                <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                    <a href="{{ route('programs.index') }}" class="m-menu__link m-menu__toggle">
-                        <i class="m-menu__link-icon flaticon-interface-9"></i>
-                        <span class="m-menu__link-text color-manager">
-                            @lang('Programs')
-                        </span>
-                    </a>
-                </li>
-            @endif
+           
             @if (Entrust::can(['view-users']))
                 <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
                     <a href="javascript:;" class="m-menu__link m-menu__toggle">
@@ -177,16 +159,6 @@
                     </span>
                 </a>
             </li>
-            @if (Entrust::can(['view-users']))
-            <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                <a href="{{ route('batches.index') }}" class="m-menu__link m-menu__toggle">
-                    <i class="m-menu__link-icon flaticon-interface-9"></i>
-                    <span class="m-menu__link-text color-manager">
-                        @lang('Batch')
-                    </span>
-                </a>
-            </li>
-            @endif
 
             @if(Entrust::can(['review-report']))
             <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
@@ -208,28 +180,78 @@
             </li>
             @endif
 
-            @if(Entrust::can('work-schedules'))
-            
-            <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                <a href="{{ route('schedule.index') }}" class="m-menu__link m-menu__toggle">
-                    <i class="m-menu__link-icon flaticon-interface-9"></i>
-                    <span class="m-menu__link-text color-manager">
-                        @lang('Schedule')
-                    </span>
-                </a>
-            </li>
+           
+
+            @if (Entrust::can(['view-users']))
+                <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+                    <a href="javascript:;" class="m-menu__link m-menu__toggle">
+                        <i class="m-menu__link-icon flaticon-interface-9"></i>
+                        <span class="m-menu__link-text color-manager">
+                            @lang('Setting')
+                        </span>
+                        <i class="m-menu__ver-arrow la la-angle-right"></i>
+                    </a>
+
+                    <div class="m-menu__submenu ">
+                        <span class="m-menu__arrow"></span>
+                        <ul class="m-menu__subnav">
+                            @if (Entrust::can(['view-positions']))
+                                <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+                                    <a href="{{ route('positions.index') }}" class="m-menu__link m-menu__toggle">
+                                        <i class="m-menu__link-icon flaticon-interface-9"></i>
+                                        <span class="m-menu__link-text color-manager">
+                                            @lang('Position')
+                                        </span>
+                                    </a>
+                                </li>
+                            @endif
+
+                            @if (Entrust::can(['view-programs']))
+                                <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+                                    <a href="{{ route('programs.index') }}" class="m-menu__link m-menu__toggle">
+                                        <i class="m-menu__link-icon flaticon-interface-9"></i>
+                                        <span class="m-menu__link-text color-manager">
+                                            @lang('Programs')
+                                        </span>
+                                    </a>
+                                </li>
+                            @endif
+                            @if (Entrust::can(['view-users']))
+                                <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+                                    <a href="{{ route('batches.index') }}" class="m-menu__link m-menu__toggle">
+                                        <i class="m-menu__link-icon flaticon-interface-9"></i>
+                                        <span class="m-menu__link-text color-manager">
+                                            @lang('Batch')
+                                        </span>
+                                    </a>
+                                </li>
+                            @endif
+
+                            @if (Entrust::can(['work-schedules']))
+                                <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+                                    <a href="{{ route('special-days.create') }}" class="m-menu__link m-menu__toggle">
+                                        <i class="m-menu__link-icon flaticon-interface-9"></i>
+                                        <span class="m-menu__link-text color-manager">
+                                            @lang('Special day')
+                                        </span>
+                                    </a>
+                                </li>
+                            @endif
+                            @if(Entrust::can('work-schedules'))
+                                <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
+                                    <a href="{{ route('schedule.index') }}" class="m-menu__link m-menu__toggle">
+                                        <i class="m-menu__link-icon flaticon-interface-9"></i>
+                                        <span class="m-menu__link-text color-manager">
+                                            @lang('Schedule')
+                                        </span>
+                                    </a>
+                                </li>
+                            @endif
+                        </ul>
+                    </div>
+                </li>
             @endif
 
-            @if (Entrust::can(['work-schedules']))
-            <li class="m-menu__item m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                <a href="{{ route('special-days.create') }}" class="m-menu__link m-menu__toggle">
-                    <i class="m-menu__link-icon flaticon-interface-9"></i>
-                    <span class="m-menu__link-text color-manager">
-                        @lang('Special day')
-                    </span>
-                </a>
-            </li>
-            @endif
         </ul>
     </div>
 </div>
