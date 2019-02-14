@@ -159,7 +159,7 @@ class UserController extends Controller
         $this->userRepository->update($data, $id);
         alert()->success(__('Edit User'), __('Successfully!!!'));
 
-        return redirect('/');
+        return redirect()->back();
     }
 
     /**
