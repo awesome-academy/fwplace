@@ -51,7 +51,7 @@
         <table class="m-auto">
             <tbody>
                 @for($i = 0; $i < $workspace->seat_per_row; $i++)
-                    <tr class="row">
+                    <tr class="cell-row d-flex">
                         @for($j = 0; $j < $workspace->seat_per_column; $j++)
                             <td class="seat-cell area-selected" row="{{ $i }}" column="{{ $j }}"></td>
                         @endfor

@@ -50,15 +50,12 @@
                                 {!! Form::select('program_id', $programs, request('program_id'), ['class' => 'form-control m-input', 'data-col-index' => 2]) !!}
                             </div>
                             <div class="col-lg-3 m--margin-bottom-10-tablet-and-mobile">
-                                {!! Form::label(__('Workspace')) !!}
-                                {!! Form::select('workspace_id', $workspaces, request('workspace_id'), ['class' => 'form-control m-input', 'data-col-index' => 2]) !!}
-                            </div>
-                        </div>
-
-                        <div class="row m--margin-bottom-20">
-                            <div class="col-lg-3 m--margin-bottom-10-tablet-and-mobile">
                                 {!! Form::label(__('Position')) !!}
                                 {!! Form::select('position_id', $positions, request('position_id'), ['class' => 'form-control m-input', 'data-col-index' => 7]) !!}
+                            </div>
+                            <div class="col-lg-3 m--margin-bottom-10-tablet-and-mobile">
+                                {!! Form::label(__('Workspace')) !!}
+                                {!! Form::select('workspace_id', $workspaces, request('workspace_id'), ['class' => 'form-control m-input', 'data-col-index' => 2]) !!}
                             </div>
                         </div>
 

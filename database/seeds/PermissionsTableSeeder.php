@@ -229,6 +229,11 @@ class PermissionsTableSeeder extends Seeder
             'name' => 'review-report',
             'display_name' => 'Review Report',
         ]);
+
+        Permission::create([
+            'name' => 'change-role',
+            'display_name' => 'Change Role',
+        ]);
         /*-----*/
     }
 }
