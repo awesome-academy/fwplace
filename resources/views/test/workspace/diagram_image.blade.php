@@ -1,4 +1,4 @@
-@if($diagramDetail->diagramContent)
+@if(isset($diagramDetail) && $diagramDetail->diagramContent)
     {!! $diagramDetail->diagramContent !!}
 @else
     <div class="text-center">
