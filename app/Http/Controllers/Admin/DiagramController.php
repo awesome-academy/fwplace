@@ -465,7 +465,7 @@ class DiagramController extends Controller
 
             $data['content'] = json_encode($content);
 
-            array_merge(['status' => config('database.diagram_status.without_diagram')], $data);
+            $data['status'] = config('database.diagram_status.without_diagram');
 
             $this->designDiagramRepository
                 ->makeModel()
